@@ -1,5 +1,8 @@
 #pragma once
 
+/* Carve version number */
+#undef CARVE_VERSION
+
 /* Define if using gnu libstdc++. */
 #undef HAVE_LIBSTDCPP_UNORDERED_COLLECTIONS
 
