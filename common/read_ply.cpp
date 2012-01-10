@@ -278,7 +278,7 @@ bool readFile(const std::string &in_file,
     std::cerr << "File '" <<  in_file << "' could not be opened." << std::endl;
     return false;
   }
-  std::cerr << "Loading " << in_file << "'" << std::endl;
+  std::cerr << "Loading '" << in_file << "'" << std::endl;
   return readFile<filetype_t>(in, inputs, transform);
 }
 
