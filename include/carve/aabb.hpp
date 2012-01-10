@@ -172,11 +172,20 @@ namespace carve {
 
       bool intersectsLineSegment(const vector_t &v1, const vector_t &v2) const;
 
-      bool intersects(const aabb<ndim> &other) const {
-        for (unsigned i = 0; i < ndim; ++i) {
-          if (fabs(other.pos.v[i] - pos.v[i]) > (extent.v[i] + other.extent.v[i])) return false;
+      double axisSeparation(const aabb<ndim> &other, unsigned axis) const {
+        return fabs(other.pos.v[axis] - pos.v[axis]) - extent.v[axis] - other.extent.v[axis];
+      }
+
+      double maxAxisSeparation(const aabb<ndim> &other) const {
+        double m = axisSeparation(other, 0);
+        for (unsigned i = 1; i < ndim; ++i) {
+          m = std::max(m, axisSeparation(other, i));
         }
-        return true;
+        return m;
+      }
+
+      bool intersects(const aabb<ndim> &other) const {
+        return maxAxisSeparation(other) <= 0.0;
       }
  
       bool intersects(const sphere<ndim> &s) const {
