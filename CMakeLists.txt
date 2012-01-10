@@ -17,6 +17,7 @@ option(CARVE_SYSTEM_BOOST         "Compile with system installed boost" ON)
 option(CARVE_BOOST_COLLECTIONS    "Compile with boost collections"      ON)
 option(CARVE_DEBUG                "Compile in debug code"               OFF)
 option(CARVE_DEBUG_WRITE_PLY_DATA "Write geometry output during debug"  OFF)
+option(CARVE_GTEST_TESTS          "Complie gtest, and dependent tests"  ON)
 
 
 
@@ -102,7 +103,10 @@ if(CARVE_WITH_GUI)
 endif(CARVE_WITH_GUI)
 
 add_subdirectory(external/GLOOP) 
-add_subdirectory(external/gtest-1.5.0)
+
+if (CARVE_GTEST_TESTS)
+  add_subdirectory(external/gtest-1.5.0)
+endif(CARVE_GTEST_TESTS)
 
 configure_file (
   "${carve_SOURCE_DIR}/include/carve/cmake-config.h.in"
