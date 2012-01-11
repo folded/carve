@@ -44,11 +44,13 @@ namespace carve {
     };
 
     static inline FaceClass class_bit_to_class(unsigned i) {
-      if (i & FACE_ON_ORIENT_OUT_BIT) return FACE_ON_ORIENT_OUT;
-      if (i & FACE_OUT_BIT) return FACE_OUT;
-      if (i & FACE_IN_BIT) return FACE_IN;
-      if (i & FACE_ON_ORIENT_IN_BIT) return FACE_ON_ORIENT_IN;
-      return FACE_UNCLASSIFIED;
+      switch (i) {
+      case FACE_ON_ORIENT_OUT_BIT: return FACE_ON_ORIENT_OUT;
+      case FACE_OUT_BIT: return FACE_OUT;
+      case FACE_IN_BIT: return FACE_IN;
+      case FACE_ON_ORIENT_IN_BIT: return FACE_ON_ORIENT_IN;
+      default: return FACE_UNCLASSIFIED;
+      }
     }
 
     static inline unsigned class_to_class_bit(FaceClass f) {
