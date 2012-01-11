@@ -131,28 +131,31 @@ namespace carve {
 
             if ((*i).intersectedManifoldIsClosed()) {
               if ((*i).classification == FACE_UNCLASSIFIED) continue;
+              std::cerr << "  classification:: " << ENUM((*i).classification) << " grp: " << grp << " against manifold: " << (*i).intersected_manifold << std::endl;
               fc_bits |= class_to_class_bit((*i).classification);
             }
           }
 
-          fc = class_bit_to_class(fc_bits);
-
-          // handle the complex cases where a group is classified differently with respect to two or more closed manifolds.
-          if (fc == FACE_UNCLASSIFIED) {
-            unsigned inout_bits = fc_bits & FACE_NOT_ON_BIT;
-            unsigned on_bits = fc_bits & FACE_ON_BIT;
-
-            // both in and out. indicates an invalid manifold embedding.
-            if (inout_bits == (FACE_IN_BIT | FACE_OUT_BIT)) goto out;
-
-            // on, both orientations. could be caused by two manifolds touching at a face.
-            if (on_bits == (FACE_ON_ORIENT_IN_BIT | FACE_ON_ORIENT_OUT_BIT)) goto out;
-
-            // in or out, but also on (with orientation). the on classification takes precedence.
-            fc = class_bit_to_class(on_bits);
+	  // Assuming that the embedding of multiple manifolds is
+	  // correct, then the following precedence of classifications
+	  // holds.
+          //
+          // Possible cases where multiple different classifications
+          // are consistent:
+          // * IN | OUT
+          //   This can occur when two manifolds touch, and are
+          //   intersected at the point at which they touch.
+          if (fc_bits & FACE_ON_ORIENT_OUT_BIT) {
+            fc = FACE_ON_ORIENT_OUT;
+          } else if (fc_bits & FACE_ON_ORIENT_IN_BIT) {
+            fc = FACE_ON_ORIENT_IN;
+          } else if (fc_bits & FACE_IN_BIT) {
+            fc = FACE_IN;
+          } else if (fc_bits & FACE_OUT_BIT) {
+            fc = FACE_OUT;
+          } else {
+            fc = FACE_UNCLASSIFIED;
           }
-
-        out:
 
           if (fc == FACE_UNCLASSIFIED) {
             std::cerr << "group " << grp << " is unclassified!" << std::endl;
