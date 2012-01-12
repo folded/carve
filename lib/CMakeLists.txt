@@ -35,6 +35,10 @@ set_target_properties(carve PROPERTIES
                       VERSION   "${carve_VERSION_MAJOR}.${carve_VERSION_MINOR}.${carve_VERSION_PATCH}"
                       SOVERSION "${carve_VERSION_MAJOR}.${carve_VERSION_MINOR}")
 
+if(CARVE_DEBUG_WRITE_PLY_DATA)
+  target_link_libraries(carve carve_fileformats gloop_model)
+endif()
+
 install(TARGETS carve
         LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
         ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib")
