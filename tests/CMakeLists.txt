@@ -32,6 +32,9 @@ target_link_libraries(test_rescale       carve)
 add_executable       (tetrahedron        tetrahedron.cpp)
 target_link_libraries(tetrahedron        carve)
 
+add_executable       (stdlib_conflict    stdlib_conflict.cpp)
+target_link_libraries(stdlib_conflict    carve)
+
 if(CARVE_WITH_GUI)
   add_executable       (test_intersect     test_intersect.cpp)
   target_link_libraries(test_intersect     carve carve_fileformats carve_ui carve_misc glui gloop_model ${OPENGL_LIBRARIES} ${GLUT_LIBRARIES})
