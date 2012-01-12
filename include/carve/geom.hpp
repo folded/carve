@@ -639,6 +639,15 @@ namespace carve {
       return o;
     }
 
+
+
+    struct distance_functor {
+      template<typename obj1_t, typename obj2_t>
+      double operator()(const obj1_t &o1, const obj2_t &o2) {
+        return distance(o1, o2);
+      }
+    };
+
   }
 }
 
