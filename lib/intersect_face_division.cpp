@@ -41,7 +41,7 @@ typedef carve::poly::Polyhedron poly_t;
 
 
 #if defined(CARVE_DEBUG_WRITE_PLY_DATA)
-void writePLY(std::string &out_file, const carve::line::PolylineSet *lines, bool ascii);
+void writePLY(const std::string &out_file, const carve::line::PolylineSet *lines, bool ascii);
 #endif
 
 
