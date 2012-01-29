@@ -574,6 +574,10 @@ namespace {
     std::vector<std::vector<int> > containing_faces;
     std::map<int, std::map<int, std::pair<unsigned, unsigned> > > hole_shared_vertices;
 
+#if defined(CARVE_DEBUG_WRITE_PLY_DATA)
+    dumpFacesAndHoles(f_loops.begin(), f_loops.end(), h_loops.begin(), h_loops.end(), "/tmp/pre_merge.ply");
+#endif
+
     {
       // move input face and hole loops to temp vectors.
       size_t m;
@@ -718,6 +722,10 @@ namespace {
       }
     }
 #endif
+#if defined(CARVE_DEBUG_WRITE_PLY_DATA)
+    dumpFacesAndHoles(f_loops.begin(), f_loops.end(), h_loops.begin(), h_loops.end(), "/tmp/post_merge.ply");
+#endif
+
   }
 
 
