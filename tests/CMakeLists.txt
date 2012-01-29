@@ -92,6 +92,9 @@ if (CARVE_GTEST_TESTS)
   cxx_test(geom3d_unittest gtest_main)
   target_link_libraries(geom3d_unittest carve)
 
+  cxx_test(triangulate_unittest gtest_main)
+  target_link_libraries(triangulate_unittest carve)
+
   # not committed yet.
   # cxx_test(exact_unittest gtest_main)
   # target_link_libraries(exact_unittest carve)
