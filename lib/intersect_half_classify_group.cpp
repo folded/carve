@@ -62,7 +62,7 @@ namespace carve {
         virtual ~GroupPoly() {
         }
 
-        virtual void collect(FaceLoopGroup *grp, CSG::Hooks & /* hooks */) {
+        virtual void collect(FaceLoopGroup *grp, CSG::Hooks &hooks) {
           if (grp->face_loops.head->orig_face->owner != want_groups_from) return;
 
           std::list<ClassificationInfo> &cinfo = (grp->classification);
