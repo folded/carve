@@ -6,7 +6,7 @@ AC_CANONICAL_SYSTEM
 
 AC_CONFIG_SRCDIR([src])
 AM_CONFIG_HEADER(include/carve_config.h include/carve/config.h)
-AM_INIT_AUTOMAKE(carve, 1.1.0, toby@permuted.net)
+AM_INIT_AUTOMAKE(carve, 1.6.0, toby@permuted.net)
 
 AC_PROG_CC
 AC_PROG_CPP
