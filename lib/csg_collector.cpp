@@ -26,7 +26,7 @@
 typedef carve::poly::Polyhedron poly_t;
 
 #if defined(CARVE_DEBUG_WRITE_PLY_DATA)
-void writePLY(std::string &out_file, const carve::poly::Polyhedron *poly, bool ascii);
+void writePLY(const std::string &out_file, const carve::poly::Polyhedron *poly, bool ascii);
 #endif
 
 
