@@ -40,13 +40,64 @@ typedef carve::poly::Polyhedron poly_t;
 
 
 
-#if defined(CARVE_DEBUG_WRITE_PLY_DATA)
-void writePLY(std::string &out_file, const carve::line::PolylineSet *lines, bool ascii);
-#endif
-
-
-
 namespace {
+
+
+
+#if defined(CARVE_DEBUG_WRITE_PLY_DATA)
+  template<typename iter_t>
+    void dumpFacesAndHoles(iter_t f_begin, iter_t f_end,
+                           iter_t h_begin, iter_t h_end,
+                           const std::string &fname) {
+    std::cerr << "dumping " << std::distance(f_begin, f_end) << " faces, " << std::distance(h_begin, h_end) << " holes." << std::endl;
+    std::map<const poly_t::vertex_t *, size_t> v_included;
+
+    for (iter_t i = f_begin; i != f_end; ++i) {
+      for (size_t j = 0; j < (*i).size(); ++j) {
+        if (v_included.find((*i)[j]) == v_included.end()) {
+          size_t &p = v_included[(*i)[j]];
+          p = v_included.size() - 1;
+        }
+      }
+    }
+
+    for (iter_t i = h_begin; i != h_end; ++i) {
+      for (size_t j = 0; j < (*i).size(); ++j) {
+        if (v_included.find((*i)[j]) == v_included.end()) {
+          size_t &p = v_included[(*i)[j]];
+          p = v_included.size() - 1;
+        }
+      }
+    }
+
+    carve::line::PolylineSet fh;
+    fh.vertices.resize(v_included.size());
+    for (std::map<const poly_t::vertex_t *, size_t>::const_iterator
+           i = v_included.begin(); i != v_included.end(); ++i) {
+      fh.vertices[(*i).second].v = (*i).first->v;
+    }
+
+    {
+      std::vector<size_t> connected;
+      for (iter_t i = f_begin; i != f_end; ++i) {
+        connected.clear();
+        for (size_t j = 0; j < (*i).size(); ++j) {
+          connected.push_back(v_included[(*i)[j]]);
+        }
+        fh.addPolyline(true, connected.begin(), connected.end());
+      }
+      for (iter_t i = h_begin; i != h_end; ++i) {
+        connected.clear();
+        for (size_t j = 0; j < (*i).size(); ++j) {
+          connected.push_back(v_included[(*i)[j]]);
+        }
+        fh.addPolyline(true, connected.begin(), connected.end());
+      }
+    }
+
+    ::writePLY(fname, &fh, true);
+  }
+#endif
 
 
 
@@ -1327,65 +1378,6 @@ namespace {
  
     populateVectorFromList(loop_list, loops);
   }
-
-
-
-#if defined(CARVE_DEBUG_WRITE_PLY_DATA)
-  void dumpFacesAndHoles(const std::list<std::vector<const poly_t::vertex_t *> > &face_loops,
-                         const std::list<std::vector<const poly_t::vertex_t *> > &hole_loops) {
-    std::map<const poly_t::vertex_t *, size_t> v_included;
-
-    for (std::list<std::vector<const poly_t::vertex_t *> >::const_iterator
-           i = face_loops.begin(); i != face_loops.end(); ++i) {
-      for (size_t j = 0; j < (*i).size(); ++j) {
-        if (v_included.find((*i)[j]) == v_included.end()) {
-          size_t &p = v_included[(*i)[j]];
-          p = v_included.size() - 1;
-        }
-      }
-    }
-
-    for (std::list<std::vector<const poly_t::vertex_t *> >::const_iterator
-           i = hole_loops.begin(); i != hole_loops.end(); ++i) {
-      for (size_t j = 0; j < (*i).size(); ++j) {
-        if (v_included.find((*i)[j]) == v_included.end()) {
-          size_t &p = v_included[(*i)[j]];
-          p = v_included.size() - 1;
-        }
-      }
-    }
-
-    carve::line::PolylineSet fh;
-    fh.vertices.resize(v_included.size());
-    for (std::map<const poly_t::vertex_t *, size_t>::const_iterator
-           i = v_included.begin(); i != v_included.end(); ++i) {
-      fh.vertices[(*i).second].v = (*i).first->v;
-    }
-
-    {
-      std::vector<size_t> connected;
-      for (std::list<std::vector<const poly_t::vertex_t *> >::const_iterator
-             i = face_loops.begin(); i != face_loops.end(); ++i) {
-        connected.clear();
-        for (size_t j = 0; j < (*i).size(); ++j) {
-          connected.push_back(v_included[(*i)[j]]);
-        }
-        fh.addPolyline(true, connected.begin(), connected.end());
-      }
-      for (std::list<std::vector<const poly_t::vertex_t *> >::const_iterator
-             i = hole_loops.begin(); i != hole_loops.end(); ++i) {
-        connected.clear();
-        for (size_t j = 0; j < (*i).size(); ++j) {
-          connected.push_back(v_included[(*i)[j]]);
-        }
-        fh.addPolyline(true, connected.begin(), connected.end());
-      }
-    }
-
-    std::string out("/tmp/hole_merge.ply");
-    ::writePLY(out, &fh, true);
-  }
-#endif
 
 
 
