@@ -128,6 +128,37 @@ namespace {
     }
   }
 
+  template<typename iter_t>
+  void orderEdgeIntersectionVertices(iter_t beg, const iter_t end,
+                                     const poly_t::vertex_t::vector_t &dir,
+                                     const poly_t::vertex_t::vector_t &base,
+                                     std::vector<const poly_t::vertex_t *> &out) {
+    typedef std::vector<std::pair<std::pair<double, double>, const poly_t::vertex_t *> > DVVector;
+    DVVector ordered_vertices;
+
+    ordered_vertices.reserve(std::distance(beg, end));
+  
+    for (; beg != end; ++beg) {
+      const poly_t::vertex_t *v = (*beg).first;
+      double ovec = 0.0;
+      for (carve::csg::detail::EdgeIntInfo::mapped_type::const_iterator j = (*beg).second.begin(); j != (*beg).second.end(); ++j) {
+        ovec += (*j).second;
+      }
+      ordered_vertices.push_back(std::make_pair(std::make_pair(carve::geom::dot(v->v - base, dir), -ovec), v));
+    }
+
+    std::sort(ordered_vertices.begin(), ordered_vertices.end());
+
+    out.clear();
+    out.reserve(ordered_vertices.size());
+    for (DVVector::const_iterator
+           i = ordered_vertices.begin(), e = ordered_vertices.end();
+         i != e;
+         ++i) {
+      out.push_back((*i).second);
+    }
+  }
+
 
 
   /** 
@@ -507,6 +538,19 @@ void carve::csg::CSG::groupIntersections() {
 }
 
 
+static void recordEdgeIntersectionInfo(const poly_t::vertex_t *intersection,
+                                       const poly_t::edge_t *edge,
+                                       const carve::csg::detail::VFSMap::mapped_type &intersected_faces,
+                                       carve::csg::detail::Data &data) {
+  poly_t::vertex_t::vector_t edge_dir = edge->v2->v - edge->v1->v;
+  carve::csg::detail::EdgeIntInfo::mapped_type &eint_info = data.emap[edge][intersection];
+
+  for (carve::csg::detail::VFSMap::mapped_type::const_iterator i = intersected_faces.begin(); i != intersected_faces.end(); ++i) {
+    poly_t::vertex_t::vector_t normal = (*i)->plane_eqn.N;
+    eint_info.insert(std::make_pair((*i), carve::geom::dot(edge_dir, normal)));
+  }
+}
+
 
 void carve::csg::CSG::intersectingFacePairs(detail::Data &data) {
   static carve::TimingName FUNC_NAME("CSG::intersectingFacePairs()");
@@ -521,6 +565,8 @@ void carve::csg::CSG::intersectingFacePairs(detail::Data &data) {
     const poly_t::vertex_t *i_pt = ((*i).first);
     detail::VFSMap::mapped_type &face_set = (data.fmap_rev[i_pt]);
 
+    detail::VFSMap::mapped_type src_face_set;
+    detail::VFSMap::mapped_type tgt_face_set;
     // for all pairs of intersecting objects at this point
     for (carve::csg::VertexIntersections::mapped_type::const_iterator
            j = (*i).second.begin(),
@@ -530,17 +576,22 @@ void carve::csg::CSG::intersectingFacePairs(detail::Data &data) {
       const carve::csg::IObj &i_src = ((*j).first);
       const carve::csg::IObj &i_tgt = ((*j).second);
 
-      // work out the faces involved. this updates fmap_rev.
-      intersections.facesForObject(i_src, face_set);
-      intersections.facesForObject(i_tgt, face_set);
+      src_face_set.clear();
+      tgt_face_set.clear();
+      // work out the faces involved.
+      intersections.facesForObject(i_src, src_face_set);
+      intersections.facesForObject(i_tgt, tgt_face_set);
+      // this updates fmap_rev.
+      std::copy(src_face_set.begin(), src_face_set.end(), set_inserter(face_set));
+      std::copy(tgt_face_set.begin(), tgt_face_set.end(), set_inserter(face_set));
 
       // record the intersection with respect to any involved vertex.
       if (i_src.obtype == IObj::OBTYPE_VERTEX) data.vmap[i_src.vertex] = i_pt;
       if (i_tgt.obtype == IObj::OBTYPE_VERTEX) data.vmap[i_tgt.vertex] = i_pt;
 
       // record the intersection with respect to any involved edge.
-      if (i_src.obtype == IObj::OBTYPE_EDGE) data.emap[i_src.edge].insert(i_pt);
-      if (i_tgt.obtype == IObj::OBTYPE_EDGE) data.emap[i_tgt.edge].insert(i_pt);
+      if (i_src.obtype == IObj::OBTYPE_EDGE) recordEdgeIntersectionInfo(i_pt, i_src.edge, tgt_face_set, data);
+      if (i_tgt.obtype == IObj::OBTYPE_EDGE) recordEdgeIntersectionInfo(i_pt, i_tgt.edge, src_face_set, data);
     }
 
     // record the intersection with respect to each face.
@@ -826,13 +877,13 @@ void carve::csg::CSG::divideIntersectedEdges(detail::Data &data) {
   static carve::TimingName FUNC_NAME("CSG::divideIntersectedEdges()");
   carve::TimingBlock block(FUNC_NAME);
 
-  for (detail::EVSMap::const_iterator i = data.emap.begin(), ei = data.emap.end(); i != ei; ++i) {
+  for (detail::EIntMap::const_iterator i = data.emap.begin(), ei = data.emap.end(); i != ei; ++i) {
     const poly_t::edge_t *edge = (*i).first;
-    const detail::EVSMap::mapped_type &vertices = (*i).second;
+    const detail::EIntMap::mapped_type &int_info = (*i).second;
     std::vector<const poly_t::vertex_t *> &verts = data.divided_edges[edge];
-    orderVertices(edge->v2->v - edge->v1->v, edge->v1->v,
-                  vertices.begin(), vertices.end(),
-                  verts, vertices.size());
+    orderEdgeIntersectionVertices(int_info.begin(), int_info.end(),
+                                  edge->v2->v - edge->v1->v, edge->v1->v,
+                                  verts);
   }
 }
 
@@ -854,13 +905,13 @@ void carve::csg::CSG::divideEdges(const std::vector<poly_t::edge_t > &edges,
        i != e;
        ++i) {
     const poly_t::edge_t *edge = (&(*i));
-    detail::EVSMap::const_iterator ei = data.emap.find(edge);
+    detail::EIntMap::const_iterator ei = data.emap.find(edge);
     if (ei != data.emap.end()) {
-      const detail::EVSMap::mapped_type &vertices = ((*ei).second);
+      const detail::EIntMap::mapped_type &int_info = ((*ei).second);
       std::vector<const poly_t::vertex_t *> &verts = (data.divided_edges[edge]);
-      orderVertices(edge->v2->v - edge->v1->v, edge->v1->v,
-                    vertices.begin(), vertices.end(),
-                    verts, vertices.size());
+      orderEdgeIntersectionVertices(int_info.begin(), int_info.end(),
+                                    edge->v2->v - edge->v1->v, edge->v1->v,
+                                    verts);
     }
   }
 }

@@ -25,6 +25,14 @@ namespace carve {
   namespace csg {
     namespace detail {
 
+    typedef std::map<const carve::poly::Geometry<3>::vertex_t *,
+                     std::set<std::pair<const carve::poly::Geometry<3>::face_t *, double> > > EdgeIntInfo;
+
+    typedef std::unordered_map<
+      const carve::poly::Geometry<3>::edge_t *,
+      EdgeIntInfo,
+      carve::poly::hash_edge_ptr> EIntMap;
+
     typedef std::unordered_set<
       const carve::poly::Geometry<3>::vertex_t *,
       carve::poly::hash_vertex_ptr> VSet;
