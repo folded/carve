@@ -1207,12 +1207,12 @@ void carve::csg::CSG::calc(const poly_t *a,
   {
     std::string out("/tmp/a_split.ply");
     std::auto_ptr<carve::poly::Polyhedron> poly(faceLoopsToPolyhedron(a_face_loops));
-    ::writePLY(out, faceLoopsToPolyhedron(poly.get()), false);
+    ::writePLY(out, poly.get(), false);
   }
   {
     std::string out("/tmp/b_split.ply");
     std::auto_ptr<carve::poly::Polyhedron> poly(faceLoopsToPolyhedron(b_face_loops));
-    ::writePLY(out, faceLoopsToPolyhedron(poly.get()), false);
+    ::writePLY(out, poly.get(), false);
   }
 #endif
 
