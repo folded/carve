@@ -14,6 +14,7 @@
 // A PARTICULAR PURPOSE.
 // End:
 
+#include <memory>
 
 #if defined(HAVE_CONFIG_H)
 #  include <carve_config.h>
@@ -1205,11 +1206,13 @@ void carve::csg::CSG::calc(const poly_t *a,
 #if defined(CARVE_DEBUG_WRITE_PLY_DATA)
   {
     std::string out("/tmp/a_split.ply");
-    writePLY(out, faceLoopsToPolyhedron(a_face_loops), false);
+    std::auto_ptr<carve::poly::Polyhedron> poly(faceLoopsToPolyhedron(a_face_loops));
+    writePLY(out, faceLoopsToPolyhedron(poly.get()), false);
   }
   {
     std::string out("/tmp/b_split.ply");
-    writePLY(out, faceLoopsToPolyhedron(b_face_loops), false);
+    std::auto_ptr<carve::poly::Polyhedron> poly(faceLoopsToPolyhedron(b_face_loops));
+    writePLY(out, faceLoopsToPolyhedron(poly.get()), false);
   }
 #endif
 
