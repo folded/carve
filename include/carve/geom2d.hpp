@@ -32,6 +32,8 @@
 
 #include <carve/geom.hpp>
 
+#include <algorithm>
+#include <cstddef>
 #include <vector>
 
 #include <math.h>
@@ -62,15 +64,15 @@ namespace carve {
 
     typedef std::vector<P2> P2Vector;
 
-    /** 
+    /**
      * \brief Return the orientation of c with respect to the ray defined by a->b.
      *
      * (Can be implemented exactly)
-     * 
-     * @param[in] a 
-     * @param[in] b 
-     * @param[in] c 
-     * 
+     *
+     * @param[in] a
+     * @param[in] b
+     * @param[in] c
+     *
      * @return positive, if c to the left of a->b.
      *         zero, if c is colinear with a->b.
      *         negative, if c to the right of a->b.
@@ -89,15 +91,15 @@ namespace carve {
     }
 #endif
 
-    /** 
+    /**
      * \brief Determine whether p is internal to the anticlockwise
      *        angle abc, where b is the apex of the angle.
      *
-     * @param[in] a 
-     * @param[in] b 
-     * @param[in] c 
-     * @param[in] p 
-     * 
+     * @param[in] a
+     * @param[in] b
+     * @param[in] c
+     * @param[in] p
+     *
      * @return true, if p is contained in the anticlockwise angle from
      *               b->a to b->c. Reflex angles contain p if p lies
      *               on b->a or on b->c. Acute angles do not contain p
@@ -118,14 +120,14 @@ namespace carve {
       }
     }
 
-    /** 
+    /**
      * \brief Determine whether p is internal to the anticlockwise
      *        angle ac, with apex at (0,0).
      *
-     * @param[in] a 
-     * @param[in] c 
-     * @param[in] p 
-     * 
+     * @param[in] a
+     * @param[in] c
+     * @param[in] p
+     *
      * @return true, if p is contained in a0c.
      */
     inline bool internalToAngle(const P2 &a,

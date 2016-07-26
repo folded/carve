@@ -79,22 +79,22 @@ if(CARVE_SYSTEM_BOOST)
     set(CARVE_SYSTEM_BOOST OFF)
   endif(Boost_FOUND)
 endif(CARVE_SYSTEM_BOOST)
-  
+
 if(CARVE_BOOST_COLLECTIONS)
   set(HAVE_BOOST_UNORDERED_COLLECTIONS TRUE)
 
 else(CARVE_BOOST_COLLECTIONS)
   # attempt to work out which unordered collection implementation we can use
   try_compile(_HAVE_STD_UNORDERED_COLLECTIONS
-              ${CMAKE_BINARY_DIR} 
+              ${CMAKE_BINARY_DIR}
               "${carve_SOURCE_DIR}/cmake/test_std_unordered.cpp"
               OUTPUT_VARIABLE OUTPUT)
   try_compile(_HAVE_TR1_UNORDERED_COLLECTIONS
-              ${CMAKE_BINARY_DIR} 
+              ${CMAKE_BINARY_DIR}
               "${carve_SOURCE_DIR}/cmake/test_tr1_unordered.cpp"
               OUTPUT_VARIABLE OUTPUT)
   try_compile(_HAVE_LIBSTDCPP_UNORDERED_COLLECTIONS
-              ${CMAKE_BINARY_DIR} 
+              ${CMAKE_BINARY_DIR}
               "${carve_SOURCE_DIR}/cmake/test_libstdcpp_unordered.cpp"
               OUTPUT_VARIABLE OUTPUT)
 
@@ -134,20 +134,20 @@ if(CARVE_WITH_GUI)
       if(WIN32)
         add_definitions(-DGLEW_STATIC)
       endif(WIN32)
-      add_subdirectory(external/GLEW) 
+      add_subdirectory(external/GLEW)
     endif(GLEW_FOUND)
 
     if(WIN32)
       add_definitions(-DGLUI_NO_LIB_PRAGMA)
       add_definitions(-DGLUI_USE_STATIC_LIB)
     endif(WIN32)
-    add_subdirectory(external/GLUI) 
+    add_subdirectory(external/GLUI)
 
   endif(NOT OPENGL_FOUND)
 
 endif(CARVE_WITH_GUI)
 
-add_subdirectory(external/GLOOP) 
+add_subdirectory(external/GLOOP)
 
 if (CARVE_GTEST_TESTS)
   add_subdirectory(external/gtest-1.5.0)
@@ -161,13 +161,22 @@ add_definitions(-DCMAKE_BUILD)
 
 include_directories(${carve_BINARY_DIR}/include)
 
-add_subdirectory(lib) 
-add_subdirectory(include) 
-add_subdirectory(common) 
-add_subdirectory(src) 
-add_subdirectory(examples) 
-add_subdirectory(tests) 
+add_subdirectory(lib)
+add_subdirectory(include)
+add_subdirectory(common)
+add_subdirectory(src)
+add_subdirectory(examples)
+add_subdirectory(tests)
 
+install(
+  FILES
+    ${carve_BINARY_DIR}/include/carve/config.h
+    ${carve_SOURCE_DIR}/include/carve/gnu_cxx.h
+  DESTINATION
+    include/carve
+  COMPONENT
+    Devel
+)
 
 include(CTest)
 

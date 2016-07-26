@@ -30,6 +30,7 @@
 #include <carve/djset.hpp>
 
 #include <iostream>
+#include <cstddef>
 #include <deque>
 
 namespace carve {
@@ -553,7 +554,7 @@ namespace carve {
         for (size_t i = 0; i < set_size.size(); ++i) {
           mesh_faces[i].reserve(set_size[i]);
         }
-      
+
         for (iter_t i = begin; i != end; ++i) {
           face_t *face = *i;
           mesh_faces[index_set[face->id]].push_back(face);

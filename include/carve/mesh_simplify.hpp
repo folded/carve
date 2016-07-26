@@ -130,7 +130,7 @@ namespace carve {
           return e->edge->prev->vert == e->edge->rev->prev->vert;
         }
 
-        bool flippable_DotProd(const EdgeInfo *e) const { 
+        bool flippable_DotProd(const EdgeInfo *e) const {
           using carve::geom::dot;
           using carve::geom::cross;
 
@@ -476,7 +476,7 @@ namespace carve {
               tri_b[0] = fb->edge->vert->v;
               tri_b[1] = fb->edge->next->vert->v;
               tri_b[2] = fb->edge->next->next->vert->v;
-              
+
               if (carve::geom::triangle_intersection_exact(tri_a, tri_b) == carve::geom::TR_TYPE_INT) {
                 ++r;
               }
@@ -765,7 +765,7 @@ namespace carve {
           vector_t aabb_min, aabb_max;
           assign_op(aabb_min, v1->v, v2->v, carve::util::min_functor());
           assign_op(aabb_max, v1->v, v2->v, carve::util::max_functor());
-          
+
           for (size_t i = 0; i < v1_incident.size(); ++i) {
             assign_op(aabb_min, aabb_min, v1_incident[i]->edge->v1()->v, carve::util::min_functor());
             assign_op(aabb_max, aabb_max, v1_incident[i]->edge->v1()->v, carve::util::max_functor());
@@ -1285,7 +1285,11 @@ namespace carve {
             open.erase(open.begin());
             face_set.insert(curr);
             axes |= axis_influence[curr];
+#ifdef HAVE_STD_UNORDERED_COLLECTIONS
+            for (interaction_graph_t::mapped_type::iterator i = interacting_faces[curr].begin(), e = interacting_faces[curr].end(); i != e; ++i) {
+#else
             for (interaction_graph_t::data_type::iterator i = interacting_faces[curr].begin(), e = interacting_faces[curr].end(); i != e; ++i) {
+#endif
               face_t *f = *i;
               if (face_set.find(f) != face_set.end()) continue;
               open.insert(f);
@@ -1323,7 +1327,7 @@ namespace carve {
           if (grid) {
             carve::geom::vector<3> v_best = vert->v;
             double d_best = 0.0;
-            
+
             for (size_t axes = 0; axes < 8; ++axes) {
               carve::geom::vector<3> v = vert->v;
               for (size_t N = 0; N < 3; ++N) {
@@ -1398,8 +1402,8 @@ namespace carve {
         return modifications;
       }
 
-      
-      
+
+
       size_t removeFins(mesh_t *mesh) {
         size_t n_removed = 0;
         for (size_t i = 0; i < mesh->faces.size(); ++i) {

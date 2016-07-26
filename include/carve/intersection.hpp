@@ -32,10 +32,10 @@
 namespace carve {
   namespace csg {
 
-    /** 
+    /**
      * \class Intersections
      * \brief Storage for computed intersections between vertices, edges and faces.
-     * 
+     *
      */
     struct Intersections : public std::unordered_map<IObj, IObjVMapSmall, IObj_hash> {
       typedef carve::mesh::MeshSet<3>::vertex_t vertex_t;
@@ -47,9 +47,9 @@ namespace carve {
       ~Intersections() {
       }
 
-      /** 
+      /**
        * \brief Record the position of intersection between a pair of intersection objects.
-       * 
+       *
        * @param a The first intersecting object.
        * @param b The second intersecting object.
        * @param p The point of intersection.
@@ -60,19 +60,19 @@ namespace carve {
         (*this)[b][a] = p;
       }
 
-      /** 
+      /**
        * \brief Test whether vertex \a v intersects face \a f.
-       * 
+       *
        * @param v The vertex to test.
        * @param f The face to test.
-       * 
+       *
        * @return true, if \a v intersects \a f.
        */
       bool intersectsFace(vertex_t *v, face_t *f) const;
 
-      /** 
+      /**
        * \brief Collect sets of vertices, edges and faces that intersect \a obj
-       * 
+       *
        * @param[in] obj The intersection object to search for intersections.
        * @param[out] collect_v A vector of vertices intersecting \a obj.
        * @param[out] collect_e A vector of edges intersecting \a obj.
@@ -84,12 +84,12 @@ namespace carve {
                    std::vector<face_t *> *collect_f) const;
 
 
-      /** 
+      /**
        * \brief Determine whether two intersection objects intersect.
-       * 
+       *
        * @param a The first intersection object.
        * @param b The second intersection object.
-       * 
+       *
        * @return true, if \a a and \a b intersect.
        */
       bool intersectsExactly(const IObj &a, const IObj &b) {
@@ -98,12 +98,12 @@ namespace carve {
         return i->second.find(b) != i->second.end();
       }
 
-      /** 
+      /**
        * \brief Determine whether an intersection object intersects a vertex.
-       * 
+       *
        * @param a The intersection object.
        * @param v The vertex.
-       * 
+       *
        * @return true, if \a a and \a v intersect.
        */
       bool intersects(const IObj &a, vertex_t *v) {
@@ -113,19 +113,23 @@ namespace carve {
         return false;
       }
 
-      /** 
+      /**
        * \brief Determine whether an intersection object intersects an edge.
-       * 
+       *
        * @param a The intersection object.
        * @param e The edge.
-       * 
+       *
        * @return true, if \a a and \a e intersect (either on the edge,
        *         or at either endpoint).
        */
       bool intersects(const IObj &a, edge_t *e) {
         Intersections::const_iterator i = find(a);
         if (i == end()) return false;
+#ifdef HAVE_STD_UNORDERED_COLLECTIONS
+        for (super::mapped_type::const_iterator j = i->second.begin(); j != i->second.end(); ++j) {
+#else
         for (super::data_type::const_iterator j = i->second.begin(); j != i->second.end(); ++j) {
+#endif
           const IObj &obj = j->first;
           switch (obj.obtype) {
           case IObj::OBTYPE_VERTEX:
@@ -141,12 +145,12 @@ namespace carve {
         return false;
       }
 
-      /** 
+      /**
        * \brief Determine whether an intersection object intersects a face.
-       * 
+       *
        * @param a The intersection object.
        * @param f The face.
-       * 
+       *
        * @return true, if \a a and \a f intersect (either on the face,
        *         or at any associated edge or vertex).
        */
@@ -163,12 +167,12 @@ namespace carve {
         return false;
       }
 
-      /** 
+      /**
        * \brief Determine whether an edge intersects another edge.
-       * 
+       *
        * @param e The edge.
        * @param f The face.
-       * 
+       *
        * @return true, if \a e and \a f intersect.
        */
       bool intersects(edge_t *e1, edge_t *e2) {
@@ -176,12 +180,12 @@ namespace carve {
         return false;
       }
 
-      /** 
+      /**
        * \brief Determine whether an edge intersects a face.
-       * 
+       *
        * @param e The edge.
        * @param f The face.
-       * 
+       *
        * @return true, if \a e and \a f intersect.
        */
       bool intersects(edge_t *e, face_t *f) {
@@ -189,9 +193,9 @@ namespace carve {
         return false;
       }
 
-      /** 
+      /**
        * \brief Determine the faces intersected by an edge.
-       * 
+       *
        * @tparam face_set_t A collection type holding face_t *
        * @param[in] e The edge.
        * @param[out] f The resulting set of faces.
@@ -213,9 +217,9 @@ namespace carve {
         f.insert(intersected_faces.begin(), intersected_faces.end());
       }
 
-      /** 
+      /**
        * \brief Determine the faces intersected by a vertex.
-       * 
+       *
        * @tparam face_set_t A collection type holding face_t *
        * @param[in] v The vertex.
        * @param[out] f The resulting set of faces.
@@ -237,9 +241,9 @@ namespace carve {
         f.insert(intersected_faces.begin(), intersected_faces.end());
       }
 
-      /** 
+      /**
        * \brief Collect the set of faces that contain all vertices in \a verts.
-       * 
+       *
        * @tparam vertex_set_t A collection type holding vertex_t *
        * @tparam face_set_t A collection type holding face_t *
        * @param[in] verts A set of vertices.
