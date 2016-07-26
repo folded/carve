@@ -27,6 +27,7 @@
 
 #include <carve/carve.hpp>
 
+#include <algorithm>
 #include <vector>
 #include <numeric>
 
@@ -154,7 +155,7 @@ namespace carve {
           double half;
           double check, lastcheck;
           int every_other;
-  
+
           every_other = 1;
           half = 0.5;
           epsilon = 1.0;
@@ -174,7 +175,7 @@ namespace carve {
             check = 1.0 + epsilon;
           } while ((check != 1.0) && (check != lastcheck));
           splitter += 1.0;
-  
+
           /* Error bounds for orientation and incircle tests. */
           resulterrbound = (3.0 + 8.0 * epsilon) * epsilon;
           ccwerrboundA = (3.0 + 16.0 * epsilon) * epsilon;
@@ -704,7 +705,7 @@ namespace carve {
       sum_zeroelim(cdet, ddet, cddet);
 
       sum_zeroelim(abdet, cddet, det);
-  
+
       return det[det.size() - 1];
     }
 

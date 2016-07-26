@@ -31,6 +31,7 @@
 #include <carve/geom.hpp>
 #include <carve/geom3d.hpp>
 
+#include <algorithm>
 #include <sstream>
 
 #include <math.h>
@@ -64,7 +65,7 @@ namespace carve {
     };
 
 
-  
+
     struct vec_adapt_pair_first {
       template<typename pair_t> const Vector &operator()(const pair_t &v) const { return v.first; }
       template<typename pair_t> Vector &operator()(pair_t &v) const { return v.first; }
