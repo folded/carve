@@ -150,7 +150,7 @@ endif(CARVE_WITH_GUI)
 add_subdirectory(external/GLOOP) 
 
 if (CARVE_GTEST_TESTS)
-  add_subdirectory(external/gtest-1.5.0)
+  add_subdirectory(external/googletest)
 endif(CARVE_GTEST_TESTS)
 
 configure_file (
