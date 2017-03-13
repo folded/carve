@@ -43,6 +43,9 @@ namespace poly {
 struct Object;
 
 template <unsigned ndim>
+class Vertex;
+
+template <unsigned ndim>
 class Edge;
 
 template <unsigned ndim>

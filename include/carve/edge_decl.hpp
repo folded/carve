@@ -38,6 +38,9 @@ namespace poly {
 struct Object;
 
 template <unsigned ndim>
+class Vertex;
+
+template <unsigned ndim>
 class Edge : public tagable {
  public:
   typedef Vertex<ndim> vertex_t;
