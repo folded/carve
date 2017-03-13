@@ -86,7 +86,9 @@ bool Geometry<3>::orderVertices(order_t order) {
 template <typename T>
 int Geometry<3>::_faceNeighbourhood(const face_t* f, int depth,
                                     T* result) const {
-  if (depth < 0 || f->is_tagged()) return 0;
+  if (depth < 0 || f->is_tagged()) {
+    return 0;
+  }
 
   f->tag();
   *(*result)++ = f;
@@ -182,15 +184,18 @@ inline const Geometry<3>::face_t* Geometry<3>::connectedFace(
   const std::vector<const face_t*>& edge_faces =
       connectivity.edge_to_face[(size_t)edgeToIndex_fast(e)];
   for (size_t i = 0; i < (edge_faces.size() & ~1U); i++) {
-    if (edge_faces[i] == f) return edge_faces[i ^ 1];
+    if (edge_faces[i] == f) {
+      return edge_faces[i ^ 1];
+    }
   }
   return NULL;
 }
 
 inline void Polyhedron::invert(int m_id) {
   std::vector<bool> selected_manifolds(manifold_is_closed.size(), false);
-  if (m_id >= 0 && (size_t)m_id < selected_manifolds.size())
+  if (m_id >= 0 && (size_t)m_id < selected_manifolds.size()) {
     selected_manifolds[(size_t)m_id] = true;
+  }
   invert(selected_manifolds);
 }
 
@@ -201,7 +206,9 @@ inline bool Polyhedron::edgeOnManifold(const edge_t* e, int m_id) const {
       connectivity.edge_to_face[(size_t)edgeToIndex_fast(e)];
 
   for (size_t i = 0; i < edge_faces.size(); ++i) {
-    if (edge_faces[i] && edge_faces[i]->manifold_id == m_id) return true;
+    if (edge_faces[i] && edge_faces[i]->manifold_id == m_id) {
+      return true;
+    }
   }
   return false;
 }
@@ -211,7 +218,9 @@ inline bool Polyhedron::vertexOnManifold(const vertex_t* v, int m_id) const {
       connectivity.vertex_to_face[(size_t)vertexToIndex_fast(v)];
 
   for (size_t i = 0; i < f.size(); ++i) {
-    if (f[i]->manifold_id == m_id) return true;
+    if (f[i]->manifold_id == m_id) {
+      return true;
+    }
   }
   return false;
 }
@@ -225,10 +234,11 @@ int Polyhedron::edgeManifolds(const edge_t* e, T result) const {
     const face_t* f1 = edge_faces[i];
     const face_t* f2 = edge_faces[i + 1];
     assert(f1 || f2);
-    if (f1)
+    if (f1) {
       *result++ = f1->manifold_id;
-    else if (f2)
+    } else if (f2) {
       *result++ = f2->manifold_id;
+    }
   }
   return (int)(edge_faces.size() >> 1);
 }
@@ -262,7 +272,9 @@ inline size_t Polyhedron::manifoldCount() const {
 
 inline bool Polyhedron::hasOpenManifolds() const {
   for (size_t i = 0; i < manifold_is_closed.size(); ++i) {
-    if (!manifold_is_closed[i]) return true;
+    if (!manifold_is_closed[i]) {
+      return true;
+    }
   }
   return false;
 }

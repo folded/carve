@@ -54,8 +54,9 @@ void test_notify(std::vector<int> heap) {
   for (size_t l = heap.size(); l > 0; --l) {
     carve::heap::pop_heap(heap.begin(), heap.begin() + l, std::less<int>(),
                           record_t(pos));
-    if (l)
+    if (l) {
       ASSERT_EQ(carve::heap::is_heap(heap.begin(), heap.begin() + l - 1), true);
+    }
     for (std::map<int, size_t>::iterator i = pos.begin(); i != pos.end(); ++i) {
       ASSERT_EQ(heap[(*i).second], (*i).first);
     }
@@ -71,10 +72,11 @@ void test_cmp(std::vector<int> heap) {
 
   for (size_t l = heap.size(); l > 0; --l) {
     carve::heap::pop_heap(heap.begin(), heap.begin() + l, std::greater<int>());
-    if (l)
+    if (l) {
       ASSERT_EQ(carve::heap::is_heap(heap.begin(), heap.begin() + l - 1,
                                      std::greater<int>()),
                 true);
+    }
   }
   ASSERT_EQ(carve::is_sorted(heap.begin(), heap.end(), std::greater<int>()),
             true);
@@ -87,8 +89,9 @@ void test_heap(std::vector<int> heap) {
 
   for (size_t l = heap.size(); l > 0; --l) {
     carve::heap::pop_heap(heap.begin(), heap.begin() + l);
-    if (l)
+    if (l) {
       ASSERT_EQ(carve::heap::is_heap(heap.begin(), heap.begin() + l - 1), true);
+    }
   }
   ASSERT_EQ(carve::is_sorted(heap.begin(), heap.end()), true);
 }
@@ -101,8 +104,9 @@ void test_push(std::vector<int> heap) {
 
   for (size_t l = heap.size(); l > 0; --l) {
     carve::heap::pop_heap(heap.begin(), heap.begin() + l);
-    if (l)
+    if (l) {
       ASSERT_EQ(carve::heap::is_heap(heap.begin(), heap.begin() + l - 1), true);
+    }
   }
   ASSERT_EQ(carve::is_sorted(heap.begin(), heap.end()), true);
 }

@@ -102,7 +102,9 @@ class CarveTriangulationImprover : public csg::CSG::Hook {
   virtual void processOutputFace(
       std::vector<carve::mesh::MeshSet<3>::face_t*>& faces,
       const carve::mesh::MeshSet<3>::face_t* orig, bool flipped) {
-    if (faces.size() == 1) return;
+    if (faces.size() == 1) {
+      return;
+    }
 
     // doing improvement as a separate hook is much messier than
     // just incorporating it into the triangulation hook.
@@ -173,7 +175,9 @@ class CarveTriangulationQuadMerger : public csg::CSG::Hook {
   virtual ~CarveTriangulationQuadMerger() {}
 
   double scoreQuad(edge_map_t::iterator i, edge_map_t& edge_map) {
-    if (!(*i).second.first || !(*i).second.second) return -1;
+    if (!(*i).second.first || !(*i).second.second) {
+      return -1;
+    }
     return -1;
   }
 
@@ -195,7 +199,9 @@ class CarveTriangulationQuadMerger : public csg::CSG::Hook {
   virtual void processOutputFace(
       std::vector<carve::mesh::MeshSet<3>::face_t*>& faces,
       const carve::mesh::MeshSet<3>::face_t* orig, bool flipped) {
-    if (faces.size() == 1) return;
+    if (faces.size() == 1) {
+      return;
+    }
 
     std::vector<carve::mesh::MeshSet<3>::face_t*> out_faces;
     edge_map_t edge_map;
@@ -233,9 +239,13 @@ class CarveTriangulationQuadMerger : public csg::CSG::Hook {
       double best_score = scoreQuad(i, edge_map);
       for (++i; i != edge_map.end(); ++i) {
         double score = scoreQuad(i, edge_map);
-        if (score > best_score) best = i;
+        if (score > best_score) {
+          best = i;
+        }
       }
-      if (best_score < 0) break;
+      if (best_score < 0) {
+        break;
+      }
       out_faces.push_back(mergeQuad(best, edge_map));
     }
 
@@ -247,8 +257,12 @@ class CarveTriangulationQuadMerger : public csg::CSG::Hook {
             const_cast<carve::mesh::MeshSet<3>::face_t*>((*i).second.first);
         carve::mesh::MeshSet<3>::face_t* b =
             const_cast<carve::mesh::MeshSet<3>::face_t*>((*i).second.first);
-        if (a && a->tag_once()) out_faces.push_back(a);
-        if (b && b->tag_once()) out_faces.push_back(b);
+        if (a && a->tag_once()) {
+          out_faces.push_back(a);
+        }
+        if (b && b->tag_once()) {
+          out_faces.push_back(b);
+        }
       }
     }
 
@@ -306,9 +320,13 @@ class CarveHoleResolver : public csg::CSG::Hook {
       for (size_t i = 0; i < 3; ++i) {
         std::map<std::pair<size_t, size_t>, size_t>::const_iterator adj =
             tri_edge.find(rev[i]);
-        if (adj == tri_edge.end()) continue;
+        if (adj == tri_edge.end()) {
+          continue;
+        }
         size_t next = (*adj).second;
-        if (grp[next] != old_grp) continue;
+        if (grp[next] != old_grp) {
+          continue;
+        }
         grp[next] = grp[curr];
         to_visit.push_back(next);
       }

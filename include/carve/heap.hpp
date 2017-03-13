@@ -40,7 +40,9 @@ void _adjust_heap(random_access_iter_t begin, distance_t pos, distance_t len,
 
   distance_t child = pos * 2 + 2;
   while (child < len) {
-    if (pred(begin[child], begin[child - 1])) child--;
+    if (pred(begin[child], begin[child - 1])) {
+      child--;
+    }
 
     begin[pos] = begin[child];
     notify(begin[pos], pos);
@@ -127,7 +129,9 @@ bool _is_heap(random_access_iter_t begin, distance_t len, pred_t pred) {
     if (pred(begin[parent], begin[child])) {
       return false;
     }
-    if (++child == len) break;
+    if (++child == len) {
+      break;
+    }
     if (pred(begin[parent], begin[child])) {
       return false;
     }

@@ -104,7 +104,9 @@ struct RTreeNode {
   // The aabb class must provide a method intersects(obj_t).
   template <typename obj_t, typename out_iter_t>
   void search(const obj_t& obj, out_iter_t out) const {
-    if (!bbox.intersects(obj)) return;
+    if (!bbox.intersects(obj)) {
+      return;
+    }
     if (child) {
       for (node_t* node = child; node; node = node->sibling) {
         node->search(obj, out);
@@ -119,7 +121,9 @@ struct RTreeNode {
   // The aabb class must provide a method intersects(obj_t).
   template <typename obj_t>
   void updateExtents(const obj_t& obj) {
-    if (!bbox.intersects(obj)) return;
+    if (!bbox.intersects(obj)) {
+      return;
+    }
 
     if (child) {
       node_t* node = child;
@@ -138,7 +142,9 @@ struct RTreeNode {
   // aabb).
   // The aabb class must provide a method intersects(obj_t).
   bool remove(const data_t& val, const aabb_t& val_aabb) {
-    if (!bbox.intersects(val_aabb)) return false;
+    if (!bbox.intersects(val_aabb)) {
+      return false;
+    }
 
     if (child) {
       node_t* node = child;
@@ -146,7 +152,9 @@ struct RTreeNode {
       bbox = node->bbox;
       bool removed = false;
       for (node = node->sibling; node; node = node->sibling) {
-        if (!removed) removed = node->remove(val, val_aabb);
+        if (!removed) {
+          removed = node->remove(val, val_aabb);
+        }
         bbox.unionAABB(node->bbox);
       }
       return removed;
@@ -253,7 +261,9 @@ struct RTreeNode {
 
     // find the sparsest remaining dimension to partition by.
     for (size_t i = 0; i < ndim; ++i) {
-      if (dim_mask & (1U << i)) continue;
+      if (dim_mask & (1U << i)) {
+        continue;
+      }
       aabb_extent extent(i);
       double dmin, dmax, dsum;
 
@@ -371,7 +381,9 @@ struct RTreeNode {
       lhs.unionAABB(base[begin[i]].aabb);
       if (i % part_size == 0 || (N - i) % part_size == 0) {
         partition_info curr(lhs.volume() + rhs_vol[i], i);
-        if (best.score > curr.score) best = curr;
+        if (best.score > curr.score) {
+          best = curr;
+        }
       }
     }
     return best;
@@ -417,10 +429,12 @@ struct RTreeNode {
       }
     }
 
-    for (size_t j = 0; j < best.partition_pos; ++j)
+    for (size_t j = 0; j < best.partition_pos; ++j) {
       part_num[begin[(ssize_t)j]] = part_curr;
-    for (size_t j = best.partition_pos; j < N; ++j)
+    }
+    for (size_t j = best.partition_pos; j < N; ++j) {
       part_num[begin[(ssize_t)j]] = part_next;
+    }
     ++part_next;
 
     if (best.partition_pos > part_size) {
@@ -468,21 +482,23 @@ struct RTreeNode {
         size_t j = S, k = N;
         while (true) {
           while (true) {
-            if (j == k)
+            if (j == k) {
               goto done;
-            else if (part_num[j] == i)
+            } else if (part_num[j] == i) {
               ++j;
-            else
+            } else {
               break;
+            }
           }
           --k;
           while (true) {
-            if (j == k)
+            if (j == k) {
               goto done;
-            else if (part_num[k] != i)
+            } else if (part_num[k] != i) {
               --k;
-            else
+            } else {
               break;
+            }
           }
           std::swap(*(begin + j), *(begin + k));
           std::swap(part_num[j], part_num[k]);

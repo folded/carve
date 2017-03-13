@@ -49,7 +49,9 @@ class CSG_TreeNode {
   virtual carve::mesh::MeshSet<3>* eval(CSG& csg) {
     bool temp;
     carve::mesh::MeshSet<3>* r = eval(temp, csg);
-    if (!temp) r = r->clone();
+    if (!temp) {
+      r = r->clone();
+    }
     return r;
   }
 };
@@ -92,8 +94,9 @@ class CSG_InvertNode : public CSG_TreeNode {
       : selected_meshes(), child(_child) {
     while (start != end) {
       int g_id = (int)(*start);
-      if (selected_meshes.size() < g_id + 1)
+      if (selected_meshes.size() < g_id + 1) {
         selected_meshes.resize(g_id + 1, false);
+      }
       selected_meshes[g_id] = true;
       ++start;
     }
@@ -102,7 +105,9 @@ class CSG_InvertNode : public CSG_TreeNode {
   virtual carve::mesh::MeshSet<3>* eval(bool& is_temp, CSG& csg) {
     bool c_temp;
     carve::mesh::MeshSet<3>* c = child->eval(c_temp, csg);
-    if (!c_temp) c = c->clone();
+    if (!c_temp) {
+      c = c->clone();
+    }
     if (!selected_meshes.size()) {
       c->invert();
     } else {
@@ -134,8 +139,9 @@ class CSG_SelectNode : public CSG_TreeNode {
       : selected_meshes(), child(_child) {
     while (start != end) {
       int m_id = (int)(*start);
-      if ((int)selected_meshes.size() < m_id + 1)
+      if ((int)selected_meshes.size() < m_id + 1) {
         selected_meshes.resize(m_id + 1, false);
+      }
       selected_meshes[m_id] = true;
       ++start;
     }
@@ -146,7 +152,9 @@ class CSG_SelectNode : public CSG_TreeNode {
   virtual carve::mesh::MeshSet<3>* eval(bool& is_temp, CSG& csg) {
     bool c_temp;
     carve::mesh::MeshSet<3>* c = child->eval(c_temp, csg);
-    if (!c_temp) c = c->clone();
+    if (!c_temp) {
+      c = c->clone();
+    }
     size_t i = 0;
     size_t j = 0;
     for (size_t i = 0; i < c->meshes.size(); ++i) {
@@ -295,8 +303,12 @@ class CSG_OPNode : public CSG_TreeNode {
       static carve::TimingName FUNC_NAME("delete polyhedron");
       carve::TimingBlock block(FUNC_NAME);
 
-      if (l_temp) delete l;
-      if (r_temp) delete r;
+      if (l_temp) {
+        delete l;
+      }
+      if (r_temp) {
+        delete r;
+      }
     }
 
     is_temp = true;

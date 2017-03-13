@@ -116,10 +116,14 @@ struct Options : public opt::Parser {
 static Options options;
 
 static bool endswith(const std::string& a, const std::string& b) {
-  if (a.size() < b.size()) return false;
+  if (a.size() < b.size()) {
+    return false;
+  }
 
   for (unsigned i = a.size(), j = b.size(); j;) {
-    if (tolower(a[--i]) != tolower(b[--j])) return false;
+    if (tolower(a[--i]) != tolower(b[--j])) {
+      return false;
+    }
   }
   return true;
 }
@@ -152,7 +156,9 @@ int main(int argc, char** argv) {
 
     if ((p = carve::input::Input::create<carve::mesh::MeshSet<3> >(*i)) !=
         NULL) {
-      if (options.canonicalize) p->canonicalize();
+      if (options.canonicalize) {
+        p->canonicalize();
+      }
       if (options.obj) {
         writeOBJ(std::cout, p);
       } else if (options.vtk) {

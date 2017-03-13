@@ -44,7 +44,9 @@ namespace csg {
 static inline carve::mesh::MeshSet<3>::vertex_t* map_vertex(
     const VVMap& vmap, carve::mesh::MeshSet<3>::vertex_t* v) {
   VVMap::const_iterator i = vmap.find(v);
-  if (i == vmap.end()) return v;
+  if (i == vmap.end()) {
+    return v;
+  }
   return (*i).second;
 }
 

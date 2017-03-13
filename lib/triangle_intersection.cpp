@@ -48,8 +48,12 @@ enum sat_t {
 };
 
 int dbl_sign(double d) {
-  if (d == 0.0) return 0;
-  if (d < 0.0) return -1;
+  if (d == 0.0) {
+    return 0;
+  }
+  if (d < 0.0) {
+    return -1;
+  }
   return +1;
 }
 
@@ -106,9 +110,15 @@ sat_t sat_normal(const vec3 tri_a[3], const vec3 tri_b[3]) {
   lo = std::min(lo, v);
   hi = std::max(hi, v);
 
-  if (lo == 0.0 && hi == 0.0) return SAT_COPLANAR;
-  if (lo == 0.0 || hi == 0.0) return SAT_TOUCH;
-  if (lo > 0.0 || hi < 0.0) return SAT_NONE;
+  if (lo == 0.0 && hi == 0.0) {
+    return SAT_COPLANAR;
+  }
+  if (lo == 0.0 || hi == 0.0) {
+    return SAT_TOUCH;
+  }
+  if (lo > 0.0 || hi < 0.0) {
+    return SAT_NONE;
+  }
   return SAT_INTERSECT;
 }
 
@@ -123,7 +133,9 @@ bool sat_plane(const vec3 tri_a[3], const vec3 tri_b[3], unsigned i, unsigned j,
   a = orient3d_exact(tri_a[i], tri_a[(i + 1) % 3], tri_b[j],
                      tri_a[(i + 2) % 3]);
   b = orient3d_exact(tri_a[i], tri_a[(i + 1) % 3], tri_b[j], tri_b[k]);
-  if (a * b < 0.0) return true;
+  if (a * b < 0.0) {
+    return true;
+  }
   return false;
 }
 
@@ -139,11 +151,17 @@ bool sat_plane(const vec3 tri_a[3], const vec3 tri_b[3], unsigned i,
                         tri_b[(j + 1) % 3]);
   b_hi = orient3d_exact(tri_a[i], tri_a[(i + 1) % 3], tri_b[j],
                         tri_b[(j + 2) % 3]);
-  if (b_lo > b_hi) std::swap(b_lo, b_hi);
+  if (b_lo > b_hi) {
+    std::swap(b_lo, b_hi);
+  }
   std::cerr << "b_lo: " << b_lo << " b_hi: " << b_hi << " a: " << a
             << std::endl;
-  if (a > 0.0 && b_hi < 0.0) return true;
-  if (a < 0.0 && b_lo > 0.0) return true;
+  if (a > 0.0 && b_hi < 0.0) {
+    return true;
+  }
+  if (a < 0.0 && b_lo > 0.0) {
+    return true;
+  }
   return false;
 }
 
@@ -239,13 +257,17 @@ void project_triangles(const vec3 tri_a[3], const vec3 tri_b[3], vec2 ptri_a[3],
   ptri_a[1] = carve::geom::select(tri_a[1], a1, a2);
   ptri_a[2] = carve::geom::select(tri_a[2], a1, a2);
 
-  if (!carve::geom2d::isAnticlockwise(ptri_a)) std::swap(ptri_a[0], ptri_a[2]);
+  if (!carve::geom2d::isAnticlockwise(ptri_a)) {
+    std::swap(ptri_a[0], ptri_a[2]);
+  }
 
   ptri_b[0] = carve::geom::select(tri_b[0], a1, a2);
   ptri_b[1] = carve::geom::select(tri_b[1], a1, a2);
   ptri_b[2] = carve::geom::select(tri_b[2], a1, a2);
 
-  if (!carve::geom2d::isAnticlockwise(ptri_b)) std::swap(ptri_b[0], ptri_b[2]);
+  if (!carve::geom2d::isAnticlockwise(ptri_b)) {
+    std::swap(ptri_b[0], ptri_b[2]);
+  }
 }
 
 carve::geom::TriangleInt triangle_intersection_coplanar(const vec3 tri_a[3],
@@ -294,10 +316,14 @@ int line_segment_tri_test(const vec3 tri_a[3], const vec3& a, const vec3& b) {
 
   switch (c[1]) {
     case 0:
-      if (c[0] == 0 || c[2] == 0) return -3;  // face
+      if (c[0] == 0 || c[2] == 0) {
+        return -3;  // face
+      }
       return 0;
     case 1:
-      if (c[0] == 2 || c[2] == 2) return -2;  // edge
+      if (c[0] == 2 || c[2] == 2) {
+        return -2;  // edge
+      }
       return 0;
     case 2:
       return -1;  // vertex
@@ -309,8 +335,12 @@ int line_segment_tri_test(const vec3 tri_a[3], const vec3& a, const vec3& b) {
 
 bool touches_edge(const vec3 tri_a[3], const int nb[3], const vec3 tri_b[3]) {
   unsigned i = 0;
-  if (nb[1] != 0) i = 1;
-  if (nb[2] != 0) i = 2;
+  if (nb[1] != 0) {
+    i = 1;
+  }
+  if (nb[2] != 0) {
+    i = 2;
+  }
 
   unsigned a1, a2;
   find_projection_axes(tri_a, a1, a2);
@@ -320,7 +350,9 @@ bool touches_edge(const vec3 tri_a[3], const int nb[3], const vec3 tri_b[3]) {
   ptri_a[1] = carve::geom::select(tri_a[1], a1, a2);
   ptri_a[2] = carve::geom::select(tri_a[2], a1, a2);
 
-  if (!carve::geom2d::isAnticlockwise(ptri_a)) std::swap(ptri_a[0], ptri_a[2]);
+  if (!carve::geom2d::isAnticlockwise(ptri_a)) {
+    std::swap(ptri_a[0], ptri_a[2]);
+  }
 
   pline_b[0] = carve::geom::select(tri_b[(i + 1) % 3], a1, a2);
   pline_b[1] = carve::geom::select(tri_b[(i + 2) % 3], a1, a2);
@@ -331,8 +363,12 @@ bool touches_edge(const vec3 tri_a[3], const int nb[3], const vec3 tri_b[3]) {
 
 bool touches_vert(const vec3 tri_a[3], const int nb[3], const vec3 tri_b[3]) {
   unsigned i = 0;
-  if (nb[1] == 0) i = 1;
-  if (nb[2] == 0) i = 2;
+  if (nb[1] == 0) {
+    i = 1;
+  }
+  if (nb[2] == 0) {
+    i = 2;
+  }
 
   unsigned a1, a2;
   find_projection_axes(tri_a, a1, a2);
@@ -342,7 +378,9 @@ bool touches_vert(const vec3 tri_a[3], const int nb[3], const vec3 tri_b[3]) {
   ptri_a[1] = carve::geom::select(tri_a[1], a1, a2);
   ptri_a[2] = carve::geom::select(tri_a[2], a1, a2);
 
-  if (!carve::geom2d::isAnticlockwise(ptri_a)) std::swap(ptri_a[0], ptri_a[2]);
+  if (!carve::geom2d::isAnticlockwise(ptri_a)) {
+    std::swap(ptri_a[0], ptri_a[2]);
+  }
 
   ppt_b = carve::geom::select(tri_b[i], a1, a2);
 
@@ -354,11 +392,17 @@ unsigned half_test(const vec3 tri_a[3], const int nb[3], const vec3 tri_b[3]) {
   unsigned c = 0;
   for (unsigned i = 0; i < 3; ++i) {
     unsigned j = (i + 1) % 3;
-    if (nb[i] == 0 || nb[i] == nb[j]) continue;
+    if (nb[i] == 0 || nb[i] == nb[j]) {
+      continue;
+    }
 
     int t = line_segment_tri_test(tri_a, tri_b[i], tri_b[j]);
-    if (t == -3) return 2;
-    if (t < 0) c++;
+    if (t == -3) {
+      return 2;
+    }
+    if (t < 0) {
+      c++;
+    }
   }
   return c;
 }
@@ -378,21 +422,41 @@ TriangleInt triangle_intersection(const vec2 tri_a[3], const vec2 tri_b[3]) {
   switch (std::abs(sharing)) {
     case 0: {
       // no shared vertices.
-      if (sat_edge(tri_a, tri_b, 0) < 0) return TR_INT_NONE;
-      if (sat_edge(tri_a, tri_b, 1) < 0) return TR_INT_NONE;
-      if (sat_edge(tri_a, tri_b, 2) < 0) return TR_INT_NONE;
-      if (sat_edge(tri_b, tri_a, 0) < 0) return TR_INT_NONE;
-      if (sat_edge(tri_b, tri_a, 1) < 0) return TR_INT_NONE;
-      if (sat_edge(tri_b, tri_a, 2) < 0) return TR_INT_NONE;
+      if (sat_edge(tri_a, tri_b, 0) < 0) {
+        return TR_INT_NONE;
+      }
+      if (sat_edge(tri_a, tri_b, 1) < 0) {
+        return TR_INT_NONE;
+      }
+      if (sat_edge(tri_a, tri_b, 2) < 0) {
+        return TR_INT_NONE;
+      }
+      if (sat_edge(tri_b, tri_a, 0) < 0) {
+        return TR_INT_NONE;
+      }
+      if (sat_edge(tri_b, tri_a, 1) < 0) {
+        return TR_INT_NONE;
+      }
+      if (sat_edge(tri_b, tri_a, 2) < 0) {
+        return TR_INT_NONE;
+      }
 
       return TR_INT_INT;
     }
     case 1: {
       // shared vertex (ia, ib) [but not shared edge]
-      if (sat_edge(tri_a, tri_b, (ia + 2) % 3, ib) < 0) return TR_INT_VERT;
-      if (sat_edge(tri_a, tri_b, ia, ib) < 0) return TR_INT_VERT;
-      if (sat_edge(tri_b, tri_a, (ib + 2) % 3, ia) < 0) return TR_INT_VERT;
-      if (sat_edge(tri_b, tri_a, ib, ia) < 0) return TR_INT_VERT;
+      if (sat_edge(tri_a, tri_b, (ia + 2) % 3, ib) < 0) {
+        return TR_INT_VERT;
+      }
+      if (sat_edge(tri_a, tri_b, ia, ib) < 0) {
+        return TR_INT_VERT;
+      }
+      if (sat_edge(tri_b, tri_a, (ib + 2) % 3, ia) < 0) {
+        return TR_INT_VERT;
+      }
+      if (sat_edge(tri_b, tri_a, ib, ia) < 0) {
+        return TR_INT_VERT;
+      }
 
       return TR_INT_INT;
     }
@@ -418,15 +482,25 @@ TriangleInt triangle_intersection(const vec2 tri_a[3], const vec2 tri_b[3]) {
 }
 
 TriangleInt triangle_intersection(const vec3 tri_a[3], const vec3 tri_b[3]) {
-  if (sat_bbox(tri_a, tri_b)) return TR_INT_NONE;
+  if (sat_bbox(tri_a, tri_b)) {
+    return TR_INT_NONE;
+  }
 
   sat_t norm1 = sat_normal(tri_a, tri_b);
   sat_t norm2 = sat_normal(tri_b, tri_a);
-  if (norm2 == SAT_NONE) return TR_INT_NONE;
-  if (norm1 == SAT_NONE) return TR_INT_NONE;
+  if (norm2 == SAT_NONE) {
+    return TR_INT_NONE;
+  }
+  if (norm1 == SAT_NONE) {
+    return TR_INT_NONE;
+  }
 
-  if (norm2 == SAT_COPLANAR) return TR_INT_NONE;
-  if (norm1 == SAT_COPLANAR) return TR_INT_NONE;
+  if (norm2 == SAT_COPLANAR) {
+    return TR_INT_NONE;
+  }
+  if (norm1 == SAT_COPLANAR) {
+    return TR_INT_NONE;
+  }
 
   if (norm1 == SAT_COPLANAR) {
     return triangle_intersection_coplanar(tri_a, tri_b);
@@ -439,8 +513,12 @@ TriangleInt triangle_intersection(const vec3 tri_a[3], const vec3 tri_b[3]) {
       // no shared vertices.
       for (size_t i = 0; i < 3; ++i) {
         for (size_t j = 0; j < 3; ++j) {
-          if (sat_plane(tri_a, tri_b, i, j)) return TR_INT_NONE;
-          if (sat_plane(tri_b, tri_a, i, j)) return TR_INT_NONE;
+          if (sat_plane(tri_a, tri_b, i, j)) {
+            return TR_INT_NONE;
+          }
+          if (sat_plane(tri_b, tri_a, i, j)) {
+            return TR_INT_NONE;
+          }
         }
       }
 
@@ -451,14 +529,30 @@ TriangleInt triangle_intersection(const vec3 tri_a[3], const vec3 tri_b[3]) {
       size_t ia0 = ia, ia1 = (ia + 1) % 3, ia2 = (ia + 2) % 3;
       size_t ib0 = ib, ib1 = (ib + 1) % 3, ib2 = (ib + 2) % 3;
 
-      if (sat_plane(tri_a, tri_b, ia2, ib1, ib2)) return TR_INT_VERT;
-      if (sat_plane(tri_a, tri_b, ia2, ib2, ib1)) return TR_INT_VERT;
-      if (sat_plane(tri_a, tri_b, ia0, ib1, ib2)) return TR_INT_VERT;
-      if (sat_plane(tri_a, tri_b, ia0, ib2, ib1)) return TR_INT_VERT;
-      if (sat_plane(tri_b, tri_b, ib2, ia1, ia2)) return TR_INT_VERT;
-      if (sat_plane(tri_b, tri_b, ib2, ia2, ia1)) return TR_INT_VERT;
-      if (sat_plane(tri_b, tri_b, ib0, ia1, ia2)) return TR_INT_VERT;
-      if (sat_plane(tri_b, tri_b, ib0, ia2, ia1)) return TR_INT_VERT;
+      if (sat_plane(tri_a, tri_b, ia2, ib1, ib2)) {
+        return TR_INT_VERT;
+      }
+      if (sat_plane(tri_a, tri_b, ia2, ib2, ib1)) {
+        return TR_INT_VERT;
+      }
+      if (sat_plane(tri_a, tri_b, ia0, ib1, ib2)) {
+        return TR_INT_VERT;
+      }
+      if (sat_plane(tri_a, tri_b, ia0, ib2, ib1)) {
+        return TR_INT_VERT;
+      }
+      if (sat_plane(tri_b, tri_b, ib2, ia1, ia2)) {
+        return TR_INT_VERT;
+      }
+      if (sat_plane(tri_b, tri_b, ib2, ia2, ia1)) {
+        return TR_INT_VERT;
+      }
+      if (sat_plane(tri_b, tri_b, ib0, ia1, ia2)) {
+        return TR_INT_VERT;
+      }
+      if (sat_plane(tri_b, tri_b, ib0, ia2, ia1)) {
+        return TR_INT_VERT;
+      }
 
       return TR_INT_INT;
     }
@@ -479,30 +573,44 @@ bool triangle_intersection_simple(const vec2 tri_a[3], const vec2 tri_b[3]) {
   CARVE_ASSERT(orient2d_exact(tri_b[0], tri_b[1], tri_b[2]) >= 0.0);
 
   for (size_t i = 0; i < 3; ++i) {
-    if (sat_edge(tri_a, tri_b, i) < 0) return false;
+    if (sat_edge(tri_a, tri_b, i) < 0) {
+      return false;
+    }
   }
   for (size_t i = 0; i < 3; ++i) {
-    if (sat_edge(tri_b, tri_a, i) < 0) return false;
+    if (sat_edge(tri_b, tri_a, i) < 0) {
+      return false;
+    }
   }
   return true;
 }
 
 bool triangle_intersection_simple(const vec3 tri_a[3], const vec3 tri_b[3]) {
-  if (sat_bbox(tri_a, tri_b)) return false;
+  if (sat_bbox(tri_a, tri_b)) {
+    return false;
+  }
 
   sat_t norm1 = sat_normal(tri_a, tri_b);
-  if (norm1 == SAT_NONE) return false;
+  if (norm1 == SAT_NONE) {
+    return false;
+  }
   if (norm1 == SAT_COPLANAR) {
     return triangle_intersection_coplanar_simple(tri_a, tri_b);
   }
 
   sat_t norm2 = sat_normal(tri_b, tri_a);
-  if (norm2 == SAT_NONE) return false;
+  if (norm2 == SAT_NONE) {
+    return false;
+  }
 
   for (size_t i = 0; i < 3; ++i) {
     for (size_t j = 0; j < 3; ++j) {
-      if (sat_plane(tri_a, tri_b, i, j)) return false;
-      if (sat_plane(tri_b, tri_a, i, j)) return false;
+      if (sat_plane(tri_a, tri_b, i, j)) {
+        return false;
+      }
+      if (sat_plane(tri_b, tri_a, i, j)) {
+        return false;
+      }
     }
   }
   return true;
@@ -534,8 +642,12 @@ TriangleIntType triangle_linesegment_intersection_exact(const vec2 tri_a[3],
   int l2 = dbl_sign(orient2d_exact(line_b[0], line_b[1], tri_a[1]));
   int l3 = dbl_sign(orient2d_exact(line_b[0], line_b[1], tri_a[2]));
 
-  if (min3(l1, l2, l3) == +1) return TR_TYPE_NONE;
-  if (max3(l1, l2, l3) == -1) return TR_TYPE_NONE;
+  if (min3(l1, l2, l3) == +1) {
+    return TR_TYPE_NONE;
+  }
+  if (max3(l1, l2, l3) == -1) {
+    return TR_TYPE_NONE;
+  }
 
   int m = +1;
   for (size_t i = 0; m != -1 && i < 3; ++i) {
@@ -596,7 +708,9 @@ TriangleIntType triangle_intersection_exact(const vec3 tri_a[3],
 
   if (ca[1] == 3 && cb[1] == 3) {
     TriangleIntType t = triangle_intersection_coplanar_exact(tri_a, tri_b);
-    if (t != TR_TYPE_NONE) t = TR_TYPE_TOUCH;
+    if (t != TR_TYPE_NONE) {
+      t = TR_TYPE_TOUCH;
+    }
     return t;
   }
 
@@ -619,8 +733,12 @@ TriangleIntType triangle_intersection_exact(const vec3 tri_a[3],
   unsigned ia = half_test(tri_b, na, tri_a);
   unsigned ib = half_test(tri_a, nb, tri_b);
 
-  if (ia == 2 || ib == 2) return TR_TYPE_INT;
-  if (ia == 0 && ib == 0) return TR_TYPE_NONE;
+  if (ia == 2 || ib == 2) {
+    return TR_TYPE_INT;
+  }
+  if (ia == 0 && ib == 0) {
+    return TR_TYPE_NONE;
+  }
   return TR_TYPE_TOUCH;
 }
 }

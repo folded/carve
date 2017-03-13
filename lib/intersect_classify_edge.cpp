@@ -131,7 +131,9 @@ static inline void remove(carve::mesh::MeshSet<3>::vertex_t* a,
   CARVE_ASSERT(i != shared_edge_graph.end());
   size_t n = (*i).second.erase(b);
   CARVE_ASSERT(n == 1);
-  if ((*i).second.size() == 0) shared_edge_graph.erase(i);
+  if ((*i).second.size() == 0) {
+    shared_edge_graph.erase(i);
+  }
 }
 
 static inline void remove(V2 edge,
@@ -159,10 +161,14 @@ static void walkGraphSegment(
       closed = true;
       break;
     }
-    if (branch_points.find(curr.second) != branch_points.end()) break;
+    if (branch_points.find(curr.second) != branch_points.end()) {
+      break;
+    }
     carve::csg::detail::VVSMap::const_iterator o =
         shared_edge_graph.find(curr.second);
-    if (o == shared_edge_graph.end()) break;
+    if (o == shared_edge_graph.end()) {
+      break;
+    }
     CARVE_ASSERT((*o).second.size() == 1);
     curr.first = curr.second;
     curr.second = *((*o).second.begin());
@@ -173,10 +179,14 @@ static void walkGraphSegment(
     // walk backward.
     curr = initial;
     for (;;) {
-      if (branch_points.find(curr.first) != branch_points.end()) break;
+      if (branch_points.find(curr.first) != branch_points.end()) {
+        break;
+      }
       carve::csg::detail::VVSMap::const_iterator o =
           shared_edge_graph.find(curr.first);
-      if (o == shared_edge_graph.end()) break;
+      if (o == shared_edge_graph.end()) {
+        break;
+      }
       curr.second = curr.first;
       curr.first = *((*o).second.begin());
       // test here that the set of incident groups hasn't changed.
@@ -244,7 +254,9 @@ static void classifyAB(const GrpEdgeSurfMap& a_edge_surfaces,
 
           ClassificationData& data =
               classifications[std::make_pair(b_grp, a_gid)];
-          if (data.class_decided) continue;
+          if (data.class_decided) {
+            continue;
+          }
 
           // an angle between (*ia).fwd_ang and (*ia).rev_ang is outside/above
           // group a.
@@ -289,7 +301,9 @@ static void classifyAB(const GrpEdgeSurfMap& a_edge_surfaces,
 
           ClassificationData& data =
               (classifications[std::make_pair(b_grp, a_gid)]);
-          if (data.class_decided) continue;
+          if (data.class_decided) {
+            continue;
+          }
 
           // an angle between (*ia).fwd_ang and (*ia).rev_ang is outside/above
           // group a.
@@ -332,7 +346,9 @@ static bool processForwardEdgeSurfaces(
   for (std::list<FaceLoop *>::const_iterator i = fwd.begin(), e = fwd.end();
        i != e; ++i) {
     EdgeSurface& es = (edge_surfaces[(*i)->orig_face->mesh]);
-    if (es.fwd != NULL) return false;
+    if (es.fwd != NULL) {
+      return false;
+    }
     es.fwd = (*i);
     es.fwd_ang = carve::geom3d::antiClockwiseAngle((*i)->orig_face->plane.N,
                                                    base_vector, edge_vector);
@@ -347,7 +363,9 @@ static bool processReverseEdgeSurfaces(
   for (std::list<FaceLoop *>::const_iterator i = rev.begin(), e = rev.end();
        i != e; ++i) {
     EdgeSurface& es = (edge_surfaces[(*i)->orig_face->mesh]);
-    if (es.rev != NULL) return false;
+    if (es.rev != NULL) {
+      return false;
+    }
     es.rev = (*i);
     es.rev_ang = carve::geom3d::antiClockwiseAngle(-(*i)->orig_face->plane.N,
                                                    base_vector, edge_vector);
@@ -379,20 +397,24 @@ static void processOneEdge(const V2& edge,
 
   if (ae_f != a_edge_map.end() &&
       !processForwardEdgeSurfaces(a_edge_surfaces, (*ae_f).second, edge_vector,
-                                  base_vector))
+                                  base_vector)) {
     return;
+  }
   if (ae_r != a_edge_map.end() &&
       !processReverseEdgeSurfaces(a_edge_surfaces, (*ae_r).second, edge_vector,
-                                  base_vector))
+                                  base_vector)) {
     return;
+  }
   if (be_f != b_edge_map.end() &&
       !processForwardEdgeSurfaces(b_edge_surfaces, (*be_f).second, edge_vector,
-                                  base_vector))
+                                  base_vector)) {
     return;
+  }
   if (be_r != b_edge_map.end() &&
       !processReverseEdgeSurfaces(b_edge_surfaces, (*be_r).second, edge_vector,
-                                  base_vector))
+                                  base_vector)) {
     return;
+  }
 
   classifyAB(a_edge_surfaces, b_edge_surfaces, b_classification);
   classifyAB(b_edge_surfaces, a_edge_surfaces, a_classification);
@@ -413,7 +435,9 @@ static void traceIntersectionGraph(
     carve::csg::detail::VVSMap::mapped_type& out =
         (shared_edge_graph[edge.first]);
     out.insert(edge.second);
-    if (out.size() == 3) branch_points.insert(edge.first);
+    if (out.size() == 3) {
+      branch_points.insert(edge.first);
+    }
 
 #if defined(CARVE_DEBUG) && defined(DEBUG_DRAW_INTERSECTION_LINE)
     HOOK(drawEdge(edge.first, edge.second, 1, 1, 1, 1, 1, 1, 1, 1, 1.0););
@@ -439,7 +463,9 @@ void hashByPerimeter(FLGroupList& grp, PerimMap& perim_map) {
     size_t perim_size = (*i).perimeter.size();
     // can be the case for non intersecting groups. (and groups that intersect
     // at a point?)
-    if (!perim_size) continue;
+    if (!perim_size) {
+      continue;
+    }
     const carve::mesh::MeshSet<3>::vertex_t* perim_min =
         std::min_element((*i).perimeter.begin(), (*i).perimeter.end())->first;
     perim_map[std::make_pair(perim_size, perim_min)].insert(&(*i));
@@ -447,25 +473,36 @@ void hashByPerimeter(FLGroupList& grp, PerimMap& perim_map) {
 }
 
 bool same_edge_set_fwd(const V2Set& a, const V2Set& b) {
-  if (a.size() != b.size()) return false;
+  if (a.size() != b.size()) {
+    return false;
+  }
   for (V2Set::const_iterator i = a.begin(), e = a.end(); i != e; ++i) {
-    if (b.find(*i) == b.end()) return false;
+    if (b.find(*i) == b.end()) {
+      return false;
+    }
   }
   return true;
 }
 
 bool same_edge_set_rev(const V2Set& a, const V2Set& b) {
-  if (a.size() != b.size()) return false;
+  if (a.size() != b.size()) {
+    return false;
+  }
   for (V2Set::const_iterator i = a.begin(), e = a.end(); i != e; ++i) {
-    if (b.find(std::make_pair((*i).second, (*i).first)) == b.end())
+    if (b.find(std::make_pair((*i).second, (*i).first)) == b.end()) {
       return false;
+    }
   }
   return true;
 }
 
 int same_edge_set(const V2Set& a, const V2Set& b) {
-  if (same_edge_set_fwd(a, b)) return +1;
-  if (same_edge_set_rev(a, b)) return -1;
+  if (same_edge_set_fwd(a, b)) {
+    return +1;
+  }
+  if (same_edge_set_rev(a, b)) {
+    return -1;
+  }
   return 0;
 }
 
@@ -481,7 +518,9 @@ void generateCandidateOnSets(FLGroupList& a_grp, FLGroupList& b_grp,
   for (PerimMap::iterator i = a_grp_by_perim.begin(), ie = a_grp_by_perim.end();
        i != ie; ++i) {
     PerimMap::iterator j = b_grp_by_perim.find((*i).first);
-    if (j == b_grp_by_perim.end()) continue;
+    if (j == b_grp_by_perim.end()) {
+      continue;
+    }
 
     for (PerimMap::mapped_type::iterator a = (*i).second.begin(),
                                          ae = (*i).second.end();
@@ -490,7 +529,9 @@ void generateCandidateOnSets(FLGroupList& a_grp, FLGroupList& b_grp,
                                            be = (*j).second.end();
            b != be; ++b) {
         int x = same_edge_set((*a)->perimeter, (*b)->perimeter);
-        if (!x) continue;
+        if (!x) {
+          continue;
+        }
         candidate_on_map[(*a)].insert(std::make_pair(x, (*b)));
         if ((*a)->face_loops.count == 1 && (*b)->face_loops.count == 1) {
           uint32_t fcb =
@@ -535,7 +576,9 @@ static inline std::string CODE(const FaceLoopGroup* grp) {
     }
 
     if ((*i).intersectedMeshIsClosed()) {
-      if ((*i).classification == FACE_UNCLASSIFIED) continue;
+      if ((*i).classification == FACE_UNCLASSIFIED) {
+        continue;
+      }
       if (fc == FACE_UNCLASSIFIED) {
         fc = (*i).classification;
       } else if (fc != (*i).classification) {
@@ -543,10 +586,18 @@ static inline std::string CODE(const FaceLoopGroup* grp) {
       }
     }
   }
-  if (fc == FACE_IN) return "I";
-  if (fc == FACE_ON_ORIENT_IN) return "<";
-  if (fc == FACE_ON_ORIENT_OUT) return ">";
-  if (fc == FACE_OUT) return "O";
+  if (fc == FACE_IN) {
+    return "I";
+  }
+  if (fc == FACE_ON_ORIENT_IN) {
+    return "<";
+  }
+  if (fc == FACE_ON_ORIENT_OUT) {
+    return ">";
+  }
+  if (fc == FACE_OUT) {
+    return "O";
+  }
   return "*";
 }
 
@@ -657,14 +708,18 @@ void CSG::classifyFaceGroupsEdge(
                                 e = a_classification.end();
        i != e; ++i) {
     if (!(*i).second.class_decided) {
-      if ((*i).second.c[FACE_IN + 2] == 0)
+      if ((*i).second.c[FACE_IN + 2] == 0) {
         (*i).second.class_bits &= ~FACE_IN_BIT;
-      if ((*i).second.c[FACE_ON_ORIENT_IN + 2] == 0)
+      }
+      if ((*i).second.c[FACE_ON_ORIENT_IN + 2] == 0) {
         (*i).second.class_bits &= ~FACE_ON_ORIENT_IN_BIT;
-      if ((*i).second.c[FACE_ON_ORIENT_OUT + 2] == 0)
+      }
+      if ((*i).second.c[FACE_ON_ORIENT_OUT + 2] == 0) {
         (*i).second.class_bits &= ~FACE_ON_ORIENT_OUT_BIT;
-      if ((*i).second.c[FACE_OUT + 2] == 0)
+      }
+      if ((*i).second.c[FACE_OUT + 2] == 0) {
         (*i).second.class_bits &= ~FACE_OUT_BIT;
+      }
 
       // XXX: this is the wrong thing to do. It's intended just as a test.
       if ((*i).second.class_bits == (FACE_IN_BIT | FACE_OUT_BIT)) {
@@ -675,7 +730,9 @@ void CSG::classifyFaceGroupsEdge(
         }
       }
 
-      if (single_bit_set((*i).second.class_bits)) (*i).second.class_decided = 1;
+      if (single_bit_set((*i).second.class_bits)) {
+        (*i).second.class_decided = 1;
+      }
     }
   }
 
@@ -683,14 +740,18 @@ void CSG::classifyFaceGroupsEdge(
                                 e = b_classification.end();
        i != e; ++i) {
     if (!(*i).second.class_decided) {
-      if ((*i).second.c[FACE_IN + 2] == 0)
+      if ((*i).second.c[FACE_IN + 2] == 0) {
         (*i).second.class_bits &= ~FACE_IN_BIT;
-      if ((*i).second.c[FACE_ON_ORIENT_IN + 2] == 0)
+      }
+      if ((*i).second.c[FACE_ON_ORIENT_IN + 2] == 0) {
         (*i).second.class_bits &= ~FACE_ON_ORIENT_IN_BIT;
-      if ((*i).second.c[FACE_ON_ORIENT_OUT + 2] == 0)
+      }
+      if ((*i).second.c[FACE_ON_ORIENT_OUT + 2] == 0) {
         (*i).second.class_bits &= ~FACE_ON_ORIENT_OUT_BIT;
-      if ((*i).second.c[FACE_OUT + 2] == 0)
+      }
+      if ((*i).second.c[FACE_OUT + 2] == 0) {
         (*i).second.class_bits &= ~FACE_OUT_BIT;
+      }
 
       // XXX: this is the wrong thing to do. It's intended just as a test.
       if ((*i).second.class_bits == (FACE_IN_BIT | FACE_OUT_BIT)) {
@@ -701,7 +762,9 @@ void CSG::classifyFaceGroupsEdge(
         }
       }
 
-      if (single_bit_set((*i).second.class_bits)) (*i).second.class_decided = 1;
+      if (single_bit_set((*i).second.class_bits)) {
+        (*i).second.class_decided = 1;
+      }
     }
   }
 

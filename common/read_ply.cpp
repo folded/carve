@@ -63,7 +63,9 @@ struct line_idx : public gloop::stream::reader<int> {
   line* l;
   line_idx(line* _l) : l(_l) {}
   virtual void length(size_t len) {
-    if (l > 0) l->curr().second.reserve(len);
+    if (l > 0) {
+      l->curr().second.reserve(len);
+    }
   }
   virtual void value(int val) { l->curr().second.push_back(val); }
 };
@@ -74,7 +76,9 @@ struct vertex : public gloop::stream::null_reader {
   vertex(container_t& _container) : container(_container) {}
   virtual void next() { container.push_back(carve::geom3d::Vector()); }
   virtual void length(int l) {
-    if (l > 0) container.reserve(container.size() + l);
+    if (l > 0) {
+      container.reserve(container.size() + l);
+    }
   }
   virtual void end() {}
   carve::geom3d::Vector& curr() const { return container.back(); }
@@ -99,7 +103,9 @@ struct face : public gloop::stream::null_reader {
   carve::input::PolyhedronData* data;
   face(carve::input::PolyhedronData* _data) : data(_data) {}
   virtual void length(int l) {
-    if (l > 0) data->reserveFaces(l, 3);
+    if (l > 0) {
+      data->reserveFaces(l, 3);
+    }
   }
 };
 
@@ -232,7 +238,9 @@ bool readFile(std::istream& in, carve::input::Input& inputs,
   filetype_t f;
 
   modelSetup(inputs, f);
-  if (!f.read(in)) return false;
+  if (!f.read(in)) {
+    return false;
+  }
 
   inputs.transform(transform);
   return true;

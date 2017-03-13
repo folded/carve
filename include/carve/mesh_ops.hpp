@@ -110,7 +110,9 @@ struct TriangulationData {
       double dbc = (b - c).length();
       double dca = (c - a).length();
 
-      if (dab < 1e-10 || dbc < 1e-10 || dca < 1e-10) return 0.0;
+      if (dab < 1e-10 || dbc < 1e-10 || dca < 1e-10) {
+        return 0.0;
+      }
 
       return std::max(std::min((dab + dbc) / dca,
                                std::min((dab + dca) / dbc, (dbc + dca) / dab)) -
@@ -243,7 +245,9 @@ struct TriangulationData {
 
     for (VertexInfo* t = v1->next; !intersected && t != v1->prev; t = t->next) {
       VertexInfo* u = t->next;
-      if (t == v2 || u == v2) continue;
+      if (t == v2 || u == v2) {
+        continue;
+      }
 
       geom2d::P2 tp = P(t);
       geom2d::P2 up = P(u);
@@ -254,8 +258,12 @@ struct TriangulationData {
       double l_b1 = carve::geom2d::orient2d(tp, up, v1p);
       double l_b2 = carve::geom2d::orient2d(tp, up, v2p);
 
-      if (l_a1 > l_a2) std::swap(l_a1, l_a2);
-      if (l_b1 > l_b2) std::swap(l_b1, l_b2);
+      if (l_a1 > l_a2) {
+        std::swap(l_a1, l_a2);
+      }
+      if (l_b1 > l_b2) {
+        std::swap(l_b1, l_b2);
+      }
 
       if (l_a1 == 0.0 && l_a2 == 0.0 && l_b1 == 0.0 && l_b2 == 0.0) {
         // colinear
@@ -294,9 +302,13 @@ struct TriangulationData {
     while (1) {
       r = r->next;
       v = v->next;
-      if (v == vert) return r;
+      if (v == vert) {
+        return r;
+      }
       v = v->next;
-      if (v == vert) return r;
+      if (v == vert) {
+        return r;
+      }
     }
   }
 
@@ -329,12 +341,16 @@ struct TriangulationData {
     // decrease the separation until we find something.
 
     // loops of length 2 or 3 have no possible diagonal.
-    if (a->next == a || a->next->next == a) return diag_t(NULL, NULL);
+    if (a->next == a || a->next->next == a) {
+      return diag_t(NULL, NULL);
+    }
 
     VertexInfo* b = findMidpoint(a);
     while (b != a->next) {
       diag_t d = scanDiagonals(a, b);
-      if (d != diag_t(NULL, NULL)) return d;
+      if (d != diag_t(NULL, NULL)) {
+        return d;
+      }
       b = b->prev;
     }
 
@@ -378,7 +394,9 @@ struct TriangulationData {
       heap_entry_t h = heap.back();
       heap.pop_back();
 
-      if (testDiagonal(h.second)) return h.second;
+      if (testDiagonal(h.second)) {
+        return h.second;
+      }
     }
 
     // couldn't find a diagonal that was ok.
@@ -422,7 +440,9 @@ struct TriangulationData {
   VertexInfo* findDegenerateEar(VertexInfo* edge) {
     VertexInfo* v = edge;
 
-    if (v->next == v || v->next->next == v) return NULL;
+    if (v->next == v || v->next->next == v) {
+      return NULL;
+    }
 
     do {
       if (P(v) == P(v->next)) {
@@ -687,14 +707,18 @@ struct TriangulationData {
 
           double l_a1 = carve::geom2d::orient2d(a, b, c);
           double l_a2 = carve::geom2d::orient2d(a, b, d);
-          if (l_a1 > l_a2) std::swap(l_a1, l_a2);
+          if (l_a1 > l_a2) {
+            std::swap(l_a1, l_a2);
+          }
           if (l_a2 <= 0.0 || l_a1 >= 0.0) {
             intersected = false;
           }
 
           double l_b1 = carve::geom2d::orient2d(c, d, a);
           double l_b2 = carve::geom2d::orient2d(c, d, b);
-          if (l_b1 > l_b2) std::swap(l_b1, l_b2);
+          if (l_b1 > l_b2) {
+            std::swap(l_b1, l_b2);
+          }
           if (l_b2 <= 0.0 || l_b1 >= 0.0) {
             intersected = false;
           }
@@ -761,7 +785,9 @@ struct TriangulationData {
     out << "<polygon fill=\"" << fill << "\" stroke=\"" << stroke
         << "\" stroke-width=\"" << stroke_width << "\" points=\"";
     for (size_t i = 0; i < points.size(); ++i) {
-      if (i) out << ' ';
+      if (i) {
+        out << ' ';
+      }
       double x, y;
       x = scale * (points[i].x - offx) + 5;
       y = scale * (points[i].y - offy) + 5;
@@ -803,8 +829,9 @@ struct TriangulationData {
   xml:space=\"preserve\">\n";
 
     dumpLoop(out, points, "rgb(0,0,0)", "blue", 0.1, 0, 0, 1);
-    if (points2.size())
+    if (points2.size()) {
       dumpLoop(out, points2, "rgb(255,0,0)", "blue", 0.1, 0, 0, 1);
+    }
 
     out << "</svg>" << std::endl;
   }
@@ -824,7 +851,9 @@ bool TriangulationData<ndim, proj_t>::doTriangulate(VertexInfo* begin,
   VertexInfo *v = begin, *n, *p;
   size_t remain = 0;
   do {
-    if (v->isCandidate()) vq.push(v);
+    if (v->isCandidate()) {
+      vq.push(v);
+    }
     v = v->next;
     remain++;
   } while (v != begin);
@@ -846,7 +875,9 @@ bool TriangulationData<ndim, proj_t>::doTriangulate(VertexInfo* begin,
     n = clipEar(v, out);
     p = n->prev;
     begin = n;
-    if (--remain == 3) break;
+    if (--remain == 3) {
+      break;
+    }
     // if (checkSelfIntersection(begin)) {
     //   dumpPoly(begin->edge, NULL, "badclip_");
     //   CARVE_ASSERT(!!!"clip created self intersection");
@@ -976,10 +1007,18 @@ void flipTriEdge(Edge<ndim>* edge) {
   detail::link(t1[0], t2[2], t1[1], f1);
   detail::link(t2[0], t1[2], t2[1], f2);
 
-  if (t1[0]->rev) CARVE_ASSERT(t1[0]->v2() == t1[0]->rev->v1());
-  if (t2[0]->rev) CARVE_ASSERT(t2[0]->v2() == t2[0]->rev->v1());
-  if (t1[2]->rev) CARVE_ASSERT(t1[2]->v2() == t1[2]->rev->v1());
-  if (t2[2]->rev) CARVE_ASSERT(t2[2]->v2() == t2[2]->rev->v1());
+  if (t1[0]->rev) {
+    CARVE_ASSERT(t1[0]->v2() == t1[0]->rev->v1());
+  }
+  if (t2[0]->rev) {
+    CARVE_ASSERT(t2[0]->v2() == t2[0]->rev->v1());
+  }
+  if (t1[2]->rev) {
+    CARVE_ASSERT(t1[2]->v2() == t1[2]->rev->v1());
+  }
+  if (t2[2]->rev) {
+    CARVE_ASSERT(t2[2]->v2() == t2[2]->rev->v1());
+  }
 }
 
 template <unsigned ndim>

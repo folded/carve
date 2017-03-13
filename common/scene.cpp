@@ -45,8 +45,12 @@ static double far_plane = 200;
 carve::math::Matrix g_projection, g_modelview;
 
 void Scene::updateDisplay() {
-  if (CAM_ELEVATION < -90.0) CAM_ELEVATION = -90;
-  if (CAM_ELEVATION > 90.0) CAM_ELEVATION = 90;
+  if (CAM_ELEVATION < -90.0) {
+    CAM_ELEVATION = -90;
+  }
+  if (CAM_ELEVATION > 90.0) {
+    CAM_ELEVATION = 90;
+  }
   if (CAM_DIST < 0.05) {
     CAM_DIST = 0.05;
   }
@@ -148,10 +152,14 @@ GLvoid Scene::_key(unsigned char k, int x, int y) {
       disp_axes = !disp_axes;
       break;
     case 'w':
-      if (CAM_ELEVATION > -85.0) CAM_ELEVATION -= 5.0 * rate;
+      if (CAM_ELEVATION > -85.0) {
+        CAM_ELEVATION -= 5.0 * rate;
+      }
       break;
     case 's':
-      if (CAM_ELEVATION < 85.0) CAM_ELEVATION += 5.0 * rate;
+      if (CAM_ELEVATION < 85.0) {
+        CAM_ELEVATION += 5.0 * rate;
+      }
       break;
     case 'a':
       CAM_ROT += 5.0 * rate;
@@ -194,7 +202,9 @@ GLvoid Scene::_key(unsigned char k, int x, int y) {
       far_plane /= 1.1;
       break;
     default: {
-      if (!key(k, x, y)) goto skip_redisplay;
+      if (!key(k, x, y)) {
+        goto skip_redisplay;
+      }
       break;
     }
   }
@@ -208,7 +218,9 @@ GLvoid Scene::_draw() {
   double w = WIDTH;
   double h = HEIGHT;
 
-  if (h == 0) h = 1;
+  if (h == 0) {
+    h = 1;
+  }
   glViewport(0, 0, WIDTH, HEIGHT);
   if (w > h) {
     double r = w / h;

@@ -45,7 +45,9 @@ ptrdiff_t ptrToIndex_fast(const array_t& a,
 
 template <typename array_t>
 ptrdiff_t ptrToIndex(const array_t& a, const typename array_t::value_type* v) {
-  if (v < &a.front() || v > &a.back()) return -1;
+  if (v < &a.front() || v > &a.back()) {
+    return -1;
+  }
   return v - &a[0];
 }
 

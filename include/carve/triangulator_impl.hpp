@@ -111,8 +111,12 @@ class heap_ordering {
     carve::geom2d::P2 pb = project(loop[b]);
     double da = carve::geom::distance2(p, pa);
     double db = carve::geom::distance2(p, pb);
-    if (da > db) return true;
-    if (da < db) return false;
+    if (da > db) {
+      return true;
+    }
+    if (da < db) {
+      return false;
+    }
     return axisOrdering(pa, pb, axis);
   }
 };
@@ -387,7 +391,9 @@ struct tri_pairs_t {
 
   ~tri_pairs_t() {
     for (storage_t::iterator i = storage.begin(); i != storage.end(); ++i) {
-      if ((*i).second) delete (*i).second;
+      if ((*i).second) {
+        delete (*i).second;
+      }
     }
   }
 
@@ -415,7 +421,9 @@ struct tri_pairs_t {
   tri_pair_t* get(vert_edge_t& e) {
     storage_t::iterator i;
     i = storage.find(e);
-    if (i == storage.end()) return NULL;
+    if (i == storage.end()) {
+      return NULL;
+    }
     return (*i).second;
   }
 

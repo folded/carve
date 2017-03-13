@@ -236,7 +236,9 @@ struct Graph {
                carve::mesh::MeshSet<3>::vertex_t* v2) {
     GraphEdges& edges = graph[v1];
     GraphEdge* edge = new GraphEdge(v1, v2);
-    if (edges.edges) edges.edges->prev = edge;
+    if (edges.edges) {
+      edges.edges->prev = edge;
+    }
     edge->next = edges.edges;
     edges.edges = edge;
   }
@@ -296,8 +298,9 @@ static void splitFace(
   for (carve::csg::V2Set::const_iterator i = edges.begin(), e = edges.end();
        i != e; ++i) {
     carve::mesh::MeshSet<3>::vertex_t *v1 = ((*i).first), *v2 = ((*i).second);
-    if (carve::geom::equal(v1->v, v2->v))
+    if (carve::geom::equal(v1->v, v2->v)) {
       std::cerr << "WARNING! " << v1->v << "==" << v2->v << std::endl;
+    }
     graph.addEdge(v1, v2);
   }
 
@@ -314,7 +317,9 @@ static void splitFace(
 
     for (;;) {
       double in_ang = M_PI + edge->ang;
-      if (in_ang > M_TWOPI) in_ang -= M_TWOPI;
+      if (in_ang > M_TWOPI) {
+        in_ang -= M_TWOPI;
+      }
 
       GraphEdge* opts;
       GraphEdge* out = NULL;
@@ -322,7 +327,9 @@ static void splitFace(
 
       for (opts = graph.outboundEdges(edge->tgt); opts; opts = opts->next) {
         if (opts->tgt == edge->src) {
-          if (out == NULL && opts->next == NULL) out = opts;
+          if (out == NULL && opts->next == NULL) {
+            out = opts;
+          }
         } else {
           double out_ang = carve::math::ANG(in_ang - opts->ang);
 
@@ -1146,11 +1153,15 @@ bool processCrossingEdges(
           ++skip;
         } while (skip != cross.size() && cross[skip].edge_idx[0] < e2_1);
 
-        if (skip == cross.size()) break;
+        if (skip == cross.size()) {
+          break;
+        }
 
         // if the next hit path is past the start point of the current path,
         // we're done.
-        if (cross[skip].edge_idx[0] >= e1_1) break;
+        if (cross[skip].edge_idx[0] >= e1_1) {
+          break;
+        }
       }
 
       // copy up to the end of the path.
@@ -1356,7 +1367,9 @@ void composeEdgesIntoPaths(
       CARVE_ASSERT(p != vertex_graph.end());
 
       // pick a connected vertex to move to.
-      if ((*p).second.size() == 0) break;
+      if ((*p).second.size() == 0) {
+        break;
+      }
 
       carve::mesh::MeshSet<3>::vertex_t* n = *((*p).second.begin());
       detail::VVSMap::iterator q = vertex_graph.find(n);
@@ -1369,7 +1382,9 @@ void composeEdgesIntoPaths(
       v = n;
       path.push_back(v);
 
-      if ((*p).second.size() == 0) vertex_graph.erase(p);
+      if ((*p).second.size() == 0) {
+        vertex_graph.erase(p);
+      }
       if ((*q).second.size() == 0) {
         vertex_graph.erase(q);
         q = vertex_graph.end();
@@ -1378,8 +1393,9 @@ void composeEdgesIntoPaths(
       p = q;
 
       if (v == path[0] || p == vertex_graph.end() ||
-          endpoints.find(v) != endpoints.end())
+          endpoints.find(v) != endpoints.end()) {
         break;
+      }
     }
     CARVE_ASSERT(endpoints.find(path.back()) != endpoints.end());
 
@@ -1423,12 +1439,18 @@ void composeEdgesIntoPaths(
       v = n;
       path.push_back(v);
 
-      if ((*p).second.size() == 0) vertex_graph.erase(p);
-      if ((*q).second.size() == 0) vertex_graph.erase(q);
+      if ((*p).second.size() == 0) {
+        vertex_graph.erase(p);
+      }
+      if ((*q).second.size() == 0) {
+        vertex_graph.erase(q);
+      }
 
       p = q;
 
-      if (v == path[0]) break;
+      if (v == path[0]) {
+        break;
+      }
     }
 
     loop_list.push_back(vvec_t());
@@ -1590,7 +1612,9 @@ void generateOneFaceLoop(
     if (vi1 != base_loop.end() && vi2 != base_loop.end()) {
       // this is an inserted edge that connects two points on the base loop.
       // nice and simple.
-      if (vi2 < vi1) std::swap(vi1, vi2);
+      if (vi2 < vi1) {
+        std::swap(vi1, vi2);
+      }
 
       size_t loop1_size = vi2 - vi1 + 1;
       size_t loop2_size = base_loop.size() + 2 - loop1_size;

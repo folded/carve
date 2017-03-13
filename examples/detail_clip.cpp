@@ -60,10 +60,15 @@ class DetailClip : public carve::csg::CSG::Collector {
 
   virtual void collect(carve::csg::FaceLoopGroup* grp,
                        carve::csg::CSG::Hooks& hooks) {
-    if (grp->face_loops.head->orig_face->mesh->meshset != src_b) return;
-    if (grp->classificationAgainst(NULL) == carve::csg::FACE_IN) return;
-    if (grp->classificationAgainst(src_a->meshes[0]) == carve::csg::FACE_IN)
+    if (grp->face_loops.head->orig_face->mesh->meshset != src_b) {
       return;
+    }
+    if (grp->classificationAgainst(NULL) == carve::csg::FACE_IN) {
+      return;
+    }
+    if (grp->classificationAgainst(src_a->meshes[0]) == carve::csg::FACE_IN) {
+      return;
+    }
 
     for (carve::csg::FaceLoop* f = grp->face_loops.head; f; f = f->next) {
       if (seen.find(f->orig_face) == seen.end()) {

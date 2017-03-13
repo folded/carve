@@ -67,7 +67,9 @@ class cubic_bezier {
 
   template <typename iter_t>
   cubic_bezier(iter_t begin, iter_t end) {
-    if (std::distance(begin, end) != 4) throw std::runtime_error("failed");
+    if (std::distance(begin, end) != 4) {
+      throw std::runtime_error("failed");
+    }
     std::copy(begin, end, p);
   }
 
@@ -143,7 +145,9 @@ void consume(std::istream& in, char ch) {
   while (in.good()) {
     int c;
     c = in.peek();
-    if (in.eof()) return;
+    if (in.eof()) {
+      return;
+    }
     if (std::isspace(c)) {
       in.ignore();
       continue;
@@ -159,10 +163,14 @@ void readVals(std::istream& in, std::vector<double>& vals) {
   while (in.good()) {
     int c;
 
-    while (std::isspace(in.peek())) in.ignore();
+    while (std::isspace(in.peek())) {
+      in.ignore();
+    }
 
     c = in.peek();
-    if (in.eof()) break;
+    if (in.eof()) {
+      break;
+    }
 
     if (c != '-' && c != '+' && c != '.' && !std::isdigit(c)) {
       break;
@@ -172,7 +180,9 @@ void readVals(std::istream& in, std::vector<double>& vals) {
     in >> v;
     vals.push_back(v);
 
-    while (std::isspace(in.peek())) in.ignore();
+    while (std::isspace(in.peek())) {
+      in.ignore();
+    }
     c = in.peek();
 
     if (c == ',') {
@@ -214,8 +224,12 @@ void parsePath(std::istream& in,
     char c;
 
     in >> c;
-    if (in.eof()) break;
-    if (std::isspace(c)) continue;
+    if (in.eof()) {
+      break;
+    }
+    if (std::isspace(c)) {
+      continue;
+    }
     std::cerr << "[" << c << "]";
 
     vals.clear();
@@ -354,7 +368,9 @@ void parsePath(std::istream& in,
         for (size_t i = 0; i < points.size(); ++i) {
           std::cerr << " " << i << ": " << points[i].x << "," << points[i].y;
         }
-        if (points.back() == points.front()) points.pop_back();
+        if (points.back() == points.front()) {
+          points.pop_back();
+        }
         std::cerr << std::endl;
         paths.push_back(points);
         curr = curr_ctrl = carve::geom::VECTOR(0.0, 0.0);
@@ -444,7 +460,9 @@ int main(int argc, char** argv) {
   while (in.good()) {
     std::string s;
     std::getline(in, s);
-    if (in.eof()) break;
+    if (in.eof()) {
+      break;
+    }
     std::vector<std::vector<carve::geom2d::P2> > paths;
     parsePath(s, paths);
 

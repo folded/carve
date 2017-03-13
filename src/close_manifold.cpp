@@ -125,10 +125,14 @@ struct Options : public opt::Parser {
 static Options options;
 
 static bool endswith(const std::string& a, const std::string& b) {
-  if (a.size() < b.size()) return false;
+  if (a.size() < b.size()) {
+    return false;
+  }
 
   for (unsigned i = a.size(), j = b.size(); j;) {
-    if (tolower(a[--i]) != tolower(b[--j])) return false;
+    if (tolower(a[--i]) != tolower(b[--j])) {
+      return false;
+    }
   }
   return true;
 }
@@ -168,7 +172,9 @@ int main(int argc, char** argv) {
   for (size_t i = 0; i < poly->meshes.size(); ++i) {
     carve::mesh::MeshSet<3>::mesh_t* mesh = poly->meshes[i];
     const size_t N = mesh->open_edges.size();
-    if (N == 0) continue;
+    if (N == 0) {
+      continue;
+    }
 
     mesh->faces.reserve(N + 1);
 

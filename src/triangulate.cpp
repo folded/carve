@@ -118,10 +118,14 @@ struct Options : public opt::Parser {
 static Options options;
 
 static bool endswith(const std::string& a, const std::string& b) {
-  if (a.size() < b.size()) return false;
+  if (a.size() < b.size()) {
+    return false;
+  }
 
   for (unsigned i = a.size(), j = b.size(); j;) {
-    if (tolower(a[--i]) != tolower(b[--j])) return false;
+    if (tolower(a[--i]) != tolower(b[--j])) {
+      return false;
+    }
   }
   return true;
 }
@@ -145,7 +149,9 @@ carve::mesh::MeshSet<3>* readModel(const std::string& file) {
     poly = readOBJasMesh(file);
   }
 
-  if (poly == NULL) return NULL;
+  if (poly == NULL) {
+    return NULL;
+  }
 
   std::cerr << "loaded polyhedron " << poly << " has " << poly->meshes.size()
             << " manifolds ("
@@ -172,7 +178,9 @@ int main(int argc, char** argv) {
   options.parse(argc, argv);
 
   carve::mesh::MeshSet<3>* poly = readModel(options.file);
-  if (!poly) exit(1);
+  if (!poly) {
+    exit(1);
+  }
 
   std::vector<carve::mesh::MeshSet<3>::face_t*> out_faces;
 
@@ -209,7 +217,9 @@ int main(int argc, char** argv) {
 
   carve::mesh::MeshSet<3>* result = new carve::mesh::MeshSet<3>(out_faces);
 
-  if (options.canonicalize) result->canonicalize();
+  if (options.canonicalize) {
+    result->canonicalize();
+  }
 
   if (options.obj) {
     writeOBJ(std::cout, result);

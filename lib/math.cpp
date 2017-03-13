@@ -147,8 +147,12 @@ void cubic_roots(double c3, double c2, double c1, double c0,
     double p = cbrt(fabs(r_p) / (2.0 * c3));
     double q = cbrt(fabs(r_q) / (2.0 * c3));
 
-    if (r_p > 0.0) p = -p;
-    if (r_q > 0.0) q = -q;
+    if (r_p > 0.0) {
+      p = -p;
+    }
+    if (r_q > 0.0) {
+      q = -q;
+    }
 
     _r[0] = xN + p + q;
     n_sol = 1;

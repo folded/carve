@@ -126,7 +126,9 @@ class exact_t : public std::vector<double> {
 inline std::ostream& operator<<(std::ostream& out, const exact_t& p) {
   out << '{';
   out << p[0];
-  for (size_t i = 1; i < p.size(); ++i) out << ';' << p[i];
+  for (size_t i = 1; i < p.size(); ++i) {
+    out << ';' << p[i];
+  }
   out << '}';
   return out;
 }
@@ -191,14 +193,18 @@ struct op {
   static inline void add(const double* a, const double* b, double* r) {
     double t[U + Vlo];
     op<U, Vlo>::add(a, b, t);
-    for (size_t i = 0; i < Vlo; ++i) r[i] = t[i];
+    for (size_t i = 0; i < Vlo; ++i) {
+      r[i] = t[i];
+    }
     op<U, Vhi>::add(t + Vlo, b + Vlo, r + Vlo);
   }
 
   static inline void sub(const double* a, const double* b, double* r) {
     double t[U + Vlo];
     op<U, Vlo>::sub(a, b, t);
-    for (size_t i = 0; i < Vlo; ++i) r[i] = t[i];
+    for (size_t i = 0; i < Vlo; ++i) {
+      r[i] = t[i];
+    }
     op<U, Vhi>::sub(t + Vlo, b + Vlo, r + Vlo);
   }
 };
@@ -209,14 +215,18 @@ struct op<U, 1> {
   static void add(const double* a, const double* b, double* r) {
     double t[Ulo + 1];
     op<Ulo, 1>::add(a, b, t);
-    for (size_t i = 0; i < Ulo; ++i) r[i] = t[i];
+    for (size_t i = 0; i < Ulo; ++i) {
+      r[i] = t[i];
+    }
     op<Uhi, 1>::add(a + Ulo, t + Ulo, r + Ulo);
   }
 
   static void sub(const double* a, const double* b, double* r) {
     double t[Ulo + 1];
     op<Ulo, 1>::sub(a, b, t);
-    for (size_t i = 0; i < Ulo; ++i) r[i] = t[i];
+    for (size_t i = 0; i < Ulo; ++i) {
+      r[i] = t[i];
+    }
     op<Uhi, 1>::add(a + Ulo, t + Ulo, r + Ulo);
   }
 };

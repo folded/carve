@@ -55,16 +55,24 @@ class kd_node {
       : c_neg(NULL), c_pos(NULL), parent(_parent), splitpos(0, 0.0) {}
 
   ~kd_node() {
-    if (c_neg) delete c_neg;
-    if (c_pos) delete c_pos;
+    if (c_neg) {
+      delete c_neg;
+    }
+    if (c_pos) {
+      delete c_pos;
+    }
   }
 
   template <typename visitor_t>
   void closeNodes(const vector_t& p, double d, visitor_t& visit) const {
     if (c_neg) {
       double delta = splitpos.pos - p[splitpos.axis];
-      if (delta <= d) c_neg->closeNodes(p, d, visit);
-      if (delta >= -d) c_pos->closeNodes(p, d, visit);
+      if (delta <= d) {
+        c_neg->closeNodes(p, d, visit);
+      }
+      if (delta >= -d) {
+        c_pos->closeNodes(p, d, visit);
+      }
     } else {
       visit(this);
     }
@@ -158,7 +166,9 @@ class kd_node {
         double e = -1.0;
         int a = -1;
         for (int i = 0; i < ndim; ++i) {
-          if (i == splitpos.axis) continue;
+          if (i == splitpos.axis) {
+            continue;
+          }
           if (e < aabb.extent[i]) {
             a = i;
             e = aabb.extent[i];
@@ -188,12 +198,18 @@ class kd_node {
   }
 
   void splitn(int num, inserter_t& inserter) {
-    if (num <= 0) return;
+    if (num <= 0) {
+      return;
+    }
     if (!c_neg) {
       split(inserter);
     }
-    if (c_pos) c_pos->splitn(num - 1, inserter);
-    if (c_neg) c_neg->splitn(num - 1, inserter);
+    if (c_pos) {
+      c_pos->splitn(num - 1, inserter);
+    }
+    if (c_neg) {
+      c_neg->splitn(num - 1, inserter);
+    }
   }
 
   void splitn(int num) {
@@ -203,12 +219,18 @@ class kd_node {
 
   template <typename split_t>
   void splitn(int num, split_t splitter, inserter_t& inserter) {
-    if (num <= 0) return;
+    if (num <= 0) {
+      return;
+    }
     if (!c_neg) {
       split(inserter, splitter(this));
     }
-    if (c_pos) c_pos->splitn(num - 1, inserter, splitter);
-    if (c_neg) c_neg->splitn(num - 1, inserter, splitter);
+    if (c_pos) {
+      c_pos->splitn(num - 1, inserter, splitter);
+    }
+    if (c_neg) {
+      c_neg->splitn(num - 1, inserter, splitter);
+    }
   }
 
   template <typename split_t>
@@ -221,11 +243,17 @@ class kd_node {
   void splitpred(pred_t pred, inserter_t& inserter, int depth = 0) {
     if (!c_neg) {
       axis_pos splitpos(-1, std::numeric_limits<double>::max());
-      if (!pred(this, depth, splitpos)) return;
+      if (!pred(this, depth, splitpos)) {
+        return;
+      }
       split(splitpos, inserter);
     }
-    if (c_pos) c_pos->splitpred(pred, inserter, depth + 1);
-    if (c_neg) c_neg->splitpred(pred, inserter, depth + 1);
+    if (c_pos) {
+      c_pos->splitpred(pred, inserter, depth + 1);
+    }
+    if (c_neg) {
+      c_neg->splitpred(pred, inserter, depth + 1);
+    }
   }
 
   template <typename pred_t>
@@ -284,7 +312,9 @@ class kd_node {
           }
         }
 
-        if (!node->parent) return NULL;
+        if (!node->parent) {
+          return NULL;
+        }
 
         if (node->parent->c_neg == node) {
           addToPQ(node->parent->c_pos);

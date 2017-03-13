@@ -57,7 +57,9 @@ void triangulate(std::vector<carve::mesh::Vertex<3> >& vertices) {
   std::vector<carve::mesh::Vertex<3>*> vptr;
 
   faces.resize(1);
-  for (size_t i = 0; i < vertices.size(); ++i) vptr.push_back(&vertices[i]);
+  for (size_t i = 0; i < vertices.size(); ++i) {
+    vptr.push_back(&vertices[i]);
+  }
   faces[0] = new carve::mesh::Face<3>(vptr.begin(), vptr.end());
 
   double a0 = area(faces[0]->edge, faces[0]->project);

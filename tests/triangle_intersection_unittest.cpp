@@ -39,7 +39,9 @@ typedef carve::geom::vector<2> vec3;
 std::istream& operator>>(std::istream& in, vec2& vec) {
   char c = 0;
   in >> vec.x;
-  if (in >> c && c != ',') in.setstate(std::ios_base::failbit);
+  if (in >> c && c != ',') {
+    in.setstate(std::ios_base::failbit);
+  }
   in >> vec.y;
   return in;
 }

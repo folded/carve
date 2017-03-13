@@ -68,10 +68,14 @@ class djset {
   size_t count() const { return n_sets; }
 
   size_t find_set_head(size_t a) {
-    if (a == set[a].parent) return a;
+    if (a == set[a].parent) {
+      return a;
+    }
 
     size_t a_head = a;
-    while (set[a_head].parent != a_head) a_head = set[a_head].parent;
+    while (set[a_head].parent != a_head) {
+      a_head = set[a_head].parent;
+    }
     set[a].parent = a_head;
     return a_head;
   }
@@ -106,7 +110,9 @@ class djset {
     size_t c = 0;
     for (size_t i = 0; i < set.size(); ++i) {
       size_t s = find_set_head(i);
-      if (index_set[s] == n_sets) index_set[s] = c++;
+      if (index_set[s] == n_sets) {
+        index_set[s] = c++;
+      }
       index_set[i] = index_set[s];
       set_size[index_set[s]]++;
     }
@@ -120,7 +126,9 @@ class djset {
     size_t c = 0;
     for (size_t i = 0; i < set.size(); ++i) {
       size_t s = find_set_head(i);
-      if (set_id[s] == n_sets) set_id[s] = c++;
+      if (set_id[s] == n_sets) {
+        set_id[s] = c++;
+      }
       s = set_id[s];
       std::insert_iterator<typename out_collection_t::value_type> j(
           out[s], out[s].end());

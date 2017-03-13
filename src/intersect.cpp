@@ -157,7 +157,9 @@ struct Options : public opt::Parser {
       std::cerr << "Can't mix command line arguments and -f" << std::endl;
       exit(1);
     }
-    if (stream.size()) stream += " ";
+    if (stream.size()) {
+      stream += " ";
+    }
     stream += a;
   }
 
@@ -261,10 +263,14 @@ struct Options : public opt::Parser {
 static Options options;
 
 static bool endswith(const std::string& a, const std::string& b) {
-  if (a.size() < b.size()) return false;
+  if (a.size() < b.size()) {
+    return false;
+  }
 
   for (unsigned i = a.size(), j = b.size(); j;) {
-    if (tolower(a[--i]) != tolower(b[--j])) return false;
+    if (tolower(a[--i]) != tolower(b[--j])) {
+      return false;
+    }
   }
   return true;
 }
@@ -346,9 +352,15 @@ std::vector<std::string> tokenize(const std::string& stream) {
           exit(1);
         }
       } else {
-        if (isspace(stream[i])) break;
-        if (charTok(stream[i])) break;
-        if (stream[i] == '"' || stream[i] == '\'') break;
+        if (isspace(stream[i])) {
+          break;
+        }
+        if (charTok(stream[i])) {
+          break;
+        }
+        if (stream[i] == '"' || stream[i] == '\'') {
+          break;
+        }
       }
       token += stream[i++];
     }
@@ -367,10 +379,14 @@ bool parseOP(TOK& tok, carve::csg::CSG::OP& op);
 
 carve::csg::CSG_TreeNode* parseBracketExpr(TOK& tok) {
   carve::csg::CSG_TreeNode* result;
-  if (*tok != "(") return NULL;
+  if (*tok != "(") {
+    return NULL;
+  }
   ++tok;
   result = parseExpr(tok);
-  if (result == NULL || *tok != ")") return NULL;
+  if (result == NULL || *tok != ")") {
+    return NULL;
+  }
   ++tok;
   return result;
 }
@@ -494,7 +510,9 @@ carve::csg::CSG_TreeNode* parseAtom(TOK& tok) {
     } else if (endswith(*tok, ".obj")) {
       poly = readOBJasMesh(*tok);
     }
-    if (poly == NULL) return NULL;
+    if (poly == NULL) {
+      return NULL;
+    }
 
     std::cerr << "loaded polyhedron " << poly << " has " << poly->meshes.size()
               << " manifolds ("
@@ -573,7 +591,9 @@ carve::csg::CSG_TreeNode* parseTransform(TOK& tok) {
     }
 
     carve::csg::CSG_TreeNode* child = parseTransform(tok);
-    if (child == NULL) return NULL;
+    if (child == NULL) {
+      return NULL;
+    }
 
     if (*tok != ")") {
       delete child;
@@ -628,14 +648,18 @@ carve::csg::CSG_TreeNode* parseTransform(TOK& tok) {
     ++tok;
 
     carve::csg::CSG_TreeNode* child = parseTransform(tok);
-    if (child == NULL) return NULL;
+    if (child == NULL) {
+      return NULL;
+    }
 
     if (*tok != ")") {
       delete child;
       return NULL;
     }
     ++tok;
-    if (deg) ang *= M_PI / 180.0;
+    if (deg) {
+      ang *= M_PI / 180.0;
+    }
     result = new carve::csg::CSG_TransformNode(
         carve::math::Matrix::ROT(ang, x, y, z), child);
   } else if (*tok == "TRANS") {
@@ -670,7 +694,9 @@ carve::csg::CSG_TreeNode* parseTransform(TOK& tok) {
     ++tok;
 
     carve::csg::CSG_TreeNode* child = parseTransform(tok);
-    if (child == NULL) return NULL;
+    if (child == NULL) {
+      return NULL;
+    }
 
     if (*tok != ")") {
       delete child;
@@ -711,7 +737,9 @@ carve::csg::CSG_TreeNode* parseTransform(TOK& tok) {
     ++tok;
 
     carve::csg::CSG_TreeNode* child = parseTransform(tok);
-    if (child == NULL) return NULL;
+    if (child == NULL) {
+      return NULL;
+    }
 
     if (*tok != ")") {
       delete child;
@@ -747,7 +775,9 @@ bool parseOP(TOK& tok, carve::csg::CSG::OP& op) {
 carve::csg::CSG_TreeNode* parseExpr(TOK& tok) {
   carve::csg::CSG_TreeNode* lhs = parseTransform(tok);
   carve::csg::CSG::OP op;
-  if (lhs == NULL) return NULL;
+  if (lhs == NULL) {
+    return NULL;
+  }
 
   while (parseOP(tok, op)) {
     carve::csg::CSG_TreeNode* rhs = parseTransform(tok);
@@ -838,7 +868,9 @@ int main(int argc, char** argv) {
 
     carve::Timing::start(WRITE_BLOCK);
     if (result) {
-      if (options.canonicalize) result->canonicalize();
+      if (options.canonicalize) {
+        result->canonicalize();
+      }
 
       if (options.obj) {
         writeOBJ(std::cout, result);
@@ -856,7 +888,9 @@ int main(int argc, char** argv) {
       carve::TimingBlock block(FUNC_NAME);
 
       delete p;
-      if (result) delete result;
+      if (result) {
+        delete result;
+      }
     }
   } else {
     std::cerr << "syntax error at [" << *tok << "]" << std::endl;

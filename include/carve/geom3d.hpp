@@ -72,10 +72,14 @@ bool fitPlane(iter_t begin, iter_t end, adapt_t adapt, Plane& plane) {
     const size_t N = p.size();
 
     n = cross(p[N - 1] - C, p[0] - C);
-    if (n < Vector::ZERO()) n.negate();
+    if (n < Vector::ZERO()) {
+      n.negate();
+    }
     for (size_t i = 1; i < p.size(); ++i) {
       Vector v = cross(p[i] - C, p[i - 1] - C);
-      if (v < Vector::ZERO()) v.negate();
+      if (v < Vector::ZERO()) {
+        v.negate();
+      }
       n += v;
     }
   }
@@ -243,8 +247,12 @@ inline int compareAngles(const Vector& direction, const Vector& base,
     if (d3 == 0.0) {
       return dot(b, base) > 0.0 ? +1 : -1;
     }
-    if (d2 < 0.0 && d3 > 0.0) return -1;
-    if (d2 > 0.0 && d3 < 0.0) return +1;
+    if (d2 < 0.0 && d3 > 0.0) {
+      return -1;
+    }
+    if (d2 > 0.0 && d3 < 0.0) {
+      return +1;
+    }
 
     // both a and b are to one side of plane(direction, base) -
     // rounding error (if a and b are truly coplanar with

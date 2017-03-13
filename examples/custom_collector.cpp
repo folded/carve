@@ -70,7 +70,9 @@ struct TestScene : public Scene {
 
   virtual GLvoid draw() {
     for (int i = 0; i < draw_flags.size(); ++i) {
-      if (draw_flags[i]) glCallList(draw_list_base + i);
+      if (draw_flags[i]) {
+        glCallList(draw_list_base + i);
+      }
     }
   }
 
@@ -103,11 +105,15 @@ class Between : public carve::csg::CSG::Collector {
 
   virtual void collect(carve::csg::FaceLoopGroup* grp,
                        carve::csg::CSG::Hooks& hooks) {
-    if (grp->face_loops.head->orig_face->mesh->meshset != src_a) return;
-    if (grp->classificationAgainst(src_b->meshes[1]) != carve::csg::FACE_IN)
+    if (grp->face_loops.head->orig_face->mesh->meshset != src_a) {
       return;
-    if (grp->classificationAgainst(src_b->meshes[0]) != carve::csg::FACE_OUT)
+    }
+    if (grp->classificationAgainst(src_b->meshes[1]) != carve::csg::FACE_IN) {
       return;
+    }
+    if (grp->classificationAgainst(src_b->meshes[0]) != carve::csg::FACE_OUT) {
+      return;
+    }
 
     for (carve::csg::FaceLoop* f = grp->face_loops.head; f; f = f->next) {
       faces.push_back(

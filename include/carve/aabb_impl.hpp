@@ -173,8 +173,9 @@ void aabb<ndim>::unionAABB(const aabb<ndim>& a) {
 template <unsigned ndim>
 bool aabb<ndim>::completelyContains(const aabb<ndim>& other) const {
   for (unsigned i = 0; i < ndim; ++i) {
-    if (fabs(other.pos.v[i] - pos.v[i]) + other.extent.v[i] > extent.v[i])
+    if (fabs(other.pos.v[i] - pos.v[i]) + other.extent.v[i] > extent.v[i]) {
       return false;
+    }
   }
   return true;
 }
@@ -182,7 +183,9 @@ bool aabb<ndim>::completelyContains(const aabb<ndim>& other) const {
 template <unsigned ndim>
 bool aabb<ndim>::containsPoint(const vector_t& v) const {
   for (unsigned i = 0; i < ndim; ++i) {
-    if (fabs(v.v[i] - pos.v[i]) > extent.v[i]) return false;
+    if (fabs(v.v[i] - pos.v[i]) > extent.v[i]) {
+      return false;
+    }
   }
   return true;
 }
@@ -213,7 +216,9 @@ bool aabb<ndim>::intersects(const sphere<ndim>& s) const {
   double r = 0.0;
   for (unsigned i = 0; i < ndim; ++i) {
     double t = fabs(s.C[i] - pos[i]) - extent[i];
-    if (t > 0.0) r += t * t;
+    if (t > 0.0) {
+      r += t * t;
+    }
   }
   return r <= s.r * s.r;
 }
@@ -281,8 +286,12 @@ double aabb<ndim>::volume() const {
 template <unsigned ndim>
 int aabb<ndim>::compareAxis(const axis_pos& ap) const {
   double p = ap.pos - pos[ap.axis];
-  if (p > extent[ap.axis]) return -1;
-  if (p < -extent[ap.axis]) return +1;
+  if (p > extent[ap.axis]) {
+    return -1;
+  }
+  if (p < -extent[ap.axis]) {
+    return +1;
+  }
   return 0;
 }
 
@@ -370,15 +379,21 @@ inline bool aabb<3>::intersects(const ray<3>& ray) const {
 
   // l.cross(x-axis)?
   r = extent.y * fabs(ray.D.z) + extent.z * fabs(ray.D.y);
-  if (fabs(t.y * ray.D.z - t.z * ray.D.y) > r) return false;
+  if (fabs(t.y * ray.D.z - t.z * ray.D.y) > r) {
+    return false;
+  }
 
   // ray.D.cross(y-axis)?
   r = extent.x * fabs(ray.D.z) + extent.z * fabs(ray.D.x);
-  if (fabs(t.z * ray.D.x - t.x * ray.D.z) > r) return false;
+  if (fabs(t.z * ray.D.x - t.x * ray.D.z) > r) {
+    return false;
+  }
 
   // ray.D.cross(z-axis)?
   r = extent.x * fabs(ray.D.y) + extent.y * fabs(ray.D.x);
-  if (fabs(t.x * ray.D.y - t.y * ray.D.x) > r) return false;
+  if (fabs(t.x * ray.D.y - t.y * ray.D.x) > r) {
+    return false;
+  }
 
   return true;
 }
@@ -391,9 +406,15 @@ inline bool aabb<3>::intersectsLineSegment(const vector<3>& v1,
   double r;
 
   // do any of the principal axes form a separating axis?
-  if (fabs(t.x) > extent.x + fabs(half_length.x)) return false;
-  if (fabs(t.y) > extent.y + fabs(half_length.y)) return false;
-  if (fabs(t.z) > extent.z + fabs(half_length.z)) return false;
+  if (fabs(t.x) > extent.x + fabs(half_length.x)) {
+    return false;
+  }
+  if (fabs(t.y) > extent.y + fabs(half_length.y)) {
+    return false;
+  }
+  if (fabs(t.z) > extent.z + fabs(half_length.z)) {
+    return false;
+  }
 
   // NOTE: Since the separating axis is perpendicular to the line in
   // these last four cases, the line does not contribute to the
@@ -401,15 +422,21 @@ inline bool aabb<3>::intersectsLineSegment(const vector<3>& v1,
 
   // line.cross(x-axis)?
   r = extent.y * fabs(half_length.z) + extent.z * fabs(half_length.y);
-  if (fabs(t.y * half_length.z - t.z * half_length.y) > r) return false;
+  if (fabs(t.y * half_length.z - t.z * half_length.y) > r) {
+    return false;
+  }
 
   // half_length.cross(y-axis)?
   r = extent.x * fabs(half_length.z) + extent.z * fabs(half_length.x);
-  if (fabs(t.z * half_length.x - t.x * half_length.z) > r) return false;
+  if (fabs(t.z * half_length.x - t.x * half_length.z) > r) {
+    return false;
+  }
 
   // half_length.cross(z-axis)?
   r = extent.x * fabs(half_length.y) + extent.y * fabs(half_length.x);
-  if (fabs(t.x * half_length.y - t.y * half_length.x) > r) return false;
+  if (fabs(t.x * half_length.y - t.y * half_length.x) > r) {
+    return false;
+  }
 
   return true;
 }
@@ -420,7 +447,9 @@ static inline bool intersectsTriangle_axisTest_3(const aabb<3>& aabb,
   const int d = (c + 1) % 3, e = (c + 2) % 3;
   const vector<3> a = cross(VECTOR(Ax, Ay, Az), tri.v[d] - tri.v[c]);
   double p1 = dot(a, tri.v[c]), p2 = dot(a, tri.v[e]);
-  if (p1 > p2) std::swap(p1, p2);
+  if (p1 > p2) {
+    std::swap(p1, p2);
+  }
   const double r = dot(abs(a), aabb.extent);
   return !(p1 > r || p2 < -r);
 }
@@ -447,23 +476,49 @@ inline bool aabb<3>::intersects(tri<3> tri) const {
   tri.v[1] -= pos;
   tri.v[2] -= pos;
 
-  if (!intersectsTriangle_axisTest_2<0>(*this, tri)) return false;
-  if (!intersectsTriangle_axisTest_2<1>(*this, tri)) return false;
-  if (!intersectsTriangle_axisTest_2<2>(*this, tri)) return false;
+  if (!intersectsTriangle_axisTest_2<0>(*this, tri)) {
+    return false;
+  }
+  if (!intersectsTriangle_axisTest_2<1>(*this, tri)) {
+    return false;
+  }
+  if (!intersectsTriangle_axisTest_2<2>(*this, tri)) {
+    return false;
+  }
 
-  if (!intersectsTriangle_axisTest_3<1, 0, 0, 0>(*this, tri)) return false;
-  if (!intersectsTriangle_axisTest_3<1, 0, 0, 1>(*this, tri)) return false;
-  if (!intersectsTriangle_axisTest_3<1, 0, 0, 2>(*this, tri)) return false;
+  if (!intersectsTriangle_axisTest_3<1, 0, 0, 0>(*this, tri)) {
+    return false;
+  }
+  if (!intersectsTriangle_axisTest_3<1, 0, 0, 1>(*this, tri)) {
+    return false;
+  }
+  if (!intersectsTriangle_axisTest_3<1, 0, 0, 2>(*this, tri)) {
+    return false;
+  }
 
-  if (!intersectsTriangle_axisTest_3<0, 1, 0, 0>(*this, tri)) return false;
-  if (!intersectsTriangle_axisTest_3<0, 1, 0, 1>(*this, tri)) return false;
-  if (!intersectsTriangle_axisTest_3<0, 1, 0, 2>(*this, tri)) return false;
+  if (!intersectsTriangle_axisTest_3<0, 1, 0, 0>(*this, tri)) {
+    return false;
+  }
+  if (!intersectsTriangle_axisTest_3<0, 1, 0, 1>(*this, tri)) {
+    return false;
+  }
+  if (!intersectsTriangle_axisTest_3<0, 1, 0, 2>(*this, tri)) {
+    return false;
+  }
 
-  if (!intersectsTriangle_axisTest_3<0, 0, 1, 0>(*this, tri)) return false;
-  if (!intersectsTriangle_axisTest_3<0, 0, 1, 1>(*this, tri)) return false;
-  if (!intersectsTriangle_axisTest_3<0, 0, 1, 2>(*this, tri)) return false;
+  if (!intersectsTriangle_axisTest_3<0, 0, 1, 0>(*this, tri)) {
+    return false;
+  }
+  if (!intersectsTriangle_axisTest_3<0, 0, 1, 1>(*this, tri)) {
+    return false;
+  }
+  if (!intersectsTriangle_axisTest_3<0, 0, 1, 2>(*this, tri)) {
+    return false;
+  }
 
-  if (!intersectsTriangle_axisTest_1(*this, tri)) return false;
+  if (!intersectsTriangle_axisTest_1(*this, tri)) {
+    return false;
+  }
 
   return true;
 }

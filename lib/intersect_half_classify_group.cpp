@@ -54,8 +54,9 @@ struct GroupPoly : public CSG::Collector {
   virtual ~GroupPoly() {}
 
   virtual void collect(FaceLoopGroup* grp, CSG::Hooks& /* hooks */) {
-    if (grp->face_loops.head->orig_face->mesh->meshset != want_groups_from)
+    if (grp->face_loops.head->orig_face->mesh->meshset != want_groups_from) {
       return;
+    }
 
     std::list<ClassificationInfo>& cinfo = (grp->classification);
     if (cinfo.size() == 0) {

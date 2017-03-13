@@ -243,7 +243,9 @@ class SpatialSubdivTree {
   // exist.
   template <typename obj_t, typename iter_t, typename filter_t>
   void findObjectsNear(const obj_t& object, iter_t output, filter_t filter) {
-    if (!intersection_test(root->aabb, object)) return;
+    if (!intersection_test(root->aabb, object)) {
+      return;
+    }
     root->findObjectsNear(root, object, output, filter);
   }
 };

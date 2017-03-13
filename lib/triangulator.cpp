@@ -72,8 +72,12 @@ class heap_ordering_2d {
   bool operator()(size_t a, size_t b) const {
     double da = carve::geom::distance2(p, poly[loop[a].first][loop[a].second]);
     double db = carve::geom::distance2(p, poly[loop[b].first][loop[b].second]);
-    if (da > db) return true;
-    if (da < db) return false;
+    if (da > db) {
+      return true;
+    }
+    if (da < db) {
+      return false;
+    }
     return carve::triangulate::detail::axisOrdering(
         poly[loop[a].first][loop[a].second],
         poly[loop[b].first][loop[b].second], axis);
@@ -247,8 +251,9 @@ bool findDiagonal(vertex_info* begin, vertex_info*& v1, vertex_info*& v2) {
 
     for (v2 = v1->next->next; v2 != v1->prev; v2 = v2->next) {
       if (!internalToAngle(v1->next, v1, v1->prev, v2->p) ||
-          !internalToAngle(v2->next, v2, v2->prev, v1->p))
+          !internalToAngle(v2->next, v2, v2->prev, v1->p)) {
         continue;
+      }
 
       heap.push_back(v2);
       std::push_heap(heap.begin(), heap.end(),
@@ -274,7 +279,9 @@ bool findDiagonal(vertex_info* begin, vertex_info*& v1, vertex_info*& v2) {
 
       for (t = v1->next; !intersected && t != v1->prev; t = t->next) {
         vertex_info* u = t->next;
-        if (t == v2 || u == v2) continue;
+        if (t == v2 || u == v2) {
+          continue;
+        }
 
         double l1 = carve::geom2d::orient2d(v1->p, v2->p, t->p);
         double l2 = carve::geom2d::orient2d(v1->p, v2->p, u->p);
@@ -425,13 +432,17 @@ double carve::triangulate::detail::vertex_info::triScore(const vertex_info* p,
   double a, b, c;
 
   bool convex = isLeft(p, v, n);
-  if (!convex) return -1e-5;
+  if (!convex) {
+    return -1e-5;
+  }
 
   a = (n->p - v->p).length();
   b = (p->p - n->p).length();
   c = (v->p - p->p).length();
 
-  if (a < 1e-10 || b < 1e-10 || c < 1e-10) return 0.0;
+  if (a < 1e-10 || b < 1e-10 || c < 1e-10) {
+    return 0.0;
+  }
 
   return std::max(
       std::min((a + b) / c, std::min((a + c) / b, (b + c) / a)) - 1.0, 0.0);
@@ -514,7 +525,9 @@ size_t carve::triangulate::detail::removeDegeneracies(
 
   v = begin;
   do {
-    if (remain < 4) break;
+    if (remain < 4) {
+      break;
+    }
 
     bool remove = false;
     if (v->p == v->next->p) {
@@ -545,7 +558,9 @@ size_t carve::triangulate::detail::removeDegeneracies(
       result.push_back(carve::triangulate::tri_idx(v->idx, v->next->idx,
                                                    v->next->next->idx));
       n = v->next;
-      if (n == begin) begin = n->next;
+      if (n == begin) {
+        begin = n->next;
+      }
       n->remove();
       count++;
       remain--;
@@ -575,7 +590,9 @@ bool carve::triangulate::detail::splitAndResume(
   }
 #endif
 
-  if (!findDiagonal(begin, v1, v2)) return false;
+  if (!findDiagonal(begin, v1, v2)) {
+    return false;
+  }
 
   vertex_info* v1_copy = new vertex_info(*v1);
   vertex_info* v2_copy = new vertex_info(*v2);
@@ -618,7 +635,9 @@ bool carve::triangulate::detail::doTriangulate(
   vertex_info* v = begin;
   size_t remain = 0;
   do {
-    if (v->isCandidate()) vq.push(v);
+    if (v->isCandidate()) {
+      vq.push(v);
+    }
     v = v->next;
     remain++;
   } while (v != begin);
@@ -655,10 +674,14 @@ bool carve::triangulate::detail::doTriangulate(
 #endif
 
     v->remove();
-    if (v == begin) begin = v->next;
+    if (v == begin) {
+      begin = v->next;
+    }
     delete v;
 
-    if (--remain == 3) break;
+    if (--remain == 3) {
+      break;
+    }
 
     vq.updateVertex(n);
     vq.updateVertex(p);

@@ -58,8 +58,11 @@ vector<ndim> vector<ndim>::normalized() const {
 
 template <unsigned ndim>
 bool vector<ndim>::exactlyZero() const {
-  for (unsigned i = 0; i < ndim; ++i)
-    if (this->v[i]) return false;
+  for (unsigned i = 0; i < ndim; ++i) {
+    if (this->v[i]) {
+      return false;
+    }
+  }
   return true;
 }
 template <unsigned ndim>
@@ -69,22 +72,30 @@ bool vector<ndim>::isZero(double epsilon) const {
 
 template <unsigned ndim>
 void vector<ndim>::setZero() {
-  for (size_t i = 0; i < ndim; ++i) this->v[i] = 0.0;
+  for (size_t i = 0; i < ndim; ++i) {
+    this->v[i] = 0.0;
+  }
 }
 
 template <unsigned ndim>
 void vector<ndim>::fill(double val) {
-  for (size_t i = 0; i < ndim; ++i) this->v[i] = val;
+  for (size_t i = 0; i < ndim; ++i) {
+    this->v[i] = val;
+  }
 }
 
 template <unsigned ndim>
 vector<ndim>& vector<ndim>::scaleBy(double d) {
-  for (unsigned i = 0; i < ndim; ++i) this->v[i] *= d;
+  for (unsigned i = 0; i < ndim; ++i) {
+    this->v[i] *= d;
+  }
   return *this;
 }
 template <unsigned ndim>
 vector<ndim>& vector<ndim>::invscaleBy(double d) {
-  for (unsigned i = 0; i < ndim; ++i) this->v[i] /= d;
+  for (unsigned i = 0; i < ndim; ++i) {
+    this->v[i] /= d;
+  }
   return *this;
 }
 
@@ -99,7 +110,9 @@ vector<ndim> vector<ndim>::invscaled(double d) const {
 
 template <unsigned ndim>
 vector<ndim>& vector<ndim>::negate() {
-  for (unsigned i = 0; i < ndim; ++i) this->v[i] = -this->v[i];
+  for (unsigned i = 0; i < ndim; ++i) {
+    this->v[i] = -this->v[i];
+  }
   return *this;
 }
 template <unsigned ndim>
@@ -119,7 +132,9 @@ const double& vector<ndim>::operator[](unsigned i) const {
 template <unsigned ndim>
 template <typename assign_t>
 vector<ndim>& vector<ndim>::operator=(const assign_t& t) {
-  for (unsigned i = 0; i < ndim; ++i) this->v[i] = t[i];
+  for (unsigned i = 0; i < ndim; ++i) {
+    this->v[i] = t[i];
+  }
   return *this;
 }
 
@@ -129,7 +144,9 @@ std::string vector<ndim>::asStr() const {
   out << '<';
   out << std::setprecision(24);
   for (unsigned i = 0; i < ndim; ++i) {
-    if (i) out << ',';
+    if (i) {
+      out << ',';
+    }
     out << this->v[i];
   }
   out << '>';
@@ -139,139 +156,181 @@ std::string vector<ndim>::asStr() const {
 template <unsigned ndim>
 vector<ndim> operator+(const vector<ndim>& a, const vector<ndim>& b) {
   vector<ndim> c(NOINIT);
-  for (unsigned i = 0; i < ndim; ++i) c[i] = a[i] + b[i];
+  for (unsigned i = 0; i < ndim; ++i) {
+    c[i] = a[i] + b[i];
+  }
   return c;
 }
 
 template <unsigned ndim>
 vector<ndim> operator+(const vector<ndim>& a, double b) {
   vector<ndim> c(NOINIT);
-  for (unsigned i = 0; i < ndim; ++i) c[i] = a[i] + b;
+  for (unsigned i = 0; i < ndim; ++i) {
+    c[i] = a[i] + b;
+  }
   return c;
 }
 
 template <unsigned ndim, typename val_t>
 vector<ndim> operator+(const vector<ndim>& a, const val_t& b) {
   vector<ndim> c(NOINIT);
-  for (unsigned i = 0; i < ndim; ++i) c[i] = a[i] + b[i];
+  for (unsigned i = 0; i < ndim; ++i) {
+    c[i] = a[i] + b[i];
+  }
   return c;
 }
 
 template <unsigned ndim, typename val_t>
 vector<ndim> operator+(const val_t& a, const vector<ndim>& b) {
   vector<ndim> c(NOINIT);
-  for (unsigned i = 0; i < ndim; ++i) c[i] = a[i] + b[i];
+  for (unsigned i = 0; i < ndim; ++i) {
+    c[i] = a[i] + b[i];
+  }
   return c;
 }
 
 template <unsigned ndim>
 vector<ndim>& operator+=(vector<ndim>& a, const vector<ndim>& b) {
-  for (unsigned i = 0; i < ndim; ++i) a[i] += b[i];
+  for (unsigned i = 0; i < ndim; ++i) {
+    a[i] += b[i];
+  }
   return a;
 }
 
 template <unsigned ndim>
 vector<ndim>& operator+=(vector<ndim>& a, double b) {
-  for (unsigned i = 0; i < ndim; ++i) a[i] += b;
+  for (unsigned i = 0; i < ndim; ++i) {
+    a[i] += b;
+  }
   return a;
 }
 
 template <unsigned ndim, typename val_t>
 vector<ndim>& operator+=(vector<ndim>& a, const val_t& b) {
-  for (unsigned i = 0; i < ndim; ++i) a[i] += b[i];
+  for (unsigned i = 0; i < ndim; ++i) {
+    a[i] += b[i];
+  }
   return a;
 }
 
 template <unsigned ndim>
 vector<ndim> operator-(const vector<ndim>& a) {
   vector<ndim> c(NOINIT);
-  for (unsigned i = 0; i < ndim; ++i) c[i] = -a[i];
+  for (unsigned i = 0; i < ndim; ++i) {
+    c[i] = -a[i];
+  }
   return c;
 }
 
 template <unsigned ndim>
 vector<ndim> operator-(const vector<ndim>& a, double b) {
   vector<ndim> c(NOINIT);
-  for (unsigned i = 0; i < ndim; ++i) c[i] = a[i] - b;
+  for (unsigned i = 0; i < ndim; ++i) {
+    c[i] = a[i] - b;
+  }
   return c;
 }
 
 template <unsigned ndim>
 vector<ndim> operator-(const vector<ndim>& a, const vector<ndim>& b) {
   vector<ndim> c(NOINIT);
-  for (unsigned i = 0; i < ndim; ++i) c[i] = a[i] - b[i];
+  for (unsigned i = 0; i < ndim; ++i) {
+    c[i] = a[i] - b[i];
+  }
   return c;
 }
 
 template <unsigned ndim, typename val_t>
 vector<ndim> operator-(const vector<ndim>& a, const val_t& b) {
   vector<ndim> c(NOINIT);
-  for (unsigned i = 0; i < ndim; ++i) c[i] = a[i] - b[i];
+  for (unsigned i = 0; i < ndim; ++i) {
+    c[i] = a[i] - b[i];
+  }
   return c;
 }
 
 template <unsigned ndim, typename val_t>
 vector<ndim> operator-(const val_t& a, const vector<ndim>& b) {
   vector<ndim> c(NOINIT);
-  for (unsigned i = 0; i < ndim; ++i) c[i] = a[i] - b[i];
+  for (unsigned i = 0; i < ndim; ++i) {
+    c[i] = a[i] - b[i];
+  }
   return c;
 }
 
 template <unsigned ndim>
 vector<ndim>& operator-=(vector<ndim>& a, const vector<ndim>& b) {
-  for (unsigned i = 0; i < ndim; ++i) a[i] -= b[i];
+  for (unsigned i = 0; i < ndim; ++i) {
+    a[i] -= b[i];
+  }
   return a;
 }
 
 template <unsigned ndim>
 vector<ndim>& operator-=(vector<ndim>& a, double b) {
-  for (unsigned i = 0; i < ndim; ++i) a[i] -= b;
+  for (unsigned i = 0; i < ndim; ++i) {
+    a[i] -= b;
+  }
   return a;
 }
 
 template <unsigned ndim, typename val_t>
 vector<ndim>& operator-=(vector<ndim>& a, const val_t& b) {
-  for (unsigned i = 0; i < ndim; ++i) a[i] -= b[i];
+  for (unsigned i = 0; i < ndim; ++i) {
+    a[i] -= b[i];
+  }
   return a;
 }
 
 template <unsigned ndim>
 vector<ndim> operator*(const vector<ndim>& a, double s) {
   vector<ndim> c(NOINIT);
-  for (unsigned i = 0; i < ndim; ++i) c[i] = a[i] * s;
+  for (unsigned i = 0; i < ndim; ++i) {
+    c[i] = a[i] * s;
+  }
   return c;
 }
 
 template <unsigned ndim>
 vector<ndim> operator*(double s, const vector<ndim>& a) {
   vector<ndim> c(NOINIT);
-  for (unsigned i = 0; i < ndim; ++i) c[i] = a[i] * s;
+  for (unsigned i = 0; i < ndim; ++i) {
+    c[i] = a[i] * s;
+  }
   return c;
 }
 
 template <unsigned ndim>
 vector<ndim>& operator*=(vector<ndim>& a, double s) {
-  for (unsigned i = 0; i < ndim; ++i) a[i] *= s;
+  for (unsigned i = 0; i < ndim; ++i) {
+    a[i] *= s;
+  }
   return a;
 }
 
 template <unsigned ndim>
 vector<ndim> operator/(const vector<ndim>& a, double s) {
   vector<ndim> c(NOINIT);
-  for (unsigned i = 0; i < ndim; ++i) c[i] = a[i] / s;
+  for (unsigned i = 0; i < ndim; ++i) {
+    c[i] = a[i] / s;
+  }
   return c;
 }
 
 template <unsigned ndim>
 vector<ndim>& operator/=(vector<ndim>& a, double s) {
-  for (unsigned i = 0; i < ndim; ++i) a[i] /= s;
+  for (unsigned i = 0; i < ndim; ++i) {
+    a[i] /= s;
+  }
   return a;
 }
 
 template <unsigned ndim>
 bool operator==(const vector<ndim>& a, const vector<ndim>& b) {
   for (unsigned i = 0; i < ndim; ++i) {
-    if (a[i] != b[i]) return false;
+    if (a[i] != b[i]) {
+      return false;
+    }
   }
   return true;
 }
@@ -284,8 +343,12 @@ bool operator!=(const vector<ndim>& a, const vector<ndim>& b) {
 template <unsigned ndim>
 bool operator<(const vector<ndim>& a, const vector<ndim>& b) {
   for (unsigned i = 0; i < ndim; ++i) {
-    if (a[i] < b[i]) return true;
-    if (a[i] > b[i]) return false;
+    if (a[i] < b[i]) {
+      return true;
+    }
+    if (a[i] > b[i]) {
+      return false;
+    }
   }
   return false;
 }
@@ -308,7 +371,9 @@ bool operator>=(const vector<ndim>& a, const vector<ndim>& b) {
 template <unsigned ndim>
 vector<ndim> abs(const vector<ndim>& a) {
   vector<ndim> c(NOINIT);
-  for (unsigned i = 0; i < ndim; ++i) c[i] = fabs(a[i]);
+  for (unsigned i = 0; i < ndim; ++i) {
+    c[i] = fabs(a[i]);
+  }
   return c;
 }
 
@@ -374,7 +439,9 @@ vector<3> select(const vector<ndim>& a, int a1, int a2, int a3) {
 
 template <unsigned ndim, typename assign_t, typename oper_t>
 vector<ndim>& assign_op(vector<ndim>& a, const assign_t& t, oper_t op) {
-  for (unsigned i = 0; i < ndim; ++i) a[i] = op(t[i]);
+  for (unsigned i = 0; i < ndim; ++i) {
+    a[i] = op(t[i]);
+  }
   return a;
 }
 
@@ -382,7 +449,9 @@ template <unsigned ndim, typename assign1_t, typename assign2_t,
           typename oper_t>
 vector<ndim>& assign_op(vector<ndim>& a, const assign1_t& t1,
                         const assign2_t& t2, oper_t op) {
-  for (unsigned i = 0; i < ndim; ++i) a[i] = op(t1[i], t2[i]);
+  for (unsigned i = 0; i < ndim; ++i) {
+    a[i] = op(t1[i], t2[i]);
+  }
   return a;
 }
 
@@ -440,7 +509,9 @@ void centroid(iter_t begin, iter_t end, adapt_t adapt, vector<ndim>& c) {
 template <unsigned ndim, typename val_t>
 double dot(const vector<ndim>& a, const val_t& b) {
   double r = 0.0;
-  for (unsigned i = 0; i < ndim; ++i) r += a[i] * b[i];
+  for (unsigned i = 0; i < ndim; ++i) {
+    r += a[i] * b[i];
+  }
   return r;
 }
 
@@ -588,8 +659,12 @@ template <unsigned ndim>
 double distance2(const linesegment<ndim>& l, const vector<ndim>& v) {
   vector<ndim> D = l.v2 - l.v1;
   double t = dot(v - l.v1, D) / dot(D, D);
-  if (t <= 0.0) return (v - l.v1).length2();
-  if (t >= 1.0) return (v - l.v2).length2();
+  if (t <= 0.0) {
+    return (v - l.v1).length2();
+  }
+  if (t >= 1.0) {
+    return (v - l.v2).length2();
+  }
   vector<ndim> vc = D * t + l.v1;
   return (v - vc).length2();
 }

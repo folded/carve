@@ -37,20 +37,28 @@ bool grahamScan(const std::vector<carve::geom2d::P2>& points, int vpp, int vp,
                 const std::vector<int>& ordered, int start,
                 std::vector<int>& result, int _i = 0) {
   carve::geom2d::P2 v1 = points[vp] - points[vpp];
-  if (start == (int)ordered.size()) return true;
+  if (start == (int)ordered.size()) {
+    return true;
+  }
 
   for (int i = start; i < (int)ordered.size(); ++i) {
     int v = ordered[i];
     carve::geom2d::P2 v2 = points[v] - points[vp];
 
     double cp = v1.x * v2.y - v2.x * v1.y;
-    if (cp < 0) return false;
+    if (cp < 0) {
+      return false;
+    }
 
     int j = i + 1;
-    while (j < (int)ordered.size() && points[ordered[j]] == points[v]) j++;
+    while (j < (int)ordered.size() && points[ordered[j]] == points[v]) {
+      j++;
+    }
 
     result.push_back(v);
-    if (grahamScan(points, vp, v, ordered, j, result, _i + 1)) return true;
+    if (grahamScan(points, vp, v, ordered, j, result, _i + 1)) {
+      return true;
+    }
     result.pop_back();
   }
 
@@ -77,7 +85,9 @@ std::vector<int> convexHull(const std::vector<carve::geom2d::P2>& points) {
   angle_dist.reserve(points.size());
   ordered.reserve(points.size() - 1);
   for (unsigned i = 0; i < points.size(); ++i) {
-    if (i == max_v) continue;
+    if (i == max_v) {
+      continue;
+    }
     angle_dist[i] = std::make_pair(
         carve::math::ANG(carve::geom2d::atan2(points[i] - points[max_v])),
         distance2(points[i], points[max_v]));

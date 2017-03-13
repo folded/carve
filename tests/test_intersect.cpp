@@ -543,10 +543,14 @@ void getInputsFromTest(int test, std::list<Input>& inputs) {
 }
 
 static bool endswith(const std::string& a, const std::string& b) {
-  if (a.size() < b.size()) return false;
+  if (a.size() < b.size()) {
+    return false;
+  }
 
   for (unsigned i = a.size(), j = b.size(); j;) {
-    if (tolower(a[--i]) != tolower(b[--j])) return false;
+    if (tolower(a[--i]) != tolower(b[--j])) {
+      return false;
+    }
   }
   return true;
 }
@@ -616,12 +620,16 @@ void testCSG(GLuint& dlist, std::list<Input>::const_iterator begin,
         // Place the result of this CSG into our final result, and get rid of
         // our last one
         std::swap(result, finalResult);
-        if (result_is_temp) delete result;
+        if (result_is_temp) {
+          delete result;
+        }
         result_is_temp = true;
 
       } catch (carve::exception e) {
         std::cerr << "FAIL- " << e.str();
-        if (result_is_temp && finalResult) delete finalResult;
+        if (result_is_temp && finalResult) {
+          delete finalResult;
+        }
         finalResult = NULL;
       }
     }

@@ -219,7 +219,9 @@ Face<ndim>* Face<ndim>::init(const Face* base,
 
 template <unsigned ndim>
 bool Face<ndim>::containsPoint(const vector_t& p) const {
-  if (!carve::math::ZERO(carve::geom::distance(plane_eqn, p))) return false;
+  if (!carve::math::ZERO(carve::geom::distance(plane_eqn, p))) {
+    return false;
+  }
   // return pointInPolySimple(vertices, projector(), (this->*project)(p));
   return carve::geom2d::pointInPoly(vertices, projector(),
                                     face::project(this, p))
@@ -236,7 +238,9 @@ bool Face<ndim>::containsPointInProjection(const vector_t& p) const {
 template <unsigned ndim>
 bool Face<ndim>::simpleLineSegmentIntersection(
     const carve::geom::linesegment<ndim>& line, vector_t& intersection) const {
-  if (!line.OK()) return false;
+  if (!line.OK()) {
+    return false;
+  }
 
   carve::geom3d::Vector p;
   IntersectionClass intersects =
@@ -259,7 +263,9 @@ bool Face<ndim>::simpleLineSegmentIntersection(
 template <unsigned ndim>
 IntersectionClass Face<ndim>::lineSegmentIntersection(
     const carve::geom::linesegment<ndim>& line, vector_t& intersection) const {
-  if (!line.OK()) return INTERSECT_NONE;
+  if (!line.OK()) {
+    return INTERSECT_NONE;
+  }
 
   carve::geom3d::Vector p;
   IntersectionClass intersects =

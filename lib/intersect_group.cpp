@@ -208,8 +208,9 @@ void carve::csg::CSG::groupFaceLoops(
                      ke = (*j).second.end();
                  k != ke; ++k) {
               if ((*k)->group != NULL ||
-                  (*k)->orig_face->mesh != expand->orig_face->mesh)
+                  (*k)->orig_face->mesh != expand->orig_face->mesh) {
                 continue;
+              }
               face_loops.remove((*k));
               curr.append((*k));
               (*k)->group = &group;
@@ -223,8 +224,9 @@ void carve::csg::CSG::groupFaceLoops(
                      ke = (*j).second.end();
                  k != ke; ++k) {
               if ((*k)->group != NULL ||
-                  (*k)->orig_face->mesh != expand->orig_face->mesh)
+                  (*k)->orig_face->mesh != expand->orig_face->mesh) {
                 continue;
+              }
               face_loops.remove((*k));
               curr.append((*k));
               (*k)->group = &group;

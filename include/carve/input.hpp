@@ -73,8 +73,12 @@ static inline Options opts(const std::string& k1, const std::string& v1,
 }
 
 static inline bool _bool(const std::string& str, bool _default = false) {
-  if (str == "true") return true;
-  if (str == "false") return false;
+  if (str == "true") {
+    return true;
+  }
+  if (str == "false") {
+    return false;
+  }
   return _default;
 }
 
@@ -227,7 +231,9 @@ class Input {
   void addDataBlock(Data* data) { input.push_back(data); }
 
   void transform(const carve::math::Matrix& transform) {
-    if (transform == carve::math::Matrix::IDENT()) return;
+    if (transform == carve::math::Matrix::IDENT()) {
+      return;
+    }
     for (std::list<Data*>::iterator i = input.begin(); i != input.end(); ++i) {
       (*i)->transform(transform);
     }
@@ -242,14 +248,18 @@ class Input {
 template <>
 inline carve::mesh::MeshSet<3>* Input::create(Data* d, const Options& options) {
   PolyhedronData* p = dynamic_cast<PolyhedronData*>(d);
-  if (p == NULL) return NULL;
+  if (p == NULL) {
+    return NULL;
+  }
   return p->createMesh(options);
 }
 
 template <>
 inline carve::poly::Polyhedron* Input::create(Data* d, const Options& options) {
   PolyhedronData* p = dynamic_cast<PolyhedronData*>(d);
-  if (p == NULL) return NULL;
+  if (p == NULL) {
+    return NULL;
+  }
   return p->create(options);
 }
 
@@ -257,14 +267,18 @@ template <>
 inline carve::line::PolylineSet* Input::create(Data* d,
                                                const Options& options) {
   PolylineSetData* p = dynamic_cast<PolylineSetData*>(d);
-  if (p == NULL) return NULL;
+  if (p == NULL) {
+    return NULL;
+  }
   return p->create(options);
 }
 
 template <>
 inline carve::point::PointSet* Input::create(Data* d, const Options& options) {
   PointSetData* p = dynamic_cast<PointSetData*>(d);
-  if (p == NULL) return NULL;
+  if (p == NULL) {
+    return NULL;
+  }
   return p->create(options);
 }
 }

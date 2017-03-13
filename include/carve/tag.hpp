@@ -45,7 +45,9 @@ class tagable {
   void untag() const { __tag = s_count - 1; }
   bool is_tagged() const { return __tag == s_count; }
   bool tag_once() const {
-    if (__tag == s_count) return false;
+    if (__tag == s_count) {
+      return false;
+    }
     __tag = s_count;
     return true;
   }

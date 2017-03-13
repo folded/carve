@@ -189,7 +189,9 @@ struct hash_pair {
 
 template <typename iter_t>
 inline bool is_sorted(iter_t first, iter_t last) {
-  if (first == last) return true;
+  if (first == last) {
+    return true;
+  }
 
   iter_t iter = first;
   iter_t next = first;
@@ -204,7 +206,9 @@ inline bool is_sorted(iter_t first, iter_t last) {
 
 template <typename iter_t, typename pred_t>
 inline bool is_sorted(iter_t first, iter_t last, pred_t pred) {
-  if (first == last) return true;
+  if (first == last) {
+    return true;
+  }
 
   iter_t iter = first;
   iter_t next = first;

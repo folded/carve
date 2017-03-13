@@ -55,7 +55,9 @@ struct Intersections
    * @param p The point of intersection.
    */
   void record(IObj a, IObj b, vertex_t* p) {
-    if (a > b) std::swap(a, b);
+    if (a > b) {
+      std::swap(a, b);
+    }
     (*this)[a][b] = p;
     (*this)[b][a] = p;
   }
@@ -92,7 +94,9 @@ struct Intersections
    */
   bool intersectsExactly(const IObj& a, const IObj& b) {
     Intersections::const_iterator i = find(a);
-    if (i == end()) return false;
+    if (i == end()) {
+      return false;
+    }
     return i->second.find(b) != i->second.end();
   }
 
@@ -106,8 +110,12 @@ struct Intersections
    */
   bool intersects(const IObj& a, vertex_t* v) {
     Intersections::const_iterator i = find(a);
-    if (i == end()) return false;
-    if (i->second.find(v) != i->second.end()) return true;
+    if (i == end()) {
+      return false;
+    }
+    if (i->second.find(v) != i->second.end()) {
+      return true;
+    }
     return false;
   }
 
@@ -122,16 +130,22 @@ struct Intersections
    */
   bool intersects(const IObj& a, edge_t* e) {
     Intersections::const_iterator i = find(a);
-    if (i == end()) return false;
+    if (i == end()) {
+      return false;
+    }
     for (super::mapped_type::const_iterator j = i->second.begin();
          j != i->second.end(); ++j) {
       const IObj& obj = j->first;
       switch (obj.obtype) {
         case IObj::OBTYPE_VERTEX:
-          if (obj.vertex == e->v1() || obj.vertex == e->v2()) return true;
+          if (obj.vertex == e->v1() || obj.vertex == e->v2()) {
+            return true;
+          }
           break;
         case IObj::OBTYPE_EDGE:
-          if (obj.edge == e) return true;
+          if (obj.edge == e) {
+            return true;
+          }
           break;
         default:
           break;
@@ -151,12 +165,20 @@ struct Intersections
    */
   bool intersects(const IObj& a, face_t* f) {
     Intersections::const_iterator i = find(a);
-    if (i == end()) return false;
-    if (i->second.find(f) != i->second.end()) return true;
+    if (i == end()) {
+      return false;
+    }
+    if (i->second.find(f) != i->second.end()) {
+      return true;
+    }
     edge_t* e = f->edge;
     do {
-      if (i->second.find(e) != i->second.end()) return true;
-      if (i->second.find(e->vert) != i->second.end()) return true;
+      if (i->second.find(e) != i->second.end()) {
+        return true;
+      }
+      if (i->second.find(e->vert) != i->second.end()) {
+        return true;
+      }
       e = e->next;
     } while (e != f->edge);
     return false;
@@ -172,8 +194,9 @@ struct Intersections
    */
   bool intersects(edge_t* e1, edge_t* e2) {
     if (intersects(e1->v1(), e2) || intersects(e1->v2(), e2) ||
-        intersects(IObj(e1), e2))
+        intersects(IObj(e1), e2)) {
       return true;
+    }
     return false;
   }
 
@@ -187,8 +210,9 @@ struct Intersections
    */
   bool intersects(edge_t* e, face_t* f) {
     if (intersects(e->v1(), f) || intersects(e->v2(), f) ||
-        intersects(IObj(e), f))
+        intersects(IObj(e), f)) {
       return true;
+    }
     return false;
   }
 
@@ -252,7 +276,9 @@ struct Intersections
   void commonFaces(const vertex_set_t& verts, face_set_t& result) {
     std::set<face_t *> ifaces, temp, out;
     typename vertex_set_t::const_iterator i = verts.begin();
-    if (i == verts.end()) return;
+    if (i == verts.end()) {
+      return;
+    }
     intersectedFaces((*i), ifaces);
     while (++i != verts.end()) {
       temp.clear();

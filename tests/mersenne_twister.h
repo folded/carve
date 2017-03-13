@@ -201,8 +201,10 @@ inline double MTRand::randNorm(const double& mean, const double& variance) {
 inline uint32_t MTRand::randInt() {
   // Pull a 32-bit integer from the generator state
   // Every other access function simply transforms the numbers extracted here
-	
-  if(left == 0) reload();
+
+  if (left == 0) {
+    reload();
+  }
   --left;
 		
   uint32_t s1;
@@ -257,7 +259,9 @@ inline void MTRand::seed(uint32_t *const bigSeed, const uint32_t seedLength) {
     state[i] &= 0xffffffffUL;
     ++i;  ++j;
     if(i >= N) { state[0] = state[N-1];  i = 1; }
-    if(j >= seedLength) j = 0;
+    if (j >= seedLength) {
+      j = 0;
+    }
   }
   for(k = N - 1; k; --k) {
     state[i] = state[i] ^ ((state[i-1] ^ (state[i-1] >> 30)) * 1566083941UL);
@@ -282,8 +286,9 @@ inline void MTRand::seed() {
     uint32_t *s = bigSeed;
     int i = N;
     bool success = true;
-    while(success && i--)
+    while (success && i--) {
       success = fread(s++, sizeof(uint32_t), 1, urandom);
+    }
     fclose(urandom);
     if(success) { seed(bigSeed, N);  return; }
   }
@@ -314,10 +319,12 @@ inline void MTRand::reload() {
   // Made clearer and faster by Matthew Bellew (matthew.bellew@home.com)
   uint32_t *p = state;
   int i;
-  for(i = N - M; i--; ++p)
+  for (i = N - M; i--; ++p) {
     *p = twist(p[M], p[0], p[1]);
-  for(i = M; --i; ++p)
+  }
+  for (i = M; --i; ++p) {
     *p = twist(p[M-N], p[0], p[1]);
+  }
   *p = twist(p[M-N], p[0], state[0]);
 
   left = N, pNext = state;

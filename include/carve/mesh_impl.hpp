@@ -89,7 +89,9 @@ struct list_iter_t {
 
 template <unsigned ndim>
 Edge<ndim>* Edge<ndim>::mergeFaces() {
-  if (rev == NULL) return NULL;
+  if (rev == NULL) {
+    return NULL;
+  }
 
   face_t* fwdface = face;
   face_t* revface = rev->face;
@@ -168,9 +170,13 @@ Edge<ndim>* Edge<ndim>::removeHalfEdge() {
   }
 
   if (next == this) {
-    if (face) face->edge = NULL;
+    if (face) {
+      face->edge = NULL;
+    }
   } else {
-    if (face && face->edge == this) face->edge = next;
+    if (face && face->edge == this) {
+      face->edge = next;
+    }
     next->prev = prev;
     prev->next = next;
     n = next;
@@ -200,7 +206,9 @@ void Edge<ndim>::unlink() {
 
   if (face) {
     face->n_edges--;
-    if (face->edge == this) face->edge = next;
+    if (face->edge == this) {
+      face->edge = next;
+    }
     face = NULL;
   }
 
@@ -212,7 +220,9 @@ void Edge<ndim>::unlink() {
 
 template <unsigned ndim>
 void Edge<ndim>::insertBefore(Edge<ndim>* other) {
-  if (prev != this) unlink();
+  if (prev != this) {
+    unlink();
+  }
   prev = other->prev;
   next = other;
   next->prev = this;
@@ -226,7 +236,9 @@ void Edge<ndim>::insertBefore(Edge<ndim>* other) {
 
 template <unsigned ndim>
 void Edge<ndim>::insertAfter(Edge<ndim>* other) {
-  if (prev != this) unlink();
+  if (prev != this) {
+    unlink();
+  }
   next = other->next;
   prev = other;
   next->prev = this;
@@ -251,7 +263,9 @@ size_t Edge<ndim>::loopSize() const {
 
 template <unsigned ndim>
 Edge<ndim>* Edge<ndim>::perimNext() const {
-  if (rev) return NULL;
+  if (rev) {
+    return NULL;
+  }
   Edge* e = next;
   while (e->rev) {
     e = e->rev->next;
@@ -261,7 +275,9 @@ Edge<ndim>* Edge<ndim>::perimNext() const {
 
 template <unsigned ndim>
 Edge<ndim>* Edge<ndim>::perimPrev() const {
-  if (rev) return NULL;
+  if (rev) {
+    return NULL;
+  }
   Edge* e = prev;
   while (e->rev) {
     e = e->rev->prev;
@@ -307,7 +323,9 @@ bool Face<ndim>::recalc() {
 
 template <unsigned ndim>
 void Face<ndim>::clearEdges() {
-  if (!edge) return;
+  if (!edge) {
+    return;
+  }
 
   edge_t* curr = edge;
   do {
@@ -325,7 +343,9 @@ template <unsigned ndim>
 template <typename iter_t>
 void Face<ndim>::loopFwd(iter_t begin, iter_t end) {
   clearEdges();
-  if (begin == end) return;
+  if (begin == end) {
+    return;
+  }
   edge = new edge_t(*begin, this);
   ++n_edges;
   ++begin;
@@ -341,7 +361,9 @@ template <unsigned ndim>
 template <typename iter_t>
 void Face<ndim>::loopRev(iter_t begin, iter_t end) {
   clearEdges();
-  if (begin == end) return;
+  if (begin == end) {
+    return;
+  }
   edge = new edge_t(*begin, this);
   ++n_edges;
   ++begin;
@@ -426,7 +448,9 @@ void Face<ndim>::canonicalize() {
   edge_t* e = edge;
 
   do {
-    if (e->vert < min->vert) min = e;
+    if (e->vert < min->vert) {
+      min = e;
+    }
     e = e->next;
   } while (e != edge);
 
@@ -636,8 +660,12 @@ inline int Mesh<3>::orientationAtVertex(edge_t* e_base) {
       o_lo = std::max(o_lo, o);
     }
 
-    if (o_lo >= 0.0) return +1;
-    if (o_hi <= 0.0) return -1;
+    if (o_lo >= 0.0) {
+      return +1;
+    }
+    if (o_hi <= 0.0) {
+      return -1;
+    }
   }
 
   return 0;
@@ -652,12 +680,17 @@ void Mesh<ndim>::calcOrientation() {
 
   edge_t* emin = closed_edges[0];
 
-  if (emin->rev->v1()->v < emin->v1()->v) emin = emin->rev;
+  if (emin->rev->v1()->v < emin->v1()->v) {
+    emin = emin->rev;
+  }
 
   for (size_t i = 1; i < closed_edges.size(); ++i) {
-    if (closed_edges[i]->v1()->v < emin->v1()->v) emin = closed_edges[i];
-    if (closed_edges[i]->rev->v1()->v < emin->v1()->v)
+    if (closed_edges[i]->v1()->v < emin->v1()->v) {
+      emin = closed_edges[i];
+    }
+    if (closed_edges[i]->rev->v1()->v < emin->v1()->v) {
       emin = closed_edges[i]->rev;
+    }
   }
 
   int orientation = orientationAtVertex(emin);
@@ -925,7 +958,9 @@ template <typename face_type>
 typename MeshSet<ndim>::template FaceIter<face_type>::difference_type
 MeshSet<ndim>::FaceIter<face_type>::operator-(const FaceIter& other) const {
   CARVE_ASSERT(obj == other.obj);
-  if (mesh == other.mesh) return face - other.face;
+  if (mesh == other.mesh) {
+    return face - other.face;
+  }
 
   size_t m = 0;
   for (size_t i = std::min(mesh, other.mesh) + 1;

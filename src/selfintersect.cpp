@@ -105,10 +105,14 @@ struct Options : public opt::Parser {
 static Options options;
 
 static bool endswith(const std::string& a, const std::string& b) {
-  if (a.size() < b.size()) return false;
+  if (a.size() < b.size()) {
+    return false;
+  }
 
   for (unsigned i = a.size(), j = b.size(); j;) {
-    if (tolower(a[--i]) != tolower(b[--j])) return false;
+    if (tolower(a[--i]) != tolower(b[--j])) {
+      return false;
+    }
   }
   return true;
 }
@@ -178,14 +182,22 @@ bool shares_edge(const vec3 tri_a[3], const vec3 tri_b[3], size_t& ia,
 }
 
 std::string SIGN(double x) {
-  if (x == 0.0) return "0";
-  if (x < 0.0) return "-";
+  if (x == 0.0) {
+    return "0";
+  }
+  if (x < 0.0) {
+    return "-";
+  }
   return "+";
 }
 
 inline int fsign(double d) {
-  if (d < 0.0) return -1;
-  if (d == 0.0) return 0;
+  if (d < 0.0) {
+    return -1;
+  }
+  if (d == 0.0) {
+    return 0;
+  }
   return +1;
 }
 
@@ -240,7 +252,9 @@ int triangle_line_intersection_2d(const vec3 tri[3], const vec3& p1,
   ptri[0] = carve::geom::select(tri[0], a1, a2);
   ptri[1] = carve::geom::select(tri[1], a1, a2);
   ptri[2] = carve::geom::select(tri[2], a1, a2);
-  if (!carve::geom2d::isAnticlockwise(ptri)) std::swap(ptri[0], ptri[2]);
+  if (!carve::geom2d::isAnticlockwise(ptri)) {
+    std::swap(ptri[0], ptri[2]);
+  }
 
   pp1 = carve::geom::select(p1, a1, a2);
   pp2 = carve::geom::select(p2, a1, a2);
@@ -253,17 +267,21 @@ int triangle_line_intersection_2d(const vec3 tri[3], const vec3& p1,
     return carve::geom2d::lineIntersectsTriangle(pp1, pp2, ptri) ? 3 : 0;
   } else if (ib == 3) {
     // shared vertex (pp1)
-    if (carve::geom2d::orient2d(ptri[(ia + 2) % 3], ptri[ia], pp2) < 0.0)
+    if (carve::geom2d::orient2d(ptri[(ia + 2) % 3], ptri[ia], pp2) < 0.0) {
       return 1;
-    if (carve::geom2d::orient2d(ptri[ia], ptri[(ia + 1) % 3], pp2) < 0.0)
+    }
+    if (carve::geom2d::orient2d(ptri[ia], ptri[(ia + 1) % 3], pp2) < 0.0) {
       return 1;
+    }
     return 3;
   } else if (ia == 3) {
     // shared vertex (pp2)
-    if (carve::geom2d::orient2d(ptri[(ib + 2) % 3], ptri[ib], pp1) < 0.0)
+    if (carve::geom2d::orient2d(ptri[(ib + 2) % 3], ptri[ib], pp1) < 0.0) {
       return 1;
-    if (carve::geom2d::orient2d(ptri[ib], ptri[(ib + 1) % 3], pp1) < 0.0)
+    }
+    if (carve::geom2d::orient2d(ptri[ib], ptri[(ib + 1) % 3], pp1) < 0.0) {
       return 1;
+    }
     return 3;
   } else {
     // shared edge
@@ -279,18 +297,22 @@ bool shared_vertex_intersection_test(const vec2 tri_a[3], int va,
   int vbn = (vb + 1) % 3, vbp = (vb + 2) % 3;
 
   if (carve::geom2d::orient2d(tri_a[vap], tri_a[va], tri_b[vbp]) >= 0 &&
-      carve::geom2d::orient2d(tri_a[va], tri_a[van], tri_b[vbp]) >= 0)
+      carve::geom2d::orient2d(tri_a[va], tri_a[van], tri_b[vbp]) >= 0) {
     return true;
+  }
   if (carve::geom2d::orient2d(tri_a[vap], tri_a[va], tri_b[vbn]) >= 0 &&
-      carve::geom2d::orient2d(tri_a[va], tri_a[van], tri_b[vbn]) >= 0)
+      carve::geom2d::orient2d(tri_a[va], tri_a[van], tri_b[vbn]) >= 0) {
     return true;
+  }
 
   if (carve::geom2d::orient2d(tri_b[vbp], tri_b[vb], tri_a[vap]) >= 0 &&
-      carve::geom2d::orient2d(tri_b[vb], tri_b[vbn], tri_a[vap]) >= 0)
+      carve::geom2d::orient2d(tri_b[vb], tri_b[vbn], tri_a[vap]) >= 0) {
     return true;
+  }
   if (carve::geom2d::orient2d(tri_b[vbp], tri_b[vb], tri_a[van]) >= 0 &&
-      carve::geom2d::orient2d(tri_b[vb], tri_b[vbn], tri_a[van]) >= 0)
+      carve::geom2d::orient2d(tri_b[vb], tri_b[vbn], tri_a[van]) >= 0) {
     return true;
+  }
 
   return false;
 }
@@ -317,12 +339,16 @@ int triangle_triangle_intersection_2d(const vec3 tri_a[3],
   ptri_a[0] = carve::geom::select(tri_a[0], a1, a2);
   ptri_a[1] = carve::geom::select(tri_a[1], a1, a2);
   ptri_a[2] = carve::geom::select(tri_a[2], a1, a2);
-  if (!carve::geom2d::isAnticlockwise(ptri_a)) std::swap(ptri_a[0], ptri_a[2]);
+  if (!carve::geom2d::isAnticlockwise(ptri_a)) {
+    std::swap(ptri_a[0], ptri_a[2]);
+  }
 
   ptri_b[0] = carve::geom::select(tri_b[0], a1, a2);
   ptri_b[1] = carve::geom::select(tri_b[1], a1, a2);
   ptri_b[2] = carve::geom::select(tri_b[2], a1, a2);
-  if (!carve::geom2d::isAnticlockwise(ptri_b)) std::swap(ptri_b[0], ptri_b[2]);
+  if (!carve::geom2d::isAnticlockwise(ptri_b)) {
+    std::swap(ptri_b[0], ptri_b[2]);
+  }
 
   int ia = std::find(ptri_b, ptri_b + 3, ptri_a[0]) - ptri_b;
   int ib = std::find(ptri_b, ptri_b + 3, ptri_a[1]) - ptri_b;
@@ -409,12 +435,18 @@ int a_intersects_b(const vec3 tri_a[3], double da[3], const vec3 tri_b[3]) {
   switch (c[1]) {
     case 0: {
       // no coplanar points
-      if (s[0] != s[1] && line_segment_triangle_test(tri_b, tri_a[0], tri_a[1]))
+      if (s[0] != s[1] &&
+          line_segment_triangle_test(tri_b, tri_a[0], tri_a[1])) {
         return 3;
-      if (s[1] != s[2] && line_segment_triangle_test(tri_b, tri_a[1], tri_a[2]))
+      }
+      if (s[1] != s[2] &&
+          line_segment_triangle_test(tri_b, tri_a[1], tri_a[2])) {
         return 3;
-      if (s[2] != s[0] && line_segment_triangle_test(tri_b, tri_a[2], tri_a[0]))
+      }
+      if (s[2] != s[0] &&
+          line_segment_triangle_test(tri_b, tri_a[2], tri_a[0])) {
         return 3;
+      }
       return 0;
     }
     case 1: {
@@ -423,8 +455,9 @@ int a_intersects_b(const vec3 tri_a[3], double da[3], const vec3 tri_b[3]) {
       if (c[0] == 1 && c[2] == 1) {
         // test for intersection of crossing edge.
         if (line_segment_triangle_test(tri_b, tri_a[(zi + 1) % 3],
-                                       tri_a[(zi + 2) % 3]))
+                                       tri_a[(zi + 2) % 3])) {
           return 3;
+        }
       }
       // test point against triangle.
       return triangle_point_intersection_2d(tri_b, tri_a[zi]);
@@ -565,7 +598,9 @@ bool sat_edge(const vec3 tri_a[3], const vec3 tri_b[3], unsigned i,
 // 2 = shared edge
 // 3 = intersecting
 int tripair_intersection(const vec3 tri_a[3], const vec3 tri_b[3]) {
-  if (sat_bbox(tri_a, tri_b)) return 0;
+  if (sat_bbox(tri_a, tri_b)) {
+    return 0;
+  }
 
   {
     size_t ia, ib;
@@ -648,7 +683,9 @@ int main(int argc, char** argv) {
   for (std::list<carve::input::Data*>::const_iterator i = inputs.input.begin();
        i != inputs.input.end(); ++i) {
     poly = inputs.create<carve::mesh::MeshSet<3> >(*i);
-    if (poly) break;
+    if (poly) {
+      break;
+    }
   }
   if (poly == NULL) {
     std::cerr << "failed to load polyhedron" << std::endl;
@@ -662,7 +699,9 @@ int main(int argc, char** argv) {
   for (carve::mesh::MeshSet<3>::face_iter f = poly->faceBegin();
        f != poly->faceEnd(); ++f) {
     carve::mesh::MeshSet<3>::face_t* fa = *f;
-    if (fa->nVertices() != 3) continue;
+    if (fa->nVertices() != 3) {
+      continue;
+    }
 
     vec3 tri_a[3];
     tri_a[0] = fa->edge->vert->v;
@@ -675,9 +714,13 @@ int main(int argc, char** argv) {
 
     for (size_t f2 = 0; f2 < near_faces.size(); ++f2) {
       const carve::mesh::MeshSet<3>::face_t* fb = near_faces[f2];
-      if (fb->nVertices() != 3) continue;
+      if (fb->nVertices() != 3) {
+        continue;
+      }
 
-      if (fa >= fb) continue;
+      if (fa >= fb) {
+        continue;
+      }
 
       vec3 tri_b[3];
       tri_b[0] = fb->edge->vert->v;

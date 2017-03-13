@@ -37,7 +37,9 @@ namespace csg {
 Octree::Node::Node(const carve::geom3d::Vector& newMin,
                    const carve::geom3d::Vector& newMax)
     : parent(NULL), is_leaf(true), min(newMin), max(newMax) {
-  for (int i = 0; i < 8; ++i) children[i] = NULL;
+  for (int i = 0; i < 8; ++i) {
+    children[i] = NULL;
+  }
   aabb = Octree::makeAABB(this);
 }
 
@@ -47,7 +49,9 @@ Octree::Node::Node(Node* p, double x1, double y1, double z1, double x2,
       is_leaf(true),
       min(carve::geom::VECTOR(x1, y1, z1)),
       max(carve::geom::VECTOR(x2, y2, z2)) {
-  for (int i = 0; i < 8; ++i) children[i] = NULL;
+  for (int i = 0; i < 8; ++i) {
+    children[i] = NULL;
+  }
   aabb = Octree::makeAABB(this);
 }
 
@@ -134,17 +138,23 @@ bool Octree::Node::hasGeometry() {
 Octree::Octree() { root = NULL; }
 
 Octree::~Octree() {
-  if (root) delete root;
+  if (root) {
+    delete root;
+  }
 }
 
 void Octree::setBounds(const carve::geom3d::Vector& min,
                        const carve::geom3d::Vector& max) {
-  if (root) delete root;
+  if (root) {
+    delete root;
+  }
   root = new Node(min, max);
 }
 
 void Octree::setBounds(carve::geom3d::AABB aabb) {
-  if (root) delete root;
+  if (root) {
+    delete root;
+  }
   aabb.extent = 1.1 * aabb.extent;
   root = new Node(aabb.min(), aabb.max());
 }

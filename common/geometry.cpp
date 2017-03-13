@@ -59,7 +59,9 @@ carve::mesh::MeshSet<3>* makeSubdividedCube(
     const carve::math::Matrix& transform) {
   carve::input::PolyhedronData data;
 
-  if (inc == NULL) inc = _all;
+  if (inc == NULL) {
+    inc = _all;
+  }
 
   data.reserveVertices((sub_x + 1) * (sub_y + 1) * (sub_z + 1));
   for (int _z = 0; _z < sub_z + 1; ++_z) {
@@ -88,13 +90,27 @@ carve::mesh::MeshSet<3>* makeSubdividedCube(
                       I(_x + 1, _y, _z + 1),
                       I(_x + 1, _y + 1, _z + 1),
                       I(_x, _y + 1, _z + 1)};
-        if (!inc(_x, _y, _z)) continue;
-        if (!OK(_x - 1, _y, _z) || !inc(_x - 1, _y, _z)) FACE(3, 7, 4, 0);
-        if (!OK(_x + 1, _y, _z) || !inc(_x + 1, _y, _z)) FACE(1, 5, 6, 2);
-        if (!OK(_x, _y - 1, _z) || !inc(_x, _y - 1, _z)) FACE(0, 4, 5, 1);
-        if (!OK(_x, _y + 1, _z) || !inc(_x, _y + 1, _z)) FACE(2, 6, 7, 3);
-        if (!OK(_x, _y, _z - 1) || !inc(_x, _y, _z - 1)) FACE(0, 1, 2, 3);
-        if (!OK(_x, _y, _z + 1) || !inc(_x, _y, _z + 1)) FACE(7, 6, 5, 4);
+        if (!inc(_x, _y, _z)) {
+          continue;
+        }
+        if (!OK(_x - 1, _y, _z) || !inc(_x - 1, _y, _z)) {
+          FACE(3, 7, 4, 0);
+        }
+        if (!OK(_x + 1, _y, _z) || !inc(_x + 1, _y, _z)) {
+          FACE(1, 5, 6, 2);
+        }
+        if (!OK(_x, _y - 1, _z) || !inc(_x, _y - 1, _z)) {
+          FACE(0, 4, 5, 1);
+        }
+        if (!OK(_x, _y + 1, _z) || !inc(_x, _y + 1, _z)) {
+          FACE(2, 6, 7, 3);
+        }
+        if (!OK(_x, _y, _z - 1) || !inc(_x, _y, _z - 1)) {
+          FACE(0, 1, 2, 3);
+        }
+        if (!OK(_x, _y, _z + 1) || !inc(_x, _y, _z + 1)) {
+          FACE(7, 6, 5, 4);
+        }
       }
     }
   }

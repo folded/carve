@@ -69,7 +69,9 @@ struct TestScene : public Scene {
 
   virtual GLvoid draw() {
     for (int i = 0; i < draw_flags.size(); ++i) {
-      if (draw_flags[i]) glCallList(draw_list_base + i);
+      if (draw_flags[i]) {
+        glCallList(draw_list_base + i);
+      }
     }
   }
 

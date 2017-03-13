@@ -214,8 +214,11 @@ struct Matrix {
 };
 
 static inline bool operator==(const Matrix& A, const Matrix& B) {
-  for (size_t i = 0; i < 16; ++i)
-    if (A.v[i] != B.v[i]) return false;
+  for (size_t i = 0; i < 16; ++i) {
+    if (A.v[i] != B.v[i]) {
+      return false;
+    }
+  }
   return true;
 }
 static inline bool operator!=(const Matrix& A, const Matrix& B) {

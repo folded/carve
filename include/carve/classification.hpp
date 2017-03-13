@@ -51,10 +51,18 @@ enum FaceClassBit {
 };
 
 static inline FaceClass class_bit_to_class(unsigned i) {
-  if (i & FACE_ON_ORIENT_OUT_BIT) return FACE_ON_ORIENT_OUT;
-  if (i & FACE_OUT_BIT) return FACE_OUT;
-  if (i & FACE_IN_BIT) return FACE_IN;
-  if (i & FACE_ON_ORIENT_IN_BIT) return FACE_ON_ORIENT_IN;
+  if (i & FACE_ON_ORIENT_OUT_BIT) {
+    return FACE_ON_ORIENT_OUT;
+  }
+  if (i & FACE_OUT_BIT) {
+    return FACE_OUT;
+  }
+  if (i & FACE_IN_BIT) {
+    return FACE_IN;
+  }
+  if (i & FACE_ON_ORIENT_IN_BIT) {
+    return FACE_ON_ORIENT_IN;
+  }
   return FACE_UNCLASSIFIED;
 }
 

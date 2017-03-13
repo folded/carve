@@ -46,9 +46,15 @@ int main(int argc, char** argv) {
   minz = rand.rand(1e10) - sz / 2;
   maxz = minz + sz;
 
-  if (minx > maxx) std::swap(minx, maxx);
-  if (miny > maxy) std::swap(miny, maxy);
-  if (minz > maxz) std::swap(minz, maxz);
+  if (minx > maxx) {
+    std::swap(minx, maxx);
+  }
+  if (miny > maxy) {
+    std::swap(miny, maxy);
+  }
+  if (minz > maxz) {
+    std::swap(minz, maxz);
+  }
 
   carve::rescale::rescale r(minx, miny, minz, maxx, maxy, maxz);
   carve::rescale::fwd fwd(r);

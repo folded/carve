@@ -103,9 +103,13 @@ void Polyline::_init(bool c, iter_t begin, iter_t end,
   closed = c;
 
   PolylineEdge* e;
-  if (begin == end) return;
+  if (begin == end) {
+    return;
+  }
   size_t v1 = (size_t)*begin++;
-  if (begin == end) return;
+  if (begin == end) {
+    return;
+  }
 
   while (begin != end) {
     size_t v2 = (size_t)*begin++;

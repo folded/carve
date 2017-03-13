@@ -273,10 +273,14 @@ class Slice : public carve::csg::CSG::Collector {
 };
 
 static bool endswith(const std::string& a, const std::string& b) {
-  if (a.size() < b.size()) return false;
+  if (a.size() < b.size()) {
+    return false;
+  }
 
   for (unsigned i = a.size(), j = b.size(); j;) {
-    if (tolower(a[--i]) != tolower(b[--j])) return false;
+    if (tolower(a[--i]) != tolower(b[--j])) {
+      return false;
+    }
   }
   return true;
 }
@@ -365,7 +369,9 @@ int main(int argc, char** argv) {
   if (result) {
     result->separateMeshes();
 
-    if (options.canonicalize) result->canonicalize();
+    if (options.canonicalize) {
+      result->canonicalize();
+    }
 
     if (options.obj) {
       writeOBJ(std::cout, result);
@@ -376,7 +382,13 @@ int main(int argc, char** argv) {
     }
   }
 
-  if (object) delete object;
-  if (planes) delete planes;
-  if (result) delete result;
+  if (object) {
+    delete object;
+  }
+  if (planes) {
+    delete planes;
+  }
+  if (result) {
+    delete result;
+  }
 }

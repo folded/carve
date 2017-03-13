@@ -544,10 +544,11 @@ void DebugHooks::drawFaceLoop(
     const std::vector<const carve::geom3d::Vector*>& face_loop,
     const carve::geom3d::Vector& normal, float r, float g, float b, float a,
     bool lit) {
-  if (lit)
+  if (lit) {
     glEnable(GL_LIGHTING);
-  else
+  } else {
     glDisable(GL_LIGHTING);
+  }
 
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 

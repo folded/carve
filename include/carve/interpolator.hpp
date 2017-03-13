@@ -75,8 +75,12 @@ static inline std::vector<double> polyInterpolate(
     size_t i_p = (i + 1) % SZ;
 
     double w = 0.0;
-    if (fabs(A[i_m]) > 1e-16) w += (r[i_m] - D[i_m] / r[i]) / A[i_m];
-    if (fabs(A[i]) > 1e-16) w += (r[i_p] - D[i] / r[i]) / A[i];
+    if (fabs(A[i_m]) > 1e-16) {
+      w += (r[i_m] - D[i_m] / r[i]) / A[i_m];
+    }
+    if (fabs(A[i]) > 1e-16) {
+      w += (r[i_p] - D[i] / r[i]) / A[i];
+    }
 
     result[i] = w;
     w_sum += w;
@@ -236,7 +240,9 @@ class FaceVertexAttr : public Interpolator {
          e != orig_face->end(); ++e) {
       typename attrmap_t::const_iterator a =
           attrs.find(key_t(orig_face, e.idx()));
-      if (a == attrs.end()) return;
+      if (a == attrs.end()) {
+        return;
+      }
       vertex_attrs.push_back((*a).second);
       base_attrs[e->vert] = vertex_attrs.back();
     }
@@ -316,7 +322,9 @@ class FaceEdgeAttr : public Interpolator {
                             const meshset_t::vertex_t* v2) {
     key_t k(orig_edge->face, orig_edge_idx);
     typename attrmap_t::const_iterator attr_i = attrs.find(k);
-    if (attr_i == attrs.end()) return;
+    if (attr_i == attrs.end()) {
+      return;
+    }
     edgediv[vpair_t(v1, v2)] = k;
   }
 

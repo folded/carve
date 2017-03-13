@@ -211,8 +211,9 @@ void setup(gloop::stream::model_writer& file,
 void setup(gloop::stream::model_writer& file,
            const carve::poly::Polyhedron* poly) {
   size_t face_max = 0;
-  for (size_t i = 0; i < poly->faces.size(); ++i)
+  for (size_t i = 0; i < poly->faces.size(); ++i) {
     face_max = std::max(face_max, poly->faces[i].nVertices());
+  }
 
   file.newBlock("polyhedron");
   poly_vertex* vi = new poly_vertex(poly->vertices);
@@ -269,7 +270,9 @@ void setup(gloop::stream::model_writer& file,
 void writePLY(std::ostream& out, const carve::mesh::MeshSet<3>* poly,
               bool ascii) {
   gloop::ply::PlyWriter file(!ascii, false);
-  if (ascii) out << std::setprecision(30);
+  if (ascii) {
+    out << std::setprecision(30);
+  }
   setup(file, poly);
   file.write(out);
 }
@@ -287,7 +290,9 @@ void writePLY(const std::string& out_file, const carve::mesh::MeshSet<3>* poly,
 void writePLY(std::ostream& out, const carve::poly::Polyhedron* poly,
               bool ascii) {
   gloop::ply::PlyWriter file(!ascii, false);
-  if (ascii) out << std::setprecision(30);
+  if (ascii) {
+    out << std::setprecision(30);
+  }
   setup(file, poly);
   file.write(out);
 }
@@ -306,7 +311,9 @@ void writePLY(std::ostream& out, const carve::line::PolylineSet* lines,
               bool ascii) {
   gloop::ply::PlyWriter file(!ascii, false);
 
-  if (ascii) out << std::setprecision(30);
+  if (ascii) {
+    out << std::setprecision(30);
+  }
   setup(file, lines);
   file.write(out);
 }
@@ -325,7 +332,9 @@ void writePLY(std::ostream& out, const carve::point::PointSet* points,
               bool ascii) {
   gloop::ply::PlyWriter file(!ascii, false);
 
-  if (ascii) out << std::setprecision(30);
+  if (ascii) {
+    out << std::setprecision(30);
+  }
   setup(file, points);
   file.write(out);
 }

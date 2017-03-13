@@ -53,18 +53,26 @@ struct FaceLoopList {
   void append(FaceLoop* f) {
     f->prev = tail;
     f->next = NULL;
-    if (tail) tail->next = f;
+    if (tail) {
+      tail->next = f;
+    }
     tail = f;
-    if (!head) head = f;
+    if (!head) {
+      head = f;
+    }
     count++;
   }
 
   void prepend(FaceLoop* f) {
     f->next = head;
     f->prev = NULL;
-    if (head) head->prev = f;
+    if (head) {
+      head->prev = f;
+    }
     head = f;
-    if (!tail) tail = f;
+    if (!tail) {
+      tail = f;
+    }
     count++;
   }
 

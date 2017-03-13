@@ -52,7 +52,9 @@ template <typename project_t, typename iter_t>
 std::vector<int> convexHull(const project_t& project, iter_t beg, iter_t end,
                             size_t size_hint = 0) {
   std::vector<carve::geom2d::P2> proj;
-  if (size_hint) proj.reserve(size_hint);
+  if (size_hint) {
+    proj.reserve(size_hint);
+  }
   for (; beg != end; ++beg) {
     proj.push_back(project(*beg));
   }

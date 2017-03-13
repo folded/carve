@@ -133,9 +133,15 @@ bool isAnticlockwise(const P2vec& tri) {
 template <typename P2vec>
 bool pointIntersectsTriangle(const P2& p, const P2vec& tri) {
   int orient = isAnticlockwise(tri) ? +1 : -1;
-  if (orient2d(tri[0], tri[1], p) * orient < 0) return false;
-  if (orient2d(tri[1], tri[2], p) * orient < 0) return false;
-  if (orient2d(tri[2], tri[0], p) * orient < 0) return false;
+  if (orient2d(tri[0], tri[1], p) * orient < 0) {
+    return false;
+  }
+  if (orient2d(tri[1], tri[2], p) * orient < 0) {
+    return false;
+  }
+  if (orient2d(tri[2], tri[0], p) * orient < 0) {
+    return false;
+  }
   return true;
 }
 
@@ -146,20 +152,27 @@ bool lineIntersectsTriangle(const P2& p1, const P2& p2, const P2vec& tri) {
   s[0] = orient2d(p1, p2, tri[0]);
   s[1] = orient2d(p1, p2, tri[1]);
   s[2] = orient2d(p1, p2, tri[2]);
-  if (*std::max_element(s, s + 3) < 0) return false;
-  if (*std::min_element(s, s + 3) > 0) return false;
+  if (*std::max_element(s, s + 3) < 0) {
+    return false;
+  }
+  if (*std::min_element(s, s + 3) > 0) {
+    return false;
+  }
 
   // does line lie entirely to the right of a triangle edge?
   int orient = isAnticlockwise(tri) ? +1 : -1;
   if (orient2d(tri[0], tri[1], p1) * orient < 0 &&
-      orient2d(tri[0], tri[1], p2) * orient < 0)
+      orient2d(tri[0], tri[1], p2) * orient < 0) {
     return false;
+  }
   if (orient2d(tri[1], tri[2], p1) * orient < 0 &&
-      orient2d(tri[1], tri[2], p2) * orient < 0)
+      orient2d(tri[1], tri[2], p2) * orient < 0) {
     return false;
+  }
   if (orient2d(tri[2], tri[0], p1) * orient < 0 &&
-      orient2d(tri[2], tri[0], p2) * orient < 0)
+      orient2d(tri[2], tri[0], p2) * orient < 0) {
     return false;
+  }
   return true;
 }
 
@@ -173,28 +186,38 @@ int triangleLineOrientation(const P2& p1, const P2& p2, const P2vec& tri) {
   tmp = orient2d(p1, p2, tri[2]);
   lo = std::min(lo, tmp);
   hi = std::max(hi, tmp);
-  if (hi < 0.0) return -1;
-  if (lo > 0.0) return +1;
+  if (hi < 0.0) {
+    return -1;
+  }
+  if (lo > 0.0) {
+    return +1;
+  }
   return 0;
 }
 
 template <typename P2vec>
 bool triangleIntersectsTriangle(const P2vec& tri_b, const P2vec& tri_a) {
   int orient_a = isAnticlockwise(tri_a) ? +1 : -1;
-  if (triangleLineOrientation(tri_a[0], tri_a[1], tri_b) * orient_a < 0)
+  if (triangleLineOrientation(tri_a[0], tri_a[1], tri_b) * orient_a < 0) {
     return false;
-  if (triangleLineOrientation(tri_a[1], tri_a[2], tri_b) * orient_a < 0)
+  }
+  if (triangleLineOrientation(tri_a[1], tri_a[2], tri_b) * orient_a < 0) {
     return false;
-  if (triangleLineOrientation(tri_a[2], tri_a[0], tri_b) * orient_a < 0)
+  }
+  if (triangleLineOrientation(tri_a[2], tri_a[0], tri_b) * orient_a < 0) {
     return false;
+  }
 
   int orient_b = isAnticlockwise(tri_b) ? +1 : -1;
-  if (triangleLineOrientation(tri_b[0], tri_b[1], tri_a) * orient_b < 0)
+  if (triangleLineOrientation(tri_b[0], tri_b[1], tri_a) * orient_b < 0) {
     return false;
-  if (triangleLineOrientation(tri_b[1], tri_b[2], tri_a) * orient_b < 0)
+  }
+  if (triangleLineOrientation(tri_b[1], tri_b[2], tri_a) * orient_b < 0) {
     return false;
-  if (triangleLineOrientation(tri_b[2], tri_b[0], tri_a) * orient_b < 0)
+  }
+  if (triangleLineOrientation(tri_b[2], tri_b[0], tri_a) * orient_b < 0) {
     return false;
+  }
 
   return true;
 }
@@ -253,11 +276,15 @@ static inline bool quadIsConvex(const P2& a, const P2& b, const P2& c,
 
   s_1 = carve::geom2d::orient2d(a, c, b);
   s_2 = carve::geom2d::orient2d(a, c, d);
-  if ((s_1 < 0.0 && s_2 < 0.0) || (s_1 > 0.0 && s_2 > 0.0)) return false;
+  if ((s_1 < 0.0 && s_2 < 0.0) || (s_1 > 0.0 && s_2 > 0.0)) {
+    return false;
+  }
 
   s_1 = carve::geom2d::orient2d(b, d, a);
   s_2 = carve::geom2d::orient2d(b, d, c);
-  if ((s_1 < 0.0 && s_2 < 0.0) || (s_1 > 0.0 && s_2 > 0.0)) return false;
+  if ((s_1 < 0.0 && s_2 < 0.0) || (s_1 > 0.0 && s_2 > 0.0)) {
+    return false;
+  }
 
   return true;
 }
@@ -296,7 +323,9 @@ double signedArea(iter_t begin, iter_t end, adapt_t adapt) {
   double A = 0.0;
   P2 p, n;
 
-  if (begin == end) return 0.0;
+  if (begin == end) {
+    return 0.0;
+  }
 
   p = adapt(*begin);
   for (iter_t c = begin; ++c != end;) {
@@ -325,15 +354,23 @@ bool pointInPolySimple(const std::vector<T>& points, adapt_t adapt,
   for (P2Vector::size_type i = 1; i < l; i++) {
     double r = atan2(adapt(points[i]) - p);
     d = r - rp;
-    if (d > M_PI) d -= M_TWOPI;
-    if (d < -M_PI) d += M_TWOPI;
+    if (d > M_PI) {
+      d -= M_TWOPI;
+    }
+    if (d < -M_PI) {
+      d += M_TWOPI;
+    }
     s = s + d;
     rp = r;
   }
 
   d = r0 - rp;
-  if (d > M_PI) d -= M_TWOPI;
-  if (d < -M_PI) d += M_TWOPI;
+  if (d > M_PI) {
+    d -= M_TWOPI;
+  }
+  if (d < -M_PI) {
+    d += M_TWOPI;
+  }
   s = s + d;
 
   return !carve::math::ZERO(s);
@@ -346,8 +383,9 @@ PolyInclusionInfo pointInPoly(const std::vector<T>& points, adapt_t adapt,
                               const P2& p) {
   P2Vector::size_type l = points.size();
   for (unsigned i = 0; i < l; i++) {
-    if (equal(adapt(points[i]), p))
+    if (equal(adapt(points[i]), p)) {
       return PolyInclusionInfo(POINT_VERTEX, (int)i);
+    }
   }
 
   for (unsigned i = 0; i < l; i++) {

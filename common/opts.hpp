@@ -146,13 +146,15 @@ class Parser {
     for (std::list<Long>::iterator j = long_opts.begin(), je = long_opts.end();
          j != je; ++j) {
       if ((*j).str == opt) {
-        if (!(*j).arg && has_argopt)
+        if (!(*j).arg && has_argopt) {
           throw exception() << "unexpected argument for option --" << (*j).str
                             << ".";
+        }
         if ((*j).arg) {
-          if (++i == e)
+          if (++i == e) {
             throw exception() << "missing argument for option --" << (*j).str
                               << ".";
+          }
           val = *i;
         }
         optval("--" + opt, val);
@@ -177,9 +179,10 @@ class Parser {
               optval("-" + a.substr(j, 1), a.substr(j + 1));
               j = a.size() - 1;
             } else {
-              if (++i == e)
+              if (++i == e) {
                 throw exception() << "missing argument for option -" << a[j]
                                   << ".";
+              }
               optval("-" + a.substr(j, 1), *i);
             }
           } else {

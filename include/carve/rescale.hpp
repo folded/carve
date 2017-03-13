@@ -41,9 +41,13 @@ T calc_scale(T max) {
 
   T div = T(1);
   T m = fabs(max);
-  while (div < m) div *= radix;
+  while (div < m) {
+    div *= radix;
+  }
   m *= radix;
-  while (div > m) div /= radix;
+  while (div > m) {
+    div /= radix;
+  }
   return div;
 }
 
@@ -60,11 +64,17 @@ T calc_delta(T min, T max) {
       neg = true;
     }
     T t = T(1);
-    while (t > max) t /= radix;
-    while (t <= max / radix) t *= radix;
+    while (t > max) {
+      t /= radix;
+    }
+    while (t <= max / radix) {
+      t *= radix;
+    }
     volatile T temp = t + min;
     temp -= t;
-    if (neg) temp = -temp;
+    if (neg) {
+      temp = -temp;
+    }
     return temp;
   } else {
     return T(0);

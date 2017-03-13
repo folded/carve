@@ -37,27 +37,45 @@ namespace geom3d {
 namespace {
 int is_same(const std::vector<const Vector*>& a,
             const std::vector<const Vector*>& b) {
-  if (a.size() != b.size()) return false;
+  if (a.size() != b.size()) {
+    return false;
+  }
 
   const size_t S = a.size();
   size_t i, j, p;
 
   for (p = 0; p < S; ++p) {
-    if (a[0] == b[p]) break;
+    if (a[0] == b[p]) {
+      break;
+    }
   }
-  if (p == S) return 0;
+  if (p == S) {
+    return 0;
+  }
 
-  for (i = 1, j = p + 1; j < S; ++i, ++j)
-    if (a[i] != b[j]) goto not_fwd;
-  for (j = 0; i < S; ++i, ++j)
-    if (a[i] != b[j]) goto not_fwd;
+  for (i = 1, j = p + 1; j < S; ++i, ++j) {
+    if (a[i] != b[j]) {
+      goto not_fwd;
+    }
+  }
+  for (j = 0; i < S; ++i, ++j) {
+    if (a[i] != b[j]) {
+      goto not_fwd;
+    }
+  }
   return +1;
 
 not_fwd:
-  for (i = 1, j = p - 1; j != (size_t)-1; ++i, --j)
-    if (a[i] != b[j]) goto not_rev;
-  for (j = S - 1; i < S; ++i, --j)
-    if (a[i] != b[j]) goto not_rev;
+  for (i = 1, j = p - 1; j != (size_t)-1; ++i, --j) {
+    if (a[i] != b[j]) {
+      goto not_rev;
+    }
+  }
+  for (j = S - 1; i < S; ++i, --j) {
+    if (a[i] != b[j]) {
+      goto not_rev;
+    }
+  }
   return -1;
 
 not_rev:
@@ -112,10 +130,13 @@ IntersectionClass lineSegmentPlaneIntersection(const Plane& p,
   double t;
   IntersectionClass r = rayPlaneIntersection(p, line.v1, line.v2, v, t);
 
-  if (r <= 0) return r;
+  if (r <= 0) {
+    return r;
+  }
 
-  if ((t < 0.0 && !equal(v, line.v1)) || (t > 1.0 && !equal(v, line.v2)))
+  if ((t < 0.0 && !equal(v, line.v1)) || (t > 1.0 && !equal(v, line.v2))) {
     return INTERSECT_NONE;
+  }
 
   return INTERSECT_PLANE;
 }
@@ -123,7 +144,9 @@ IntersectionClass lineSegmentPlaneIntersection(const Plane& p,
 RayIntersectionClass rayRayIntersection(const Ray& r1, const Ray& r2,
                                         Vector& v1, Vector& v2, double& mu1,
                                         double& mu2) {
-  if (!r1.OK() || !r2.OK()) return RR_DEGENERATE;
+  if (!r1.OK() || !r2.OK()) {
+    return RR_DEGENERATE;
+  }
 
   Vector v_13 = r1.v - r2.v;
 

@@ -57,8 +57,12 @@ static inline double ANG(double x) { return (x < 0) ? x + M_TWOPI : x; }
 
 template <typename T>
 static inline const T& clamp(const T& val, const T& min, const T& max) {
-  if (val < min) return min;
-  if (val > max) return max;
+  if (val < min) {
+    return min;
+  }
+  if (val > max) {
+    return max;
+  }
   return val;
 }
 }

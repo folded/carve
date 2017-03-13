@@ -425,7 +425,9 @@ class Face : public tagable {
   void remove() {
     edge_t* e = edge;
     do {
-      if (e->rev) e->rev->rev = NULL;
+      if (e->rev) {
+        e->rev->rev = NULL;
+      }
       e = e->next;
     } while (e != edge);
   }
@@ -653,7 +655,9 @@ class Mesh {
   bool isNegative() const { return is_negative; }
 
   double volume() const {
-    if (is_negative || !faces.size()) return 0.0;
+    if (is_negative || !faces.size()) {
+      return 0.0;
+    }
 
     double vol = 0.0;
     typename vertex_t::vector_t origin = faces[0]->edge->vert->v;
@@ -685,7 +689,9 @@ class Mesh {
   void calcOrientation();
 
   void recalc() {
-    for (size_t i = 0; i < faces.size(); ++i) faces[i]->recalc();
+    for (size_t i = 0; i < faces.size(); ++i) {
+      faces[i]->recalc();
+    }
     calcOrientation();
   }
 
@@ -693,7 +699,9 @@ class Mesh {
     for (size_t i = 0; i < faces.size(); ++i) {
       faces[i]->invert();
     }
-    if (isClosed()) is_negative = !is_negative;
+    if (isClosed()) {
+      is_negative = !is_negative;
+    }
   }
 
   Mesh* clone(const vertex_t* old_base, vertex_t* new_base) const;
@@ -838,7 +846,9 @@ class MeshSet {
 
   bool isClosed() const {
     for (size_t i = 0; i < meshes.size(); ++i) {
-      if (!meshes[i]->isClosed()) return false;
+      if (!meshes[i]->isClosed()) {
+        return false;
+      }
     }
     return true;
   }

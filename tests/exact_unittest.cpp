@@ -37,7 +37,9 @@ inline std::ostream& operator<<(std::ostream& out,
                                 const std::vector<double>& p) {
   out << '{';
   out << p[0];
-  for (size_t i = 1; i < p.size(); ++i) out << ';' << p[i];
+  for (size_t i = 1; i < p.size(); ++i) {
+    out << ';' << p[i];
+  }
   out << '}';
   return out;
 }

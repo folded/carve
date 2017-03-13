@@ -30,20 +30,40 @@
 #include "csg_detail.hpp"
 
 const char* carve::csg::ENUM(carve::csg::FaceClass f) {
-  if (f == FACE_ON_ORIENT_OUT) return "FACE_ON_ORIENT_OUT";
-  if (f == FACE_OUT) return "FACE_OUT";
-  if (f == FACE_IN) return "FACE_IN";
-  if (f == FACE_ON_ORIENT_IN) return "FACE_ON_ORIENT_IN";
+  if (f == FACE_ON_ORIENT_OUT) {
+    return "FACE_ON_ORIENT_OUT";
+  }
+  if (f == FACE_OUT) {
+    return "FACE_OUT";
+  }
+  if (f == FACE_IN) {
+    return "FACE_IN";
+  }
+  if (f == FACE_ON_ORIENT_IN) {
+    return "FACE_ON_ORIENT_IN";
+  }
   return "???";
 }
 
 const char* carve::csg::ENUM(carve::PointClass p) {
-  if (p == POINT_UNK) return "POINT_UNK";
-  if (p == POINT_OUT) return "POINT_OUT";
-  if (p == POINT_ON) return "POINT_ON";
-  if (p == POINT_IN) return "POINT_IN";
-  if (p == POINT_VERTEX) return "POINT_VERTEX";
-  if (p == POINT_EDGE) return "POINT_EDGE";
+  if (p == POINT_UNK) {
+    return "POINT_UNK";
+  }
+  if (p == POINT_OUT) {
+    return "POINT_OUT";
+  }
+  if (p == POINT_ON) {
+    return "POINT_ON";
+  }
+  if (p == POINT_IN) {
+    return "POINT_IN";
+  }
+  if (p == POINT_VERTEX) {
+    return "POINT_VERTEX";
+  }
+  if (p == POINT_EDGE) {
+    return "POINT_EDGE";
+  }
   return "???";
 }
 

@@ -43,13 +43,19 @@ void carve::csg::Intersections::collect(
     for (a = (*i).second.begin(), b = (*i).second.end(); a != b; ++a) {
       switch ((*a).first.obtype) {
         case carve::csg::IObj::OBTYPE_VERTEX:
-          if (collect_v) collect_v->push_back((*a).first.vertex);
+          if (collect_v) {
+            collect_v->push_back((*a).first.vertex);
+          }
           break;
         case carve::csg::IObj::OBTYPE_EDGE:
-          if (collect_e) collect_e->push_back((*a).first.edge);
+          if (collect_e) {
+            collect_e->push_back((*a).first.edge);
+          }
           break;
         case carve::csg::IObj::OBTYPE_FACE:
-          if (collect_f) collect_f->push_back((*a).first.face);
+          if (collect_f) {
+            collect_f->push_back((*a).first.face);
+          }
           break;
         default:
           throw carve::exception("should not happen " __FILE__
@@ -71,7 +77,9 @@ bool carve::csg::Intersections::intersectsFace(
         case IObj::OBTYPE_VERTEX: {
           const carve::mesh::MeshSet<3>::edge_t* edge = f->edge;
           do {
-            if (edge->vert == (*a).first.vertex) return true;
+            if (edge->vert == (*a).first.vertex) {
+              return true;
+            }
             edge = edge->next;
           } while (edge != f->edge);
           break;
@@ -79,13 +87,17 @@ bool carve::csg::Intersections::intersectsFace(
         case carve::csg::IObj::OBTYPE_EDGE: {
           const carve::mesh::MeshSet<3>::edge_t* edge = f->edge;
           do {
-            if (edge == (*a).first.edge) return true;
+            if (edge == (*a).first.edge) {
+              return true;
+            }
             edge = edge->next;
           } while (edge != f->edge);
           break;
         }
         case carve::csg::IObj::OBTYPE_FACE: {
-          if ((*a).first.face == f) return true;
+          if ((*a).first.face == f) {
+            return true;
+          }
           break;
         }
         default:

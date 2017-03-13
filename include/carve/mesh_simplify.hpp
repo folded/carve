@@ -125,7 +125,9 @@ class MeshSimplifier {
       using carve::geom::dot;
       using carve::geom::cross;
 
-      if (open(e)) return false;
+      if (open(e)) {
+        return false;
+      }
 
       edge_t* edge = e->edge;
 
@@ -135,12 +137,14 @@ class MeshSimplifier {
       const vertex_t* v4 = edge->rev->next->next->vert;
 
       if (dot(cross(v3->v - v2->v, v1->v - v2->v).normalized(),
-              cross(v4->v - v1->v, v2->v - v1->v).normalized()) < min_dp)
+              cross(v4->v - v1->v, v2->v - v1->v).normalized()) < min_dp) {
         return false;
+      }
 
       if (dot(cross(v3->v - v4->v, v1->v - v4->v).normalized(),
-              cross(v4->v - v3->v, v2->v - v3->v).normalized()) < min_dp)
+              cross(v4->v - v3->v, v2->v - v3->v).normalized()) < min_dp) {
         return false;
+      }
 
       return true;
     }
@@ -172,7 +176,9 @@ class MeshSimplifier {
 
     bool connectsAlmostCoplanarFaces(const EdgeInfo* e) const {
       // XXX: remove hard coded constants.
-      if (e->c[0] < 1e-10 || e->c[1] < 1e-10) return true;
+      if (e->c[0] < 1e-10 || e->c[1] < 1e-10) {
+        return true;
+      }
       return fabs(carve::geom::dot(e->edge->face->plane.N,
                                    e->edge->rev->face->plane.N) -
                   1.0) < 1e-10;
@@ -201,9 +207,13 @@ class MeshSimplifier {
     virtual double score(const EdgeInfo* e) const { return e->l[0] - e->l[1]; }
 
     virtual bool canFlip(const EdgeInfo* e) const {
-      if (!FlippableBase::canFlip(e)) return false;
+      if (!FlippableBase::canFlip(e)) {
+        return false;
+      }
 
-      if (e->c[0] > 1e-3 || e->c[1] > 1e-3) return false;
+      if (e->c[0] > 1e-3 || e->c[1] > 1e-3) {
+        return false;
+      }
 
       return true;
     }
@@ -220,9 +230,13 @@ class MeshSimplifier {
           min_delta_v(_min_delta_v) {}
 
     virtual bool canFlip(const EdgeInfo* e) const {
-      if (!FlippableBase::canFlip(e)) return false;
+      if (!FlippableBase::canFlip(e)) {
+        return false;
+      }
 
-      if (fabs(e->delta_v) > min_delta_v) return false;
+      if (fabs(e->delta_v) > min_delta_v) {
+        return false;
+      }
 
       // if (std::min(e->c[0], e->c[1]) > min_colinearity) return false;
 
@@ -359,10 +373,14 @@ class MeshSimplifier {
 
     for (iter1_t i = fabegin; i != faend; ++i) {
       remap_a = mapTriangle(*i, remap1, remap2, tgt, tri_a);
-      if (remap_a >= 2) continue;
+      if (remap_a >= 2) {
+        continue;
+      }
       for (iter2_t j = fbbegin; j != fbend; ++j) {
         remap_b = mapTriangle(*j, remap1, remap2, tgt, tri_b);
-        if (remap_b >= 2) continue;
+        if (remap_b >= 2) {
+          continue;
+        }
         if (carve::geom::triangle_intersection_exact(tri_a, tri_b) ==
             carve::geom::TR_TYPE_INT) {
           ints.insert(std::make_pair(std::min(*i, *j), std::max(*i, *j)));
@@ -385,7 +403,9 @@ class MeshSimplifier {
     for (std::vector<face_t*>::const_iterator i = faces.begin();
          i != faces.end(); ++i) {
       face_t* fb = *i;
-      if (fb->nEdges() != 3) continue;
+      if (fb->nEdges() != 3) {
+        continue;
+      }
       tri_b[0] = fb->edge->vert->v;
       tri_b[1] = fb->edge->next->vert->v;
       tri_b[2] = fb->edge->next->next->vert->v;
@@ -418,7 +438,9 @@ class MeshSimplifier {
     } else {
       for (size_t i = 0; i < a_node->data.size(); ++i) {
         face_t* fa = a_node->data[i];
-        if (fa->nVertices() != 3) continue;
+        if (fa->nVertices() != 3) {
+          continue;
+        }
 
         aabb_t aabb_a = fa->getAABB();
 
@@ -427,11 +449,15 @@ class MeshSimplifier {
         tri_a[1] = fa->edge->next->vert->v;
         tri_a[2] = fa->edge->next->next->vert->v;
 
-        if (!aabb_a.intersects(b_node->bbox)) continue;
+        if (!aabb_a.intersects(b_node->bbox)) {
+          continue;
+        }
 
         for (size_t j = 0; j < b_node->data.size(); ++j) {
           face_t* fb = b_node->data[j];
-          if (fb->nVertices() != 3) continue;
+          if (fb->nVertices() != 3) {
+            continue;
+          }
 
           vector_t tri_b[3];
           tri_b[0] = fb->edge->vert->v;
@@ -457,7 +483,9 @@ class MeshSimplifier {
     for (meshset_t::face_iter f = meshset->faceBegin(); f != meshset->faceEnd();
          ++f) {
       face_t* fa = *f;
-      if (fa->nVertices() != 3) continue;
+      if (fa->nVertices() != 3) {
+        continue;
+      }
 
       vector_t tri_a[3];
       tri_a[0] = fa->edge->vert->v;
@@ -469,9 +497,13 @@ class MeshSimplifier {
 
       for (size_t f2 = 0; f2 < near_faces.size(); ++f2) {
         const face_t* fb = near_faces[f2];
-        if (fb->nVertices() != 3) continue;
+        if (fb->nVertices() != 3) {
+          continue;
+        }
 
-        if (fa >= fb) continue;
+        if (fa >= fb) {
+          continue;
+        }
 
         vector_t tri_b[3];
         tri_b[0] = fb->edge->vert->v;
@@ -751,7 +783,9 @@ class MeshSimplifier {
                   << " affected faces: " << affected_faces.size() << std::endl;
         std::cerr << "merge delta[ints] = " << i2 - i1 << " pre: " << i1
                   << " post: " << i2 << std::endl;
-        if (i2 > i1) continue;
+        if (i2 > i1) {
+          continue;
+        }
       }
 
       std::cerr << "collapse " << e << std::endl;
@@ -793,8 +827,12 @@ class MeshSimplifier {
         if (f1->n_edges == 2) {
           edge_t* e1 = f1->edge;
           edge_t* e2 = f1->edge->next;
-          if (e1->rev) e1->rev->rev = e2->rev;
-          if (e2->rev) e2->rev->rev = e1->rev;
+          if (e1->rev) {
+            e1->rev->rev = e2->rev;
+          }
+          if (e2->rev) {
+            e2->rev->rev = e1->rev;
+          }
           EdgeInfo* e1i = edge_info[e1];
           EdgeInfo* e2i = edge_info[e2];
           CARVE_ASSERT(e1i != NULL);
@@ -869,14 +907,17 @@ class MeshSimplifier {
   uint8_t affected_axes(const face_t* face) {
     uint8_t r = 0;
     if (fabs(carve::geom::dot(face->plane.N, carve::geom::VECTOR(1, 0, 0))) >
-        0.001)
+        0.001) {
       r |= 1;
+    }
     if (fabs(carve::geom::dot(face->plane.N, carve::geom::VECTOR(0, 1, 0))) >
-        0.001)
+        0.001) {
       r |= 2;
+    }
     if (fabs(carve::geom::dot(face->plane.N, carve::geom::VECTOR(0, 0, 1))) >
-        0.001)
+        0.001) {
       r |= 4;
+    }
     return r;
   }
 
@@ -930,7 +971,9 @@ class MeshSimplifier {
     double med = median(pos);
 
     double snap_pos = med;
-    if (grid) snap_pos = round(snap_pos / grid) * grid;
+    if (grid) {
+      snap_pos = round(snap_pos / grid) * grid;
+    }
 
     for (std::set<vertex_t*>::iterator i = vertices.begin();
          i != vertices.end(); ++i) {
@@ -942,7 +985,9 @@ class MeshSimplifier {
       face->recalc();
       edge_t* edge = face->edge;
       do {
-        if (edge->rev && edge->rev->face) edge->rev->face->recalc();
+        if (edge->rev && edge->rev->face) {
+          edge->rev->face->recalc();
+        }
         edge = edge->next;
       } while (edge != face->edge);
     }
@@ -1016,7 +1061,9 @@ class MeshSimplifier {
       den += N.v[axis] * N.v[axis];
       num -= N.v[axis] * (N.v[a1] * vert.v[a1] + N.v[a2] * vert.v[a2] + d);
     }
-    if (fabs(den) < 1e-5) return vert.v[axis];
+    if (fabs(den) < 1e-5) {
+      return vert.v[axis];
+    }
     return num / den;
   }
 
@@ -1076,8 +1123,12 @@ class MeshSimplifier {
 
     edge_t* e1r = e1->rev;
     edge_t* e2r = e2->rev;
-    if (e1r) e1r->rev = e2r;
-    if (e2r) e2r->rev = e1r;
+    if (e1r) {
+      e1r->rev = e2r;
+    }
+    if (e2r) {
+      e2r->rev = e1r;
+    }
 
     face_t* f1 = e1->face;
     face_t* f2 = e2->face;
@@ -1088,7 +1139,9 @@ class MeshSimplifier {
   }
 
   size_t removeFin(face_t* face) {
-    if (face->edge == NULL || face->nEdges() != 3) return 0;
+    if (face->edge == NULL || face->nEdges() != 3) {
+      return 0;
+    }
     edge_t* e = face->edge;
     do {
       if (e->rev != NULL) {
@@ -1158,8 +1211,9 @@ class MeshSimplifier {
   void snap(meshset_t* meshset, int log2_grid, int angle_xy_quantization = 0,
             int angle_z_quantization = 0) {
     double grid = 0.0;
-    if (log2_grid >= std::numeric_limits<double>::min_exponent)
+    if (log2_grid >= std::numeric_limits<double>::min_exponent) {
       grid = pow(2.0, (double)log2_grid);
+    }
 
     typedef std::unordered_map<face_t*, uint8_t> axis_influence_map_t;
     axis_influence_map_t axis_influence;
@@ -1218,7 +1272,9 @@ class MeshSimplifier {
         face_set.insert(curr);
         axes |= axis_influence[curr];
         for (face_t* f : interacting_faces[curr]) {
-          if (face_set.find(f) != face_set.end()) continue;
+          if (face_set.find(f) != face_set.end()) {
+            continue;
+          }
           open.insert(f);
         }
       }
@@ -1250,14 +1306,20 @@ class MeshSimplifier {
       std::list<carve::geom::plane<3> >& planes = (*i).second;
       uint8_t constraint = vertex_constraints[vert];
 
-      if (constraint == 7) continue;
+      if (constraint == 7) {
+        continue;
+      }
 
       double d = summedError(vert->v, planes);
       for (size_t N = 0;; N = (N + 1) % 3) {
-        if (constraint & (1 << N)) continue;
+        if (constraint & (1 << N)) {
+          continue;
+        }
         vert->v[N] = minimize(vert->v, planes, N);
         double d_next = summedError(vert->v, planes);
-        if (d - d_next < 1e-20) break;
+        if (d - d_next < 1e-20) {
+          break;
+        }
         d = d_next;
       }
 
@@ -1268,7 +1330,9 @@ class MeshSimplifier {
         for (size_t axes = 0; axes < 8; ++axes) {
           carve::geom::vector<3> v = vert->v;
           for (size_t N = 0; N < 3; ++N) {
-            if (constraint & (1 << N)) continue;
+            if (constraint & (1 << N)) {
+              continue;
+            }
             if (axes & (1 << N)) {
               v.v[N] = ceil(v.v[N] / grid) * grid;
             } else {
@@ -1341,7 +1405,9 @@ class MeshSimplifier {
     for (size_t i = 0; i < mesh->faces.size(); ++i) {
       n_removed += removeFin(mesh->faces[i]);
     }
-    if (n_removed) removeRemnantFaces(mesh);
+    if (n_removed) {
+      removeRemnantFaces(mesh);
+    }
     return n_removed;
   }
 
@@ -1444,7 +1510,9 @@ class MeshSimplifier {
     quantization_info_t() : pt(NULL), faces() {}
 
     ~quantization_info_t() {
-      if (pt) delete pt;
+      if (pt) {
+        delete pt;
+      }
     }
 
     aabb_t getAABB() const {
@@ -1513,7 +1581,9 @@ class MeshSimplifier {
         vertex_qinfo.erase(quantized[i]);
       }
 
-      if (!quantized.size()) break;
+      if (!quantized.size()) {
+        break;
+      }
     }
   }
 };

@@ -140,7 +140,9 @@ class BaseCollector : public CSG::Collector {
         break;
       }
 
-      if ((*i).classification == FACE_UNCLASSIFIED) continue;
+      if ((*i).classification == FACE_UNCLASSIFIED) {
+        continue;
+      }
       if ((*i).intersectedMeshIsClosed()) {
         fc_closed_bits |= class_to_class_bit((*i).classification);
       } else {
@@ -163,11 +165,15 @@ class BaseCollector : public CSG::Collector {
       unsigned on_bits = fc_bits & FACE_ON_BIT;
 
       // both in and out. indicates an invalid manifold embedding.
-      if (inout_bits == (FACE_IN_BIT | FACE_OUT_BIT)) goto out;
+      if (inout_bits == (FACE_IN_BIT | FACE_OUT_BIT)) {
+        goto out;
+      }
 
       // on, both orientations. could be caused by two manifolds touching at a
       // face.
-      if (on_bits == (FACE_ON_ORIENT_IN_BIT | FACE_ON_ORIENT_OUT_BIT)) goto out;
+      if (on_bits == (FACE_ON_ORIENT_IN_BIT | FACE_ON_ORIENT_OUT_BIT)) {
+        goto out;
+      }
 
       // in or out, but also on (with orientation). the on classification takes
       // precedence.

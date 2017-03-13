@@ -38,7 +38,9 @@ carve::geom3d::AABB Polyline::aabb() const {
 
 PolylineSet::PolylineSet(const std::vector<carve::geom3d::Vector>& points) {
   vertices.resize(points.size());
-  for (size_t i = 0; i < points.size(); ++i) vertices[i].v = points[i];
+  for (size_t i = 0; i < points.size(); ++i) {
+    vertices[i].v = points[i];
+  }
   aabb.fit(points.begin(), points.end(), carve::geom3d::vec_adapt_ident());
 }
 
@@ -63,8 +65,12 @@ void PolylineSet::sortVertices(const carve::geom3d::Vector& axis) {
     Polyline& l = *(*i);
     for (size_t j = 0; j < l.edges.size(); ++j) {
       PolylineEdge& e = *l.edges[j];
-      if (e.v1) e.v1 = &vnew[revmap[vertexToIndex_fast(e.v1)]];
-      if (e.v2) e.v2 = &vnew[revmap[vertexToIndex_fast(e.v2)]];
+      if (e.v1) {
+        e.v1 = &vnew[revmap[vertexToIndex_fast(e.v1)]];
+      }
+      if (e.v2) {
+        e.v2 = &vnew[revmap[vertexToIndex_fast(e.v2)]];
+      }
     }
   }
   vertices.swap(vnew);

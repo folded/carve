@@ -56,10 +56,12 @@ bool emb_test(carve::poly::Polyhedron* poly,
   std::set<int> inside;
   for (std::map<int, carve::PointClass>::iterator j = result.begin();
        j != result.end(); ++j) {
-    if ((*j).first == m_id) continue;
-    if ((*j).second == carve::POINT_IN)
+    if ((*j).first == m_id) {
+      continue;
+    }
+    if ((*j).second == carve::POINT_IN) {
       inside.insert((*j).first);
-    else if ((*j).second == carve::POINT_ON) {
+    } else if ((*j).second == carve::POINT_ON) {
 #if defined(CARVE_DEBUG)
       std::cerr << " FAIL" << std::endl;
 #endif
@@ -130,8 +132,12 @@ void Polyhedron::invert(const std::vector<bool>& selected_manifolds) {
       std::vector<const face_t*>& f = connectivity.edge_to_face[i];
       for (size_t j = 0; j < (f.size() & ~1U); j += 2) {
         int m_id = -1;
-        if (f[j]) m_id = f[j]->manifold_id;
-        if (f[j + 1]) m_id = f[j + 1]->manifold_id;
+        if (f[j]) {
+          m_id = f[j]->manifold_id;
+        }
+        if (f[j + 1]) {
+          m_id = f[j + 1]->manifold_id;
+        }
         if (m_id >= 0 && (unsigned)m_id < selected_manifolds.size() &&
             selected_manifolds[m_id]) {
           std::swap(f[j], f[j + 1]);
@@ -355,7 +361,9 @@ bool Polyhedron::calcManifoldEmbedding() {
   carve::TimingBlock block(FUNC_NAME);
 
   const unsigned MCOUNT = manifoldCount();
-  if (MCOUNT < 2) return true;
+  if (MCOUNT < 2) {
+    return true;
+  }
 
   std::set<int> vertex_manifolds;
   std::map<int, std::set<int> > embedding;
@@ -363,8 +371,9 @@ bool Polyhedron::calcManifoldEmbedding() {
   carve::Timing::start(CME_V);
   for (size_t i = 0; i < vertices.size(); ++i) {
     vertex_manifolds.clear();
-    if (vertexManifolds(&vertices[i], set_inserter(vertex_manifolds)) != 1)
+    if (vertexManifolds(&vertices[i], set_inserter(vertex_manifolds)) != 1) {
       continue;
+    }
     int m_id = *vertex_manifolds.begin();
     if (embedding.find(m_id) == embedding.end()) {
       if (emb_test(this, embedding, vertices[i].v, m_id) &&
@@ -382,8 +391,12 @@ bool Polyhedron::calcManifoldEmbedding() {
       int m_id;
       const face_t* f1 = connectivity.edge_to_face[i][0];
       const face_t* f2 = connectivity.edge_to_face[i][1];
-      if (f1) m_id = f1->manifold_id;
-      if (f2) m_id = f2->manifold_id;
+      if (f1) {
+        m_id = f1->manifold_id;
+      }
+      if (f2) {
+        m_id = f2->manifold_id;
+      }
       if (embedding.find(m_id) == embedding.end()) {
         if (emb_test(this, embedding, (edges[i].v1->v + edges[i].v2->v) / 2,
                      m_id) &&
@@ -401,8 +414,10 @@ bool Polyhedron::calcManifoldEmbedding() {
     int m_id = faces[i].manifold_id;
     if (embedding.find(m_id) == embedding.end()) {
       carve::geom2d::P2 pv;
-      if (!carve::geom2d::pickContainedPoint(faces[i].projectedVertices(), pv))
+      if (!carve::geom2d::pickContainedPoint(faces[i].projectedVertices(),
+                                             pv)) {
         continue;
+      }
       carve::geom3d::Vector v = carve::poly::face::unproject(faces[i], pv);
       if (emb_test(this, embedding, v, m_id) && embedding.size() == MCOUNT) {
         carve::Timing::stop();
@@ -479,8 +494,12 @@ bool Polyhedron::init() {
   connectivity.vertex_to_face.clear();
   connectivity.edge_to_face.clear();
 
-  if (!initConnectivity()) return false;
-  if (!initSpatialIndex()) return false;
+  if (!initConnectivity()) {
+    return false;
+  }
+  if (!initSpatialIndex()) {
+    return false;
+  }
 
   return true;
 }
@@ -537,14 +556,18 @@ Polyhedron::Polyhedron(const Polyhedron& poly, int m_id) {
 
   for (size_t i = 0; i < poly.faces.size(); ++i) {
     const face_t& src = poly.faces[i];
-    if (src.manifold_id == m_id) n_faces++;
+    if (src.manifold_id == m_id) {
+      n_faces++;
+    }
   }
 
   faces.reserve(n_faces);
 
   for (size_t i = 0; i < poly.faces.size(); ++i) {
     const face_t& src = poly.faces[i];
-    if (src.manifold_id == m_id) faces.push_back(src);
+    if (src.manifold_id == m_id) {
+      faces.push_back(src);
+    }
   }
 
   commonFaceInit(false);  // calls setFaceAndVertexOwner() and init()
@@ -593,7 +616,9 @@ Polyhedron::Polyhedron(std::vector<face_t>& _faces,
 
   setFaceAndVertexOwner();
 
-  if (_recalc) faceRecalc();
+  if (_recalc) {
+    faceRecalc();
+  }
 
   if (!init()) {
     throw carve::exception("polyhedron creation failed");
@@ -656,14 +681,20 @@ void Polyhedron::collectFaceVertices(std::vector<face_t>& faces,
 }
 
 void Polyhedron::setFaceAndVertexOwner() {
-  for (size_t i = 0; i < vertices.size(); ++i) vertices[i].owner = this;
-  for (size_t i = 0; i < faces.size(); ++i) faces[i].owner = this;
+  for (size_t i = 0; i < vertices.size(); ++i) {
+    vertices[i].owner = this;
+  }
+  for (size_t i = 0; i < faces.size(); ++i) {
+    faces[i].owner = this;
+  }
 }
 
 void Polyhedron::commonFaceInit(bool _recalc) {
   collectFaceVertices(faces, vertices);
   setFaceAndVertexOwner();
-  if (_recalc) faceRecalc();
+  if (_recalc) {
+    faceRecalc();
+  }
 
   if (!init()) {
     throw carve::exception("polyhedron creation failed");
@@ -676,8 +707,9 @@ void Polyhedron::testVertexAgainstClosedManifolds(
     const carve::geom3d::Vector& v, std::map<int, PointClass>& result,
     bool ignore_orientation) const {
   for (size_t i = 0; i < faces.size(); i++) {
-    if (!manifold_is_closed[faces[i].manifold_id])
+    if (!manifold_is_closed[faces[i].manifold_id]) {
       continue;  // skip open manifolds
+    }
     if (faces[i].containsPoint(v)) {
       result[faces[i].manifold_id] = POINT_ON;
     }
@@ -709,10 +741,12 @@ void Polyhedron::testVertexAgainstClosedManifolds(
     octree.findFacesNear(line, possible_faces);
 
     for (unsigned i = 0; !failed && i < possible_faces.size(); i++) {
-      if (!manifold_is_closed[possible_faces[i]->manifold_id])
+      if (!manifold_is_closed[possible_faces[i]->manifold_id]) {
         continue;  // skip open manifolds
-      if (result.find(possible_faces[i]->manifold_id) != result.end())
+      }
+      if (result.find(possible_faces[i]->manifold_id) != result.end()) {
         continue;  // already ON
+      }
 
       switch (possible_faces[i]->lineSegmentIntersection(line, intersection)) {
         case INTERSECT_FACE: {
@@ -730,7 +764,9 @@ void Polyhedron::testVertexAgainstClosedManifolds(
       }
     }
 
-    if (!failed) break;
+    if (!failed) {
+      break;
+    }
   }
 
   std::vector<int> crossings(manifold_is_closed.size(), 0);
@@ -745,10 +781,16 @@ void Polyhedron::testVertexAgainstClosedManifolds(
     std::cerr << "crossing: " << i << " = " << crossings[i]
               << " is_negative = " << manifold_is_negative[i] << std::endl;
 #endif
-    if (!manifold_is_closed[i]) continue;
-    if (result.find(i) != result.end()) continue;
+    if (!manifold_is_closed[i]) {
+      continue;
+    }
+    if (result.find(i) != result.end()) {
+      continue;
+    }
     PointClass pc = (crossings[i] & 1) ? POINT_IN : POINT_OUT;
-    if (!ignore_orientation && manifold_is_negative[i]) pc = (PointClass)-pc;
+    if (!ignore_orientation && manifold_is_negative[i]) {
+      pc = (PointClass)-pc;
+    }
     result[i] = pc;
   }
 }
@@ -756,7 +798,9 @@ void Polyhedron::testVertexAgainstClosedManifolds(
 PointClass Polyhedron::containsVertex(const carve::geom3d::Vector& v,
                                       const face_t** hit_face, bool even_odd,
                                       int manifold_id) const {
-  if (hit_face) *hit_face = NULL;
+  if (hit_face) {
+    *hit_face = NULL;
+  }
 
 #if defined(DEBUG_CONTAINS_VERTEX)
   std::cerr << "{containsVertex " << v << "}" << std::endl;
@@ -768,13 +812,16 @@ PointClass Polyhedron::containsVertex(const carve::geom3d::Vector& v,
 #endif
     // XXX: if the top level manifolds are negative, this should be POINT_IN.
     // for the moment, this only works for a single manifold.
-    if (manifold_is_negative.size() == 1 && manifold_is_negative[0])
+    if (manifold_is_negative.size() == 1 && manifold_is_negative[0]) {
       return POINT_IN;
+    }
     return POINT_OUT;
   }
 
   for (size_t i = 0; i < faces.size(); i++) {
-    if (manifold_id != -1 && manifold_id != faces[i].manifold_id) continue;
+    if (manifold_id != -1 && manifold_id != faces[i].manifold_id) {
+      continue;
+    }
 
     // XXX: Do allow the tested vertex to be ON an open
     // manifold. This was here originally because of the
@@ -787,7 +834,9 @@ PointClass Polyhedron::containsVertex(const carve::geom3d::Vector& v,
 #if defined(DEBUG_CONTAINS_VERTEX)
       std::cerr << "{final:ON(hits face " << &faces[i] << ")}" << std::endl;
 #endif
-      if (hit_face) *hit_face = &faces[i];
+      if (hit_face) {
+        *hit_face = &faces[i];
+      }
       return POINT_ON;
     }
   }
@@ -821,9 +870,13 @@ PointClass Polyhedron::containsVertex(const carve::geom3d::Vector& v,
     octree.findFacesNear(line, possible_faces);
 
     for (unsigned i = 0; !failed && i < possible_faces.size(); i++) {
-      if (manifold_id != -1 && manifold_id != faces[i].manifold_id) continue;
+      if (manifold_id != -1 && manifold_id != faces[i].manifold_id) {
+        continue;
+      }
 
-      if (!manifold_is_closed[possible_faces[i]->manifold_id]) continue;
+      if (!manifold_is_closed[possible_faces[i]->manifold_id]) {
+        continue;
+      }
 
       switch (possible_faces[i]->lineSegmentIntersection(line, intersection)) {
         case INTERSECT_FACE: {
@@ -1060,12 +1113,15 @@ void Polyhedron::canonicalize() {
 
   std::vector<face_t*> face_ptrs;
   face_ptrs.reserve(faces.size());
-  for (size_t i = 0; i < faces.size(); ++i) face_ptrs.push_back(&faces[i]);
+  for (size_t i = 0; i < faces.size(); ++i) {
+    face_ptrs.push_back(&faces[i]);
+  }
   std::sort(face_ptrs.begin(), face_ptrs.end(), order_faces());
   std::vector<face_t> sorted_faces;
   sorted_faces.reserve(faces.size());
-  for (size_t i = 0; i < faces.size(); ++i)
+  for (size_t i = 0; i < faces.size(); ++i) {
     sorted_faces.push_back(*face_ptrs[i]);
+  }
   std::swap(faces, sorted_faces);
 }
 }

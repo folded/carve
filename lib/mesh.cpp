@@ -135,7 +135,9 @@ Face<3>::unproject_t Face<3>::getUnprojector(bool positive_facing,
 
 template <unsigned ndim>
 bool Face<ndim>::containsPoint(const vector_t& p) const {
-  if (!carve::math::ZERO(carve::geom::distance(plane, p))) return false;
+  if (!carve::math::ZERO(carve::geom::distance(plane, p))) {
+    return false;
+  }
   // return pointInPolySimple(vertices, projector(), (this->*project)(p));
   std::vector<carve::geom::vector<2> > verts;
   getProjectedVertices(verts);
@@ -154,7 +156,9 @@ bool Face<ndim>::containsPointInProjection(const vector_t& p) const {
 template <unsigned ndim>
 bool Face<ndim>::simpleLineSegmentIntersection(
     const carve::geom::linesegment<ndim>& line, vector_t& intersection) const {
-  if (!line.OK()) return false;
+  if (!line.OK()) {
+    return false;
+  }
 
   carve::mesh::MeshSet<3>::vertex_t::vector_t p;
   carve::IntersectionClass intersects =
@@ -176,7 +180,9 @@ bool Face<ndim>::simpleLineSegmentIntersection(
 template <unsigned ndim>
 IntersectionClass Face<ndim>::lineSegmentIntersection(
     const carve::geom::linesegment<ndim>& line, vector_t& intersection) const {
-  if (!line.OK()) return INTERSECT_NONE;
+  if (!line.OK()) {
+    return INTERSECT_NONE;
+  }
 
   vector_t p;
   IntersectionClass intersects =
@@ -265,9 +271,13 @@ bool FaceStitcher::EdgeOrderData::Cmp::operator()(
   }
 #endif
 
-  if (v < 0) return true;
+  if (v < 0) {
+    return true;
+  }
   if (v == 0) {
-    if (a.is_reversed && !b.is_reversed) return true;
+    if (a.is_reversed && !b.is_reversed) {
+      return true;
+    }
     if (a.is_reversed == b.is_reversed) {
       return a.group_id < b.group_id;
     }
@@ -395,7 +405,9 @@ void FaceStitcher::extractPath(std::vector<const vertex_t*>& path) {
     vert = prev;
     iter = edge_graph.find(vert);
     CARVE_ASSERT(iter != edge_graph.end());
-    if (vert == init) break;
+    if (vert == init) {
+      break;
+    }
   }
   init = vert;
 
@@ -425,20 +437,28 @@ void FaceStitcher::extractPath(std::vector<const vertex_t*>& path) {
                       std::bind2nd(std::not_equal_to<const vertex_t*>(), prev));
 
     edgeiter = complex_edges.find(vpair_t(vert, next));
-    if ((*edgeiter).second.size() != efwd.size()) goto done;
+    if ((*edgeiter).second.size() != efwd.size()) {
+      goto done;
+    }
 
     for (size_t i = 0; i < efwd.size(); ++i) {
       Edge<3>* e_next = efwd[i]->perimNext();
-      if (e_next->v2() != next) goto done;
+      if (e_next->v2() != next) {
+        goto done;
+      }
       efwd[i] = e_next;
     }
 
     edgeiter = complex_edges.find(vpair_t(next, vert));
-    if ((*edgeiter).second.size() != erev.size()) goto done;
+    if ((*edgeiter).second.size() != erev.size()) {
+      goto done;
+    }
 
     for (size_t i = 0; i < erev.size(); ++i) {
       Edge<3>* e_prev = erev[i]->perimPrev();
-      if (e_prev->v1() != next) goto done;
+      if (e_prev->v1() != next) {
+        goto done;
+      }
       erev[i] = e_prev;
     }
 
@@ -468,7 +488,9 @@ void FaceStitcher::removePath(const std::vector<const vertex_t*>& path) {
 }
 
 void FaceStitcher::reorder(std::vector<EdgeOrderData>& ordering, size_t grp) {
-  if (!ordering[0].is_reversed && ordering[0].group_id == grp) return;
+  if (!ordering[0].is_reversed && ordering[0].group_id == grp) {
+    return;
+  }
   for (size_t i = 1; i < ordering.size(); ++i) {
     if (!ordering[i].is_reversed && ordering[i].group_id == grp) {
       std::vector<EdgeOrderData> temp;
@@ -526,7 +548,9 @@ void FaceStitcher::matchOrderedEdges(
       }
     }
 
-    if (!pair_counts.size()) break;
+    if (!pair_counts.size()) {
+      break;
+    }
 
     std::vector<std::pair<size_t, std::pair<size_t, size_t> > > counts;
     counts.reserve(pair_counts.size());
@@ -542,8 +566,12 @@ void FaceStitcher::matchOrderedEdges(
       std::pair<size_t, size_t> join = counts.front().second;
       std::pop_heap(counts.begin(), counts.end());
       counts.pop_back();
-      if (rem_fwd.find(join.first) != rem_fwd.end()) continue;
-      if (rem_rev.find(join.second) != rem_rev.end()) continue;
+      if (rem_fwd.find(join.first) != rem_fwd.end()) {
+        continue;
+      }
+      if (rem_rev.find(join.second) != rem_rev.end()) {
+        continue;
+      }
 
       size_t g1 = join.first;
       size_t g2 = join.second;
@@ -572,7 +600,9 @@ void FaceStitcher::resolveOpenEdges() {
   std::unordered_set<size_t> open_groups;
 
   for (size_t i = 0; i < is_open.size(); ++i) {
-    if (is_open[i]) open_groups.insert(face_groups.find_set_head(i));
+    if (is_open[i]) {
+      open_groups.insert(face_groups.find_set_head(i));
+    }
   }
 
   while (!open_groups.empty()) {
@@ -603,7 +633,9 @@ void FaceStitcher::resolveOpenEdges() {
          ++i) {
       vpair_t e1 = *i;
       edge_map_t::iterator e1i = complex_edges.find(e1);
-      if (e1i == complex_edges.end()) continue;
+      if (e1i == complex_edges.end()) {
+        continue;
+      }
       vpair_t e2 = vpair_t(e1.second, e1.first);
       edge_map_t::iterator e2i = complex_edges.find(e2);
       CARVE_ASSERT(
@@ -696,13 +728,16 @@ void FaceStitcher::extractConnectedEdges(
     vpair_t ef = vpair_t(*e1, *e2);
     vpair_t er = vpair_t(*e2, *e1);
 
-    if (complex_edges[ef].size() != Nfwd || complex_edges[ef].size() != Nrev)
+    if (complex_edges[ef].size() != Nfwd || complex_edges[ef].size() != Nrev) {
       break;
+    }
 
     for (size_t k = 0; k < Nfwd; ++k) {
       Edge<3>* e_next = efwd[k].back()->perimNext();
       CARVE_ASSERT(e_next == NULL || e_next->rev == NULL);
-      if (e_next == NULL || e_next->v2() != *e2) goto done;
+      if (e_next == NULL || e_next->v2() != *e2) {
+        goto done;
+      }
       CARVE_ASSERT(e_next->v1() == *e1);
       CARVE_ASSERT(std::find(complex_edges[ef].begin(), complex_edges[ef].end(),
                              e_next) != complex_edges[ef].end());
@@ -711,7 +746,9 @@ void FaceStitcher::extractConnectedEdges(
 
     for (size_t k = 0; k < Nrev; ++k) {
       Edge<3>* e_next = erev[k].back()->perimPrev();
-      if (e_next == NULL || e_next->v1() != *e2) goto done;
+      if (e_next == NULL || e_next->v1() != *e2) {
+        goto done;
+      }
       CARVE_ASSERT(e_next->v2() == *e1);
       CARVE_ASSERT(std::find(complex_edges[er].begin(), complex_edges[er].end(),
                              e_next) != complex_edges[er].end());
@@ -731,10 +768,14 @@ done:;
 
 void FaceStitcher::construct() {
   matchSimpleEdges();
-  if (!complex_edges.size()) return;
+  if (!complex_edges.size()) {
+    return;
+  }
 
   resolveOpenEdges();
-  if (!complex_edges.size()) return;
+  if (!complex_edges.size()) {
+    return;
+  }
 
   buildEdgeGraph(complex_edges);
 
@@ -793,7 +834,9 @@ mesh::MeshSet<3>* meshFromPolyhedron(const poly::Polyhedron* poly,
   std::vector<vertex_t*> vert_ptrs;
   for (size_t i = 0; i < poly->faces.size(); ++i) {
     const poly::Polyhedron::face_t& src = poly->faces[i];
-    if (manifold_id != -1 && src.manifold_id != manifold_id) continue;
+    if (manifold_id != -1 && src.manifold_id != manifold_id) {
+      continue;
+    }
     vert_ptrs.clear();
     vert_ptrs.reserve(src.nVertices());
     for (size_t j = 0; j < src.nVertices(); ++j) {
@@ -828,19 +871,25 @@ mesh::MeshSet<3>* meshFromPolyhedron(const poly::Polyhedron* poly,
       const poly::Polyhedron::face_t *fa, *fb;
       fa = facepairs[j];
       fb = facepairs[j + 1];
-      if (!fa || !fb) continue;
+      if (!fa || !fb) {
+        continue;
+      }
       CARVE_ASSERT(fa->manifold_id == fb->manifold_id);
-      if (manifold_id != -1 && fa->manifold_id != manifold_id) continue;
+      if (manifold_id != -1 && fa->manifold_id != manifold_id) {
+        continue;
+      }
 
       std::list<edge_t *>::iterator efwdi, erevi;
       for (efwdi = efwd.begin();
            efwdi != efwd.end() && (*efwdi)->face->id != (size_t)fa->manifold_id;
-           ++efwdi)
+           ++efwdi) {
         ;
+      }
       for (erevi = erev.begin();
            erevi != erev.end() && (*erevi)->face->id != (size_t)fa->manifold_id;
-           ++erevi)
+           ++erevi) {
         ;
+      }
       CARVE_ASSERT(efwdi != efwd.end() && erevi != erev.end());
 
       (*efwdi)->rev = (*erevi);
@@ -1041,7 +1090,9 @@ carve::PointClass carve::mesh::classifyPoint(
     const carve::geom::RTreeNode<3, carve::mesh::Face<3>*>* face_rtree,
     const carve::geom::vector<3>& v, bool even_odd,
     const carve::mesh::Mesh<3>* mesh, const carve::mesh::Face<3>** hit_face) {
-  if (hit_face) *hit_face = NULL;
+  if (hit_face) {
+    *hit_face = NULL;
+  }
 
 #if defined(DEBUG_CONTAINS_VERTEX)
   std::cerr << "{containsVertex " << v << "}" << std::endl;
@@ -1063,7 +1114,9 @@ carve::PointClass carve::mesh::classifyPoint(
   face_rtree->search(v, std::back_inserter(near_faces));
 
   for (size_t i = 0; i < near_faces.size(); i++) {
-    if (mesh != NULL && mesh != near_faces[i]->mesh) continue;
+    if (mesh != NULL && mesh != near_faces[i]->mesh) {
+      continue;
+    }
 
     // XXX: Do allow the tested vertex to be ON an open
     // manifold. This was here originally because of the
@@ -1076,7 +1129,9 @@ carve::PointClass carve::mesh::classifyPoint(
 #if defined(DEBUG_CONTAINS_VERTEX)
       std::cerr << "{final:ON(hits face " << near_faces[i] << ")}" << std::endl;
 #endif
-      if (hit_face) *hit_face = near_faces[i];
+      if (hit_face) {
+        *hit_face = near_faces[i];
+      }
       return POINT_ON;
     }
   }
@@ -1108,9 +1163,13 @@ carve::PointClass carve::mesh::classifyPoint(
     face_rtree->search(line, std::back_inserter(near_faces));
 
     for (unsigned i = 0; !failed && i < near_faces.size(); i++) {
-      if (mesh != NULL && mesh != near_faces[i]->mesh) continue;
+      if (mesh != NULL && mesh != near_faces[i]->mesh) {
+        continue;
+      }
 
-      if (!near_faces[i]->mesh->isClosed()) continue;
+      if (!near_faces[i]->mesh->isClosed()) {
+        continue;
+      }
 
       switch (near_faces[i]->lineSegmentIntersection(line, intersection)) {
         case INTERSECT_FACE: {

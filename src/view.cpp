@@ -177,14 +177,21 @@ GLuint genSceneDisplayList(std::vector<carve::mesh::MeshSet<3>*>& polys,
 
   is_wireframe.clear();
 
-  if (options.wireframe) N = 2;
+  if (options.wireframe) {
+    N = 2;
+  }
 
-  for (size_t p = 0; p < polys.size(); ++p)
+  for (size_t p = 0; p < polys.size(); ++p) {
     n += polys[p]->meshes.size() * N + 1;
-  for (size_t p = 0; p < lines.size(); ++p) n += lines[p]->lines.size() * 2;
+  }
+  for (size_t p = 0; p < lines.size(); ++p) {
+    n += lines[p]->lines.size() * 2;
+  }
   n += points.size();
 
-  if (n == 0) return 0;
+  if (n == 0) {
+    return 0;
+  }
 
   carve::geom3d::AABB aabb;
   if (polys.size()) {
@@ -194,12 +201,16 @@ GLuint genSceneDisplayList(std::vector<carve::mesh::MeshSet<3>*>& polys,
   } else if (points.size()) {
     aabb = points[0]->aabb;
   }
-  for (size_t p = 0; p < polys.size(); ++p) aabb.unionAABB(polys[p]->getAABB());
+  for (size_t p = 0; p < polys.size(); ++p) {
+    aabb.unionAABB(polys[p]->getAABB());
+  }
   for (size_t p = 0; p < lines.size(); ++p) {
     std::cerr << lines[p]->aabb << std::endl;
     aabb.unionAABB(lines[p]->aabb);
   }
-  for (size_t p = 0; p < points.size(); ++p) aabb.unionAABB(points[p]->aabb);
+  for (size_t p = 0; p < points.size(); ++p) {
+    aabb.unionAABB(points[p]->aabb);
+  }
 
   GLuint dlist = glGenLists((GLsizei)(*listSize = n));
   is_wireframe.resize(n, false);
@@ -341,20 +352,34 @@ struct TestScene : public Scene {
       }
     } else if (k == '|') {
       for (unsigned i = 1; i < draw_flags.size(); i++) {
-        if (is_wireframe[i]) draw_flags[i] = !draw_flags[i];
+        if (is_wireframe[i]) {
+          draw_flags[i] = !draw_flags[i];
+        }
       }
     } else if (k == 'n') {
       bool n = true;
-      for (unsigned i = 0; i < draw_flags.size(); ++i)
-        if (is_wireframe[i] && draw_flags[i]) n = false;
-      for (unsigned i = 0; i < draw_flags.size(); ++i)
-        if (is_wireframe[i]) draw_flags[i] = n;
+      for (unsigned i = 0; i < draw_flags.size(); ++i) {
+        if (is_wireframe[i] && draw_flags[i]) {
+          n = false;
+        }
+      }
+      for (unsigned i = 0; i < draw_flags.size(); ++i) {
+        if (is_wireframe[i]) {
+          draw_flags[i] = n;
+        }
+      }
     } else if (k == 'm') {
       bool n = true;
-      for (unsigned i = 0; i < draw_flags.size(); ++i)
-        if (!is_wireframe[i] && draw_flags[i]) n = false;
-      for (unsigned i = 0; i < draw_flags.size(); ++i)
-        if (!is_wireframe[i]) draw_flags[i] = n;
+      for (unsigned i = 0; i < draw_flags.size(); ++i) {
+        if (!is_wireframe[i] && draw_flags[i]) {
+          n = false;
+        }
+      }
+      for (unsigned i = 0; i < draw_flags.size(); ++i) {
+        if (!is_wireframe[i]) {
+          draw_flags[i] = n;
+        }
+      }
     } else {
       t = strchr(l, k);
       if (t != NULL) {
@@ -370,7 +395,9 @@ struct TestScene : public Scene {
 
   virtual GLvoid draw() {
     for (unsigned i = 0; i < draw_flags.size(); ++i) {
-      if (draw_flags[i] && !is_wireframe[i]) glCallList(draw_list_base + i);
+      if (draw_flags[i] && !is_wireframe[i]) {
+        glCallList(draw_list_base + i);
+      }
     }
 
     GLfloat proj[16];
@@ -381,7 +408,9 @@ struct TestScene : public Scene {
     glLoadMatrixf(proj);
 
     for (unsigned i = 0; i < draw_flags.size(); ++i) {
-      if (draw_flags[i] && is_wireframe[i]) glCallList(draw_list_base + i);
+      if (draw_flags[i] && is_wireframe[i]) {
+        glCallList(draw_list_base + i);
+      }
     }
 
     proj[10] = p33;
