@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.0)
 
 project(carve)
 
@@ -10,6 +10,9 @@ set(carve_VERSION_MINOR 0)
 set(carve_VERSION_PATCH 0a)
 
 set(CARVE_VERSION ${carve_VERSION_MAJOR}.${carve_VERSION_MINOR}.${carve_VERSION_PATCH})
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(BUILD_COVERAGE                    "Compile with gcov"                                 OFF)
 option(BUILD_SHARED_LIBS                 "Compile libcarve as shared"                        ON)
@@ -81,6 +84,7 @@ if(CARVE_WITH_GUI)
     include_directories(${GLUT_INCLUDE_DIR})
 
     if(GLEW_FOUND)
+      include_directories(${GLEW_INCLUDE_DIR})
     else(GLEW_FOUND)
       if(WIN32)
         add_definitions(-DGLEW_STATIC)

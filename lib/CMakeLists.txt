@@ -30,7 +30,6 @@ add_library(carve
             triangulator.cpp
             triangle_intersection.cpp
             shewchuk_predicates.cpp)
-target_compile_features(carve PUBLIC cxx_auto_type cxx_range_for cxx_uniform_initialization)
 
 set_target_properties(carve PROPERTIES
                       VERSION   "${carve_VERSION_MAJOR}.${carve_VERSION_MINOR}.${carve_VERSION_PATCH}"
