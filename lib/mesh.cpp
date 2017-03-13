@@ -530,7 +530,7 @@ namespace carve {
                                            const std::vector<std::vector<EdgeOrderData> >::iterator end,
                                            std::vector<std::vector<Edge<3> *> > &efwd,
                                            std::vector<std::vector<Edge<3> *> > &erev) {
-        typedef std::unordered_map<std::pair<size_t, size_t>, size_t> pair_counts_t;
+        typedef std::unordered_map<std::pair<size_t, size_t>, size_t, carve::hash_pair> pair_counts_t;
         for (;;) {
           pair_counts_t pair_counts;
 
@@ -797,7 +797,7 @@ namespace carve {
     std::vector<std::vector<face_t *> > faces;
     faces.resize(poly->manifold_is_closed.size());
 
-    std::unordered_map<std::pair<size_t, size_t>, std::list<edge_t *> > vertex_to_edge;
+    std::unordered_map<std::pair<size_t, size_t>, std::list<edge_t *>, carve::hash_pair> vertex_to_edge;
 
     std::vector<vertex_t *> vert_ptrs;
     for (size_t i = 0; i < poly->faces.size(); ++i) {
@@ -866,7 +866,7 @@ namespace carve {
                             size_t manifold_id,
                             const mesh::Vertex<3> *Vbase,
                             poly::Polyhedron *poly,
-                            std::unordered_map<std::pair<size_t, size_t>, std::list<mesh::Edge<3> *> > &edges,
+                            std::unordered_map<std::pair<size_t, size_t>, std::list<mesh::Edge<3> *>, carve::hash_pair> &edges,
                             std::unordered_map<const mesh::Face<3> *, size_t> &face_map) {
     std::vector<const poly::Polyhedron::vertex_t *> vert_ptr;
     for (size_t f = 0; f < mesh->faces.size(); ++f) {
@@ -923,7 +923,7 @@ namespace carve {
       poly->manifold_is_negative[manifold_id] = mesh->meshes[manifold_id]->isNegative();
     }
 
-    std::unordered_map<std::pair<size_t, size_t>, std::list<mesh::Edge<3> *> > edges;
+    std::unordered_map<std::pair<size_t, size_t>, std::list<mesh::Edge<3> *>, carve::hash_pair> edges;
     std::unordered_map<const mesh::Face<3> *, size_t> face_map;
     poly->faces.reserve(n_faces);
 
@@ -936,18 +936,18 @@ namespace carve {
     }
 
     size_t n_edges = 0;
-    for (std::unordered_map<std::pair<size_t, size_t>, std::list<mesh::Edge<3> *> >::iterator i = edges.begin(); i != edges.end(); ++i) {
-      if ((*i).first.first < (*i).first.second || edges.find(std::make_pair((*i).first.second, (*i).first.first)) == edges.end()) {
+    for (auto& i : edges) {
+      if (i.first.first < i.first.second || edges.find(std::make_pair(i.first.second, i.first.first)) == edges.end()) {
         n_edges++;
       }
     }
 
     poly->edges.reserve(n_edges);
-    for (std::unordered_map<std::pair<size_t, size_t>, std::list<mesh::Edge<3> *> >::iterator i = edges.begin(); i != edges.end(); ++i) {
-      if ((*i).first.first < (*i).first.second ||
-          edges.find(std::make_pair((*i).first.second, (*i).first.first)) == edges.end()) {
-        poly->edges.push_back(edge_t(&poly->vertices[(*i).first.first],
-                                     &poly->vertices[(*i).first.second],
+    for (auto& i : edges) {
+      if (i.first.first < i.first.second ||
+          edges.find(std::make_pair(i.first.second, i.first.first)) == edges.end()) {
+        poly->edges.push_back(edge_t(&poly->vertices[i.first.first],
+                                     &poly->vertices[i.first.second],
                                      poly));
       }
     }

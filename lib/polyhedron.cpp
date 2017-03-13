@@ -43,8 +43,7 @@
 #include <algorithm>
 
 #include <carve/mesh.hpp>
-
-#include BOOST_INCLUDE(random.hpp)
+#include <random>
 
 namespace {
   bool emb_test(carve::poly::Polyhedron *poly,
@@ -247,7 +246,7 @@ namespace carve {
       manifold_is_closed.resize(meshset->meshes.size());
       manifold_is_negative.resize(meshset->meshes.size());
 
-      std::unordered_map<std::pair<size_t, size_t>, std::list<mesh::Edge<3> *> > edge_map;
+      std::unordered_map<std::pair<size_t, size_t>, std::list<mesh::Edge<3> *>, carve::hash_pair> edge_map;
 
       if (meshset->vertex_storage.size()) {
         mesh::Vertex<3> *Vbase = &meshset->vertex_storage[0];
@@ -267,17 +266,17 @@ namespace carve {
       }
 
       size_t n_edges = 0;
-      for (std::unordered_map<std::pair<size_t, size_t>, std::list<mesh::Edge<3> *> >::iterator i = edge_map.begin(); i != edge_map.end(); ++i) {
-        if ((*i).first.first < (*i).first.second || edge_map.find(std::make_pair((*i).first.second, (*i).first.first)) == edge_map.end()) {
+      for (auto& i : edge_map) {
+        if (i.first.first < i.first.second || edge_map.find(std::make_pair(i.first.second, i.first.first)) == edge_map.end()) {
           n_edges++;
         }
       }
 
       edges.clear();
       edges.reserve(n_edges);
-      for (std::unordered_map<std::pair<size_t, size_t>, std::list<mesh::Edge<3> *> >::iterator i = edge_map.begin(); i != edge_map.end(); ++i) {
-        if ((*i).first.first < (*i).first.second || edge_map.find(std::make_pair((*i).first.second, (*i).first.first)) == edge_map.end()) {
-          edges.push_back(edge_t(&vertices[(*i).first.first], &vertices[(*i).first.second], this));
+      for (auto& i : edge_map) {
+        if (i.first.first < i.first.second || edge_map.find(std::make_pair(i.first.second, i.first.first)) == edge_map.end()) {
+          edges.push_back(edge_t(&vertices[i.first.first], &vertices[i.first.second], this));
         }
       }
 
@@ -709,13 +708,12 @@ namespace carve {
 
       std::vector<std::pair<const face_t *, carve::geom3d::Vector> > manifold_intersections;
 
-      boost::mt19937 rng;
-      boost::uniform_on_sphere<double> distrib(3);
-      boost::variate_generator<boost::mt19937 &, boost::uniform_on_sphere<double> > gen(rng, distrib);
+      std::mt19937 rng;
+      std::normal_distribution<double> norm;
 
       for (;;) {
-        carve::geom3d::Vector ray_dir;
-        ray_dir = gen();
+        carve::geom3d::Vector ray_dir = geom::VECTOR(norm(rng), norm(rng), norm(rng));
+        ray_dir.normalize();
 
         carve::geom3d::Vector v2 = v + ray_dir * ray_len;
 

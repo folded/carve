@@ -1069,7 +1069,7 @@ namespace carve {
     template<unsigned ndim>
     void MeshSet<ndim>::separateMeshes() {
       size_t n;
-      typedef std::unordered_map<std::pair<mesh_t *, vertex_t *>, vertex_t *> vmap_t;
+      typedef std::unordered_map<std::pair<mesh_t *, vertex_t *>, vertex_t *, carve::hash_pair> vmap_t;
       vmap_t vmap;
       typename vmap_t::iterator vmap_iter;
 

@@ -58,7 +58,7 @@ namespace carve {
     // lib/intersect_classify_simple.cpp
     // lib/intersect_face_division.cpp lib/intersect_group.cpp
     // lib/intersect_half_classify_group.cpp
-    typedef std::unordered_set<V2> V2Set;
+    typedef std::unordered_set<V2, hash_pair> V2Set;
 
     // include/carve/csg.hpp include/carve/polyhedron_decl.hpp
     // lib/csg_collector.cpp lib/intersect.cpp

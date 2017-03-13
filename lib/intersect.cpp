@@ -315,7 +315,7 @@ namespace {
                              face_set_t &faces) {
     carve::csg::detail::VEVecMap::const_iterator vi = ve.find(v);
     if (vi != ve.end()) {
-      for (carve::csg::detail::VEVecMap::data_type::const_iterator i = (*vi).second.begin(); i != (*vi).second.end(); ++i) {
+      for (carve::csg::detail::VEVecMap::mapped_type::const_iterator i = (*vi).second.begin(); i != (*vi).second.end(); ++i) {
         faces.insert((*i)->face);
       }
     }
@@ -648,7 +648,7 @@ void carve::csg::CSG::intersectingFacePairs(detail::Data &data) {
     detail::VFSMap::mapped_type src_face_set;
     detail::VFSMap::mapped_type tgt_face_set;
     // for all pairs of intersecting objects at this point
-    for (VertexIntersections::data_type::const_iterator j = (*i).second.begin(), je = (*i).second.end(); j != je; ++j) {
+    for (VertexIntersections::mapped_type::const_iterator j = (*i).second.begin(), je = (*i).second.end(); j != je; ++j) {
       const IObj &i_src = ((*j).first);
       const IObj &i_tgt = ((*j).second);
 
@@ -1231,7 +1231,7 @@ static void checkFaceLoopIntegrity(carve::csg::FaceLoopList &fll) {
   static carve::TimingName FUNC_NAME("CSG::checkFaceLoopIntegrity()");
   carve::TimingBlock block(FUNC_NAME);
 
-  std::unordered_map<carve::csg::V2, int> counts;
+  std::unordered_map<carve::csg::V2, int, carve::hash_pair> counts;
   for (carve::csg::FaceLoop *fl = fll.head; fl; fl = fl->next) {
     std::vector<carve::mesh::MeshSet<3>::vertex_t *> &loop = (fl->vertices);
     carve::mesh::MeshSet<3>::vertex_t *v1, *v2;
@@ -1246,10 +1246,9 @@ static void checkFaceLoopIntegrity(carve::csg::FaceLoopList &fll) {
       v1 = v2;
     }
   }
-  for (std::unordered_map<carve::csg::V2, int>::const_iterator
-         x = counts.begin(), xe = counts.end(); x != xe; ++x) {
-    if ((*x).second) {
-      std::cerr << "FACE LOOP ERROR: " << (*x).first.first << "-" << (*x).first.second << " : " << (*x).second << std::endl;
+  for (auto& x : counts) {
+    if (x.second) {
+      std::cerr << "FACE LOOP ERROR: " << x.first.first << "-" << x.first.second << " : " << x.second << std::endl;
     }
   }
 }

@@ -37,22 +37,14 @@
 using namespace carve::geom;
 using namespace carve::geom3d;
 
-#include BOOST_INCLUDE(random.hpp)
+#include <random>
 
-uint32_t getseed() {
-#if defined(__APPLE__)
-  srandomdev();
-#endif
-  return random();
-}
-
-boost::mt19937 rng(getseed());
-boost::uniform_on_sphere<double> distrib(3);
-boost::variate_generator<boost::mt19937 &, boost::uniform_on_sphere<double> > gen(rng, distrib);
+std::mt19937 rng;
+std::normal_distribution<double> norm;
 
 Vector randomUnitVector() {
-  Vector vec;
-  vec = gen();
+  Vector vec = VECTOR(norm(rng), norm(rng), norm(rng));
+  vec.normalize();
   return vec;
 }
 

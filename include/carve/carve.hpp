@@ -40,15 +40,11 @@
 #  include <carve/gnu_cxx.h>
 #endif
 
-#if defined(CARVE_SYSTEM_BOOST)
-#  define BOOST_INCLUDE(x) <boost/x>
-#else
-#  define BOOST_INCLUDE(x) <carve/external/boost/x>
-#endif
-
 #include <math.h>
 
 #include <string>
+#include <unordered_set>
+#include <unordered_map>
 #include <set>
 #include <map>
 #include <vector>
@@ -179,6 +175,17 @@ namespace carve {
     typedef T argument_type;
     typedef T result_type;
     const T &operator()(const T &t) const { return t; }
+  };
+
+
+
+  struct hash_pair {
+    template<typename pair_t>
+    size_t operator()(const pair_t& pair) const {
+      size_t r = std::hash<typename pair_t::first_type>{}(pair.first);
+      size_t s = std::hash<typename pair_t::second_type>()(pair.second);
+      return r ^ ((s >> 16) | (s << 16));
+    }
   };
 
 

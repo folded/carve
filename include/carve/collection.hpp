@@ -25,8 +25,6 @@
 
 #pragma once
 
-#include <carve/collection/unordered.hpp>
-
 namespace carve {
 
   template<typename set_t>

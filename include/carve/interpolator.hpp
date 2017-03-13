@@ -279,14 +279,8 @@ namespace carve {
       typedef std::pair<const meshset_t::face_t *, unsigned> key_t;
 
     protected:
-      struct key_hash {
-        size_t operator()(const key_t &v) const {
-          return size_t(v.first) ^ size_t(v.second);
-        }
-      };
-
       typedef std::unordered_map<const meshset_t::vertex_t *, attr_t> attrvmap_t;
-      typedef std::unordered_map<key_t, attr_t, key_hash> attrmap_t;
+      typedef std::unordered_map<key_t, attr_t, carve::hash_pair> attrmap_t;
 
       attrmap_t attrs;
 
@@ -358,19 +352,8 @@ namespace carve {
     protected:
       typedef std::pair<const meshset_t::vertex_t *, const meshset_t::vertex_t *> vpair_t;
 
-      struct key_hash {
-        size_t operator()(const key_t &v) const {
-          return size_t(v.first) ^ size_t(v.second);
-        }
-      };
-      struct vpair_hash {
-        size_t operator()(const vpair_t &v) const {
-          return size_t(v.first) ^ size_t(v.second);
-        }
-      };
-
-      typedef std::unordered_map<key_t, attr_t, key_hash> attrmap_t;
-      typedef std::unordered_map<vpair_t, key_t, vpair_hash> edgedivmap_t;
+      typedef std::unordered_map<key_t, attr_t, carve::hash_pair> attrmap_t;
+      typedef std::unordered_map<vpair_t, key_t, carve::hash_pair> edgedivmap_t;
 
       attrmap_t attrs;
       edgedivmap_t edgediv;

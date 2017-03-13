@@ -46,7 +46,7 @@
 
 #include <time.h>
 
-#include BOOST_INCLUDE(random.hpp)
+#include <random>
 
 struct TestScene : public Scene {
   GLuint draw_list_base;
@@ -82,20 +82,12 @@ struct TestScene : public Scene {
   }
 };
 
-uint32_t getseed() {
-#if defined(__APPLE__)
-    srandomdev();
-#endif
-      return random();
-}
+std::mt19937 rng;
+std::normal_distribution<double> norm;
 
-boost::mt19937 rng(getseed());
-boost::uniform_on_sphere<double> distrib(3);
-boost::variate_generator<boost::mt19937 &, boost::uniform_on_sphere<double> > gen(rng, distrib);
-
-carve::geom::vector<3> randomUnitVector() {
-  carve::geom::vector<3> vec;
-  vec = gen();
+carve::geom3d::Vector randomUnitVector() {
+  carve::geom3d::Vector vec = carve::geom::VECTOR(norm(rng), norm(rng), norm(rng));
+  vec.normalize();
   return vec;
 }
 

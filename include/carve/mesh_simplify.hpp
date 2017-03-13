@@ -1285,8 +1285,7 @@ namespace carve {
             open.erase(open.begin());
             face_set.insert(curr);
             axes |= axis_influence[curr];
-            for (interaction_graph_t::data_type::iterator i = interacting_faces[curr].begin(), e = interacting_faces[curr].end(); i != e; ++i) {
-              face_t *f = *i;
+            for (face_t* f : interacting_faces[curr]) {
               if (face_set.find(f) != face_set.end()) continue;
               open.insert(f);
             }
