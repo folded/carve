@@ -36,8 +36,6 @@
 
 #if defined(WIN32)
 #  include <carve/win32.h>
-#elif defined(__GNUC__)
-#  include <carve/gnu_cxx.h>
 #endif
 
 #include <math.h>
