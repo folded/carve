@@ -22,21 +22,21 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #if defined(HAVE_CONFIG_H)
-#  include <carve_config.h>
+#include <carve_config.h>
 #endif
 
 #include <carve/aabb.hpp>
 #include <carve/geom3d.hpp>
 
-#include <iostream>
-#include <fstream>
-#include <string>
 #include <cstring>
+#include <fstream>
+#include <iostream>
+#include <string>
 
-int main(int argc, char **argv) {
-  carve::geom3d::AABB aabb(carve::geom::VECTOR(0,0,0), carve::geom::VECTOR(1,1,1));
+int main(int argc, char** argv) {
+  carve::geom3d::AABB aabb(carve::geom::VECTOR(0, 0, 0),
+                           carve::geom::VECTOR(1, 1, 1));
 
   std::ifstream in("aabb.test");
   while (in.good()) {
@@ -49,11 +49,8 @@ int main(int argc, char **argv) {
     std::string line;
 
     std::getline(in, line);
-    sscanf(line.c_str(),
-           "<%lf,%lf,%lf>\t<%lf,%lf,%lf>\t%s\t%s",
-           &x1, &y1, &z1,
-           &x2, &y2, &z2,
-           ray_intersects, lineseg_intersects);
+    sscanf(line.c_str(), "<%lf,%lf,%lf>\t<%lf,%lf,%lf>\t%s\t%s", &x1, &y1, &z1,
+           &x2, &y2, &z2, ray_intersects, lineseg_intersects);
 
     carve::geom3d::Vector v1 = carve::geom::VECTOR(x1, y1, z1);
     carve::geom3d::Vector v2 = carve::geom::VECTOR(x2, y2, z2);

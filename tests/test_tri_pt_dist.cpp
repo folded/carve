@@ -22,27 +22,26 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #if defined(HAVE_CONFIG_H)
-#  include <carve_config.h>
+#include <carve_config.h>
 #endif
 
 #include <carve/csg.hpp>
 #include <carve/csg_triangulator.hpp>
 
-#include "scene.hpp"
+#include <carve/input.hpp>
 #include "geom_draw.hpp"
 #include "geometry.hpp"
-#include <carve/input.hpp>
+#include "scene.hpp"
 
 #include <gloop/gl.hpp>
 #include <gloop/glu.hpp>
 #include <gloop/glut.hpp>
 
 #include <fstream>
+#include <set>
 #include <string>
 #include <utility>
-#include <set>
 
 #include <time.h>
 
@@ -53,8 +52,8 @@ struct TestScene : public Scene {
   std::vector<bool> draw_flags;
 
   virtual bool key(unsigned char k, int x, int y) {
-    const char *t;
-    static const char *l = "1234567890!@#$%^&*()";
+    const char* t;
+    static const char* l = "1234567890!@#$%^&*()";
     t = strchr(l, k);
     if (t != NULL) {
       int layer = t - l;
@@ -71,28 +70,27 @@ struct TestScene : public Scene {
     }
   }
 
-  TestScene(int argc, char **argv, int n_dlist) : Scene(argc, argv) {
+  TestScene(int argc, char** argv, int n_dlist) : Scene(argc, argv) {
     draw_list_base = glGenLists(n_dlist);
 
     draw_flags.resize(n_dlist, false);
   }
 
-  virtual ~TestScene() {
-    glDeleteLists(draw_list_base, draw_flags.size());
-  }
+  virtual ~TestScene() { glDeleteLists(draw_list_base, draw_flags.size()); }
 };
 
 std::mt19937 rng;
 std::normal_distribution<double> norm;
 
 carve::geom3d::Vector randomUnitVector() {
-  carve::geom3d::Vector vec = carve::geom::VECTOR(norm(rng), norm(rng), norm(rng));
+  carve::geom3d::Vector vec =
+      carve::geom::VECTOR(norm(rng), norm(rng), norm(rng));
   vec.normalize();
   return vec;
 }
 
-int main(int argc, char **argv) {
-  TestScene *scene = new TestScene(argc, argv, 1);
+int main(int argc, char** argv) {
+  TestScene* scene = new TestScene(argc, argv, 1);
 
   glNewList(scene->draw_list_base + 0, GL_COMPILE);
 
@@ -103,10 +101,8 @@ int main(int argc, char **argv) {
   glEnable(GL_LIGHTING);
   glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-  carve::geom::tri<3> tri(
-    randomUnitVector() * 10.0,
-    randomUnitVector() * 10.0,
-    randomUnitVector() * 10.0);
+  carve::geom::tri<3> tri(randomUnitVector() * 10.0, randomUnitVector() * 10.0,
+                          randomUnitVector() * 10.0);
 
   carve::geom::vector<3> p = randomUnitVector() * 20.0;
   carve::geom::vector<3> tp = carve::geom::closestPoint(tri, p);

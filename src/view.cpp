@@ -22,31 +22,30 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #if defined(HAVE_CONFIG_H)
-#  include <carve_config.h>
+#include <carve_config.h>
 #endif
 
 #include <carve/carve.hpp>
+#include <carve/pointset.hpp>
 #include <carve/poly.hpp>
 #include <carve/polyline.hpp>
-#include <carve/pointset.hpp>
 #include <carve/rtree.hpp>
 
 #include "geom_draw.hpp"
+#include "opts.hpp"
 #include "read_ply.hpp"
 #include "scene.hpp"
-#include "opts.hpp"
 
 #include <gloop/gl.hpp>
 #include <gloop/glu.hpp>
 #include <gloop/glut.hpp>
 
+#include <algorithm>
 #include <fstream>
+#include <set>
 #include <string>
 #include <utility>
-#include <set>
-#include <algorithm>
 
 #include <time.h>
 
@@ -59,19 +58,38 @@ struct Options : public opt::Parser {
   bool vtk;
   std::vector<std::string> files;
 
-  virtual void optval(const std::string &o, const std::string &v) {
-    if (o == "--obj"          || o == "-O") { obj = true; return; }
-    if (o == "--vtk"          || o == "-V") { vtk = true; return; }
-    if (o == "--no-wireframe" || o == "-n") { wireframe = false; return; }
-    if (o == "--no-fit"       || o == "-f") { fit = false; return; }
-    if (o == "--no-normals"   || o == "-N") { normal = false; return; }
-    if (o == "--no-edgeconn"  || o == "-E") { edgeconn = false; return; }
-    if (o == "--help"         || o == "-h") { help(std::cout); exit(0); }
+  virtual void optval(const std::string& o, const std::string& v) {
+    if (o == "--obj" || o == "-O") {
+      obj = true;
+      return;
+    }
+    if (o == "--vtk" || o == "-V") {
+      vtk = true;
+      return;
+    }
+    if (o == "--no-wireframe" || o == "-n") {
+      wireframe = false;
+      return;
+    }
+    if (o == "--no-fit" || o == "-f") {
+      fit = false;
+      return;
+    }
+    if (o == "--no-normals" || o == "-N") {
+      normal = false;
+      return;
+    }
+    if (o == "--no-edgeconn" || o == "-E") {
+      edgeconn = false;
+      return;
+    }
+    if (o == "--help" || o == "-h") {
+      help(std::cout);
+      exit(0);
+    }
   }
 
-  virtual void arg(const std::string &a) {
-    files.push_back(a);
-  }
+  virtual void arg(const std::string& a) { files.push_back(a); }
 
   Options() {
     obj = false;
@@ -81,46 +99,41 @@ struct Options : public opt::Parser {
     normal = true;
     edgeconn = true;
 
-    option("obj",          'O', false, "Read input in .obj format.");
-    option("vtk",          'V', false, "Read input in .vtk format.");
+    option("obj", 'O', false, "Read input in .obj format.");
+    option("vtk", 'V', false, "Read input in .vtk format.");
     option("no-wireframe", 'n', false, "Don't display wireframes.");
-    option("no-fit",       'f', false, "Don't scale/translate for viewing.");
-    option("no-normals",   'N', false, "Don't display normals.");
-    option("no-edgeconn",  'E', false, "Don't display edge connections.");
-    option("help",         'h', false, "This help message.");
+    option("no-fit", 'f', false, "Don't scale/translate for viewing.");
+    option("no-normals", 'N', false, "Don't display normals.");
+    option("no-edgeconn", 'E', false, "Don't display edge connections.");
+    option("help", 'h', false, "This help message.");
   }
 };
 
-
-
 static Options options;
 
+bool odd(int x, int y, int z) { return ((x + y + z) & 1) == 1; }
 
-
-bool odd(int x, int y, int z) {
-  return ((x + y + z) & 1) == 1;
-}
-
-bool even(int x, int y, int z) {
-  return ((x + y + z) & 1) == 0;
-}
+bool even(int x, int y, int z) { return ((x + y + z) & 1) == 0; }
 
 #undef min
 #undef max
 
-template<typename data_t>
-size_t _treeDepth(carve::geom::RTreeNode<3, data_t> *rtree_node) {
+template <typename data_t>
+size_t _treeDepth(carve::geom::RTreeNode<3, data_t>* rtree_node) {
   size_t t = 0;
-  for (carve::geom::RTreeNode<3, data_t> *child = rtree_node->child; child != NULL; child = child->sibling) {
+  for (carve::geom::RTreeNode<3, data_t>* child = rtree_node->child;
+       child != NULL; child = child->sibling) {
     t = std::max(t, _treeDepth(child));
   }
   return t + 1;
 }
 
-template<typename data_t>
-void _drawNode(carve::geom::RTreeNode<3, data_t> *rtree_node, size_t depth, size_t depth_max) {
-  for (carve::geom::RTreeNode<3, data_t> *child = rtree_node->child; child != NULL; child = child->sibling) {
-    _drawNode(child, depth+1, depth_max);
+template <typename data_t>
+void _drawNode(carve::geom::RTreeNode<3, data_t>* rtree_node, size_t depth,
+               size_t depth_max) {
+  for (carve::geom::RTreeNode<3, data_t>* child = rtree_node->child;
+       child != NULL; child = child->sibling) {
+    _drawNode(child, depth + 1, depth_max);
   }
 
   float r = depth / float(depth_max);
@@ -129,7 +142,7 @@ void _drawNode(carve::geom::RTreeNode<3, data_t> *rtree_node, size_t depth, size
   float V = .2 + r * .8;
   cRGB col;
 
-  col = HSV2RGB(H, S, V/2);
+  col = HSV2RGB(H, S, V / 2);
   glColor4f(col.r, col.g, col.b, .1 + r * .5);
   glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   drawCube(rtree_node->bbox.min(), rtree_node->bbox.max());
@@ -140,8 +153,8 @@ void _drawNode(carve::geom::RTreeNode<3, data_t> *rtree_node, size_t depth, size
   // drawCube(rtree_node->aabb.min(), rtree_node->aabb.max());
 }
 
-template<typename data_t>
-void drawTree(carve::geom::RTreeNode<3, data_t> *rtree_node) {
+template <typename data_t>
+void drawTree(carve::geom::RTreeNode<3, data_t>* rtree_node) {
   glDisable(GL_LIGHTING);
   glDisable(GL_CULL_FACE);
   glDepthMask(GL_FALSE);
@@ -155,12 +168,10 @@ void drawTree(carve::geom::RTreeNode<3, data_t> *rtree_node) {
   glEnable(GL_LIGHTING);
 }
 
-GLuint genSceneDisplayList(std::vector<carve::mesh::MeshSet<3> *> &polys,
-                           std::vector<carve::line::PolylineSet *> &lines,
-                           std::vector<carve::point::PointSet *> &points,
-                           size_t *listSize,
-                           std::vector<bool> &is_wireframe) {
-
+GLuint genSceneDisplayList(std::vector<carve::mesh::MeshSet<3>*>& polys,
+                           std::vector<carve::line::PolylineSet*>& lines,
+                           std::vector<carve::point::PointSet*>& points,
+                           size_t* listSize, std::vector<bool>& is_wireframe) {
   int n = 0;
   int N = 1;
 
@@ -168,7 +179,8 @@ GLuint genSceneDisplayList(std::vector<carve::mesh::MeshSet<3> *> &polys,
 
   if (options.wireframe) N = 2;
 
-  for (size_t p = 0; p < polys.size(); ++p) n += polys[p]->meshes.size() * N + 1;
+  for (size_t p = 0; p < polys.size(); ++p)
+    n += polys[p]->meshes.size() * N + 1;
   for (size_t p = 0; p < lines.size(); ++p) n += lines[p]->lines.size() * 2;
   n += points.size();
 
@@ -198,14 +210,14 @@ GLuint genSceneDisplayList(std::vector<carve::mesh::MeshSet<3> *> &polys,
     g_translation = -aabb.pos;
     g_scale = scale_fac;
   } else {
-    g_translation = carve::geom::VECTOR(0.0,0.0,0.0);
+    g_translation = carve::geom::VECTOR(0.0, 0.0, 0.0);
     g_scale = 1.0;
   }
 
   unsigned list_num = 0;
 
   for (size_t p = 0; p < polys.size(); ++p) {
-    carve::mesh::MeshSet<3> *poly = polys[p];
+    carve::mesh::MeshSet<3>* poly = polys[p];
     glEnable(GL_CULL_FACE);
     for (unsigned i = 0; i < poly->meshes.size(); i++) {
       if (!poly->meshes[i]->isClosed()) {
@@ -247,9 +259,11 @@ GLuint genSceneDisplayList(std::vector<carve::mesh::MeshSet<3> *> &polys,
       }
     }
 
-    typedef carve::geom::RTreeNode<3, carve::mesh::Face<3> *> face_rtree_t;
-    face_rtree_t *tree = face_rtree_t::construct_STR(poly->faceBegin(), poly->faceEnd(), 4, 4);
-    // face_rtree_t *tree = face_rtree_t::construct_TGS(poly->faceBegin(), poly->faceEnd(), 50, 4);
+    typedef carve::geom::RTreeNode<3, carve::mesh::Face<3>*> face_rtree_t;
+    face_rtree_t* tree =
+        face_rtree_t::construct_STR(poly->faceBegin(), poly->faceEnd(), 4, 4);
+    // face_rtree_t *tree = face_rtree_t::construct_TGS(poly->faceBegin(),
+    // poly->faceEnd(), 50, 4);
     is_wireframe[list_num] = true;
     glNewList(dlist + list_num++, GL_COMPILE);
     // drawTree(tree);
@@ -258,14 +272,16 @@ GLuint genSceneDisplayList(std::vector<carve::mesh::MeshSet<3> *> &polys,
   }
 
   for (size_t l = 0; l < lines.size(); ++l) {
-    carve::line::PolylineSet *line = lines[l];
+    carve::line::PolylineSet* line = lines[l];
 
-    for (carve::line::PolylineSet::line_iter i = line->lines.begin(); i != line->lines.end(); ++i) {
+    for (carve::line::PolylineSet::line_iter i = line->lines.begin();
+         i != line->lines.end(); ++i) {
       is_wireframe[list_num] = false;
       glNewList(dlist + list_num++, GL_COMPILE);
       glBegin((*i)->isClosed() ? GL_LINE_LOOP : GL_LINE_STRIP);
       glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-      for (carve::line::polyline_vertex_iter j = (*i)->vbegin(); j != (*i)->vend(); ++j) {
+      for (carve::line::polyline_vertex_iter j = (*i)->vbegin();
+           j != (*i)->vend(); ++j) {
         carve::geom3d::Vector v = (*j)->v;
         glVertex3f(g_scale * (v.x + g_translation.x),
                    g_scale * (v.y + g_translation.y),
@@ -278,7 +294,8 @@ GLuint genSceneDisplayList(std::vector<carve::mesh::MeshSet<3> *> &polys,
       glPointSize(4.0);
       glColor4f(1.0f, 1.0f, 0.0f, 1.0f);
       glBegin(GL_POINTS);
-      for (carve::line::polyline_vertex_iter j = (*i)->vbegin(); j != (*i)->vend(); ++j) {
+      for (carve::line::polyline_vertex_iter j = (*i)->vbegin();
+           j != (*i)->vend(); ++j) {
         carve::geom3d::Vector v = (*j)->v;
         glVertex3f(g_scale * (v.x + g_translation.x),
                    g_scale * (v.y + g_translation.y),
@@ -290,7 +307,7 @@ GLuint genSceneDisplayList(std::vector<carve::mesh::MeshSet<3> *> &polys,
   }
 
   for (size_t l = 0; l < points.size(); ++l) {
-    carve::point::PointSet *point = points[l];
+    carve::point::PointSet* point = points[l];
 
     is_wireframe[list_num] = false;
     glNewList(dlist + list_num++, GL_COMPILE);
@@ -316,8 +333,8 @@ struct TestScene : public Scene {
   std::vector<bool> is_wireframe;
 
   virtual bool key(unsigned char k, int x, int y) {
-    const char *t;
-    static const char *l = "1234567890!@#$%^&*()";
+    const char* t;
+    static const char* l = "1234567890!@#$%^&*()";
     if (k == '\\') {
       for (unsigned i = 1; i < draw_flags.size(); i += 2) {
         draw_flags[i] = !draw_flags[i];
@@ -372,25 +389,23 @@ struct TestScene : public Scene {
     glLoadMatrixf(proj);
   }
 
-  TestScene(int argc, char **argv, int n_dlist) : Scene(argc, argv) {
+  TestScene(int argc, char** argv, int n_dlist) : Scene(argc, argv) {
     draw_list_base = 0;
   }
 
-  virtual ~TestScene() {
-    glDeleteLists(draw_list_base, draw_flags.size());
-  }
+  virtual ~TestScene() { glDeleteLists(draw_list_base, draw_flags.size()); }
 };
 
-int main(int argc, char **argv) {
-  TestScene *scene = new TestScene(argc, argv, std::min(1, argc - 1));
+int main(int argc, char** argv) {
+  TestScene* scene = new TestScene(argc, argv, std::min(1, argc - 1));
   options.parse(argc, argv);
 
   size_t count = 0;
 
   carve::input::Input inputs;
-  std::vector<carve::mesh::MeshSet<3> *> polys;
-  std::vector<carve::line::PolylineSet *> lines;
-  std::vector<carve::point::PointSet *> points;
+  std::vector<carve::mesh::MeshSet<3>*> polys;
+  std::vector<carve::line::PolylineSet*> lines;
+  std::vector<carve::point::PointSet*> points;
 
   if (options.files.size() == 0) {
     if (options.obj) {
@@ -403,7 +418,7 @@ int main(int argc, char **argv) {
 
   } else {
     for (size_t idx = 0; idx < options.files.size(); ++idx) {
-      std::string &s(options.files[idx]);
+      std::string& s(options.files[idx]);
       std::string::size_type i = s.rfind(".");
 
       if (i != std::string::npos) {
@@ -421,18 +436,21 @@ int main(int argc, char **argv) {
     }
   }
 
-  for (std::list<carve::input::Data *>::const_iterator i = inputs.input.begin(); i != inputs.input.end(); ++i) {
-    carve::mesh::MeshSet<3> *p;
-    carve::point::PointSet *ps;
-    carve::line::PolylineSet *l;
+  for (std::list<carve::input::Data*>::const_iterator i = inputs.input.begin();
+       i != inputs.input.end(); ++i) {
+    carve::mesh::MeshSet<3>* p;
+    carve::point::PointSet* ps;
+    carve::line::PolylineSet* l;
 
-    if ((p = carve::input::Input::create<carve::mesh::MeshSet<3> >(*i, carve::input::opts("avoid_cavities", "true"))) != NULL)  {
+    if ((p = carve::input::Input::create<carve::mesh::MeshSet<3> >(
+             *i, carve::input::opts("avoid_cavities", "true"))) != NULL) {
       polys.push_back(p);
-      std::cerr << "loaded polyhedron "
-                << polys.back() << " has " << polys.back()->meshes.size()
-                << " manifolds (" << std::count_if(polys.back()->meshes.begin(),
-                                                   polys.back()->meshes.end(),
-                                                   carve::mesh::Mesh<3>::IsClosed()) << " closed)" << std::endl; 
+      std::cerr << "loaded polyhedron " << polys.back() << " has "
+                << polys.back()->meshes.size() << " manifolds ("
+                << std::count_if(polys.back()->meshes.begin(),
+                                 polys.back()->meshes.end(),
+                                 carve::mesh::Mesh<3>::IsClosed())
+                << " closed)" << std::endl;
 
       std::cerr << "closed:    ";
       for (size_t i = 0; i < polys.back()->meshes.size(); ++i) {
@@ -446,18 +464,19 @@ int main(int argc, char **argv) {
       }
       std::cerr << std::endl;
 
-    } else if ((l = carve::input::Input::create<carve::line::PolylineSet>(*i)) != NULL)  {
+    } else if ((l = carve::input::Input::create<carve::line::PolylineSet>(
+                    *i)) != NULL) {
       lines.push_back(l);
-      std::cerr << "loaded polyline set "
-                << lines.back() << std::endl; 
-    } else if ((ps = carve::input::Input::create<carve::point::PointSet>(*i)) != NULL)  {
+      std::cerr << "loaded polyline set " << lines.back() << std::endl;
+    } else if ((ps = carve::input::Input::create<carve::point::PointSet>(*i)) !=
+               NULL) {
       points.push_back(ps);
-      std::cerr << "loaded point set "
-                << points.back() << std::endl; 
+      std::cerr << "loaded point set " << points.back() << std::endl;
     }
   }
 
-  scene->draw_list_base = genSceneDisplayList(polys, lines, points, &count, scene->is_wireframe);
+  scene->draw_list_base =
+      genSceneDisplayList(polys, lines, points, &count, scene->is_wireframe);
   scene->draw_flags.assign(count, true);
 
   scene->run();

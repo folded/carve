@@ -22,68 +22,70 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #if defined(HAVE_CONFIG_H)
-#  include <carve_config.h>
+#include <carve_config.h>
 #endif
 
 #include <carve/geom2d.hpp>
-#include <carve/poly.hpp>
 #include <carve/input.hpp>
-#include <carve/triangulator.hpp>
 #include <carve/matrix.hpp>
+#include <carve/poly.hpp>
+#include <carve/triangulator.hpp>
 
 #include <fstream>
 #include <sstream>
 
 #include "write_ply.hpp"
 
-#include <iostream>
 #include <cctype>
+#include <iostream>
 #include <stdexcept>
 
-template<unsigned ndim>
-carve::geom::vector<ndim> lerp(
-    double t,
-    const carve::geom::vector<ndim> &p1,
-    const carve::geom::vector<ndim> &p2) {
-  return (1-t)*p1 + t*p2;
+template <unsigned ndim>
+carve::geom::vector<ndim> lerp(double t, const carve::geom::vector<ndim>& p1,
+                               const carve::geom::vector<ndim>& p2) {
+  return (1 - t) * p1 + t * p2;
 }
 
-template<unsigned ndim>
+template <unsigned ndim>
 class cubic_bezier {
-
-public:
+ public:
   typedef carve::geom::vector<ndim> vec_t;
   typedef cubic_bezier<ndim> cubic_bezier_t;
 
   vec_t p[4];
 
-  cubic_bezier() {
+  cubic_bezier() {}
+
+  cubic_bezier(const vec_t& p1, const vec_t& p2, const vec_t& p3,
+               const vec_t& p4) {
+    p[0] = p1;
+    p[1] = p2;
+    p[2] = p3;
+    p[3] = p4;
   }
 
-  cubic_bezier(const vec_t &p1, const vec_t &p2, const vec_t &p3, const vec_t &p4) {
-    p[0] = p1; p[1] = p2; p[2] = p3; p[3] = p4;
-  }
-
-  template<typename iter_t>
+  template <typename iter_t>
   cubic_bezier(iter_t begin, iter_t end) {
     if (std::distance(begin, end) != 4) throw std::runtime_error("failed");
     std::copy(begin, end, p);
   }
 
   vec_t eval(double t) const {
-    double u = 1-t;
-    return u*u*u*p[0] + 3*t*u*u*p[1] + 3*t*t*u*p[2] + t*t*t*p[3];
+    double u = 1 - t;
+    return u * u * u * p[0] + 3 * t * u * u * p[1] + 3 * t * t * u * p[2] +
+           t * t * t * p[3];
   }
 
   double flatness() const {
     carve::geom::ray<ndim> ray = carve::geom::rayThrough(p[0], p[3]);
-    return sqrt(std::max(carve::geom::distance2(ray, p[1]), carve::geom::distance2(ray, p[2])));
+    return sqrt(std::max(carve::geom::distance2(ray, p[1]),
+                         carve::geom::distance2(ray, p[2])));
   }
 
-  void split(double t, cubic_bezier_t &a, cubic_bezier_t &b) const {
-    a.p[0] = p[0]; b.p[3] = p[3];
+  void split(double t, cubic_bezier_t& a, cubic_bezier_t& b) const {
+    a.p[0] = p[0];
+    b.p[3] = p[3];
     a.p[1] = lerp(t, p[0], p[1]);
     vec_t m = lerp(t, p[1], p[2]);
     b.p[2] = lerp(t, p[2], p[3]);
@@ -92,7 +94,7 @@ public:
     a.p[3] = b.p[0] = lerp(t, a.p[2], b.p[1]);
   }
 
-  void approximateSimple(std::vector<vec_t> &out, double max_flatness) const {
+  void approximateSimple(std::vector<vec_t>& out, double max_flatness) const {
     double f = flatness();
     if (f < max_flatness) {
       out.push_back(p[3]);
@@ -104,7 +106,8 @@ public:
     }
   }
 
-  void approximate(std::vector<vec_t> &out, double max_flatness, unsigned n_tests = 128) const {
+  void approximate(std::vector<vec_t>& out, double max_flatness,
+                   unsigned n_tests = 128) const {
     double f = flatness();
     if (f < max_flatness) {
       out.push_back(p[3]);
@@ -128,27 +131,31 @@ public:
   }
 };
 
-template<unsigned ndim>
-cubic_bezier<ndim> make_bezier(
-    const carve::geom::vector<ndim> &p1,
-    const carve::geom::vector<ndim> &p2,
-    const carve::geom::vector<ndim> &p3,
-    const carve::geom::vector<ndim> &p4) {
+template <unsigned ndim>
+cubic_bezier<ndim> make_bezier(const carve::geom::vector<ndim>& p1,
+                               const carve::geom::vector<ndim>& p2,
+                               const carve::geom::vector<ndim>& p3,
+                               const carve::geom::vector<ndim>& p4) {
   return cubic_bezier<ndim>(p1, p2, p3, p4);
 }
 
-void consume(std::istream &in, char ch) {
+void consume(std::istream& in, char ch) {
   while (in.good()) {
     int c;
     c = in.peek();
     if (in.eof()) return;
-    if (std::isspace(c)) { in.ignore(); continue; }
-    if (c == ch) { in.ignore(); }
+    if (std::isspace(c)) {
+      in.ignore();
+      continue;
+    }
+    if (c == ch) {
+      in.ignore();
+    }
     return;
   }
 }
 
-void readVals(std::istream &in, std::vector<double> &vals) {
+void readVals(std::istream& in, std::vector<double>& vals) {
   while (in.good()) {
     int c;
 
@@ -180,17 +187,19 @@ void readVals(std::istream &in, std::vector<double> &vals) {
   }
 }
 
-void add(std::vector<carve::geom2d::P2> &points, carve::geom2d::P2 p) {
+void add(std::vector<carve::geom2d::P2>& points, carve::geom2d::P2 p) {
   if (!points.size() || points.back() != p) {
     points.push_back(p);
   }
 }
 
-void add(std::vector<carve::geom2d::P2> &points, const cubic_bezier<2> &bezier) {
+void add(std::vector<carve::geom2d::P2>& points,
+         const cubic_bezier<2>& bezier) {
   bezier.approximate(points, .05);
 }
 
-void parsePath(std::istream &in, std::vector<std::vector<carve::geom2d::P2> > &paths) {
+void parsePath(std::istream& in,
+               std::vector<std::vector<carve::geom2d::P2> >& paths) {
   carve::geom2d::P2 curr, curr_ctrl;
 
   std::string pathname;
@@ -199,7 +208,7 @@ void parsePath(std::istream &in, std::vector<std::vector<carve::geom2d::P2> > &p
   std::cerr << "parsing: [" << pathname << "]" << std::endl;
 
   std::vector<double> vals;
-  
+
   std::vector<carve::geom2d::P2> points;
   while (in.good()) {
     char c;
@@ -215,7 +224,7 @@ void parsePath(std::istream &in, std::vector<std::vector<carve::geom2d::P2> > &p
         readVals(in, vals);
         points.clear();
         for (unsigned i = 0; i < vals.size(); i += 2) {
-          curr = carve::geom::VECTOR(vals[i], vals[i+1]);
+          curr = carve::geom::VECTOR(vals[i], vals[i + 1]);
           add(points, curr);
         }
         curr_ctrl = curr;
@@ -226,7 +235,7 @@ void parsePath(std::istream &in, std::vector<std::vector<carve::geom2d::P2> > &p
         points.clear();
         curr = carve::geom::VECTOR(0.0, 0.0);
         for (unsigned i = 0; i < vals.size(); i += 2) {
-          curr += carve::geom::VECTOR(vals[i], vals[i+1]);
+          curr += carve::geom::VECTOR(vals[i], vals[i + 1]);
           add(points, curr);
         }
         curr_ctrl = curr;
@@ -235,7 +244,7 @@ void parsePath(std::istream &in, std::vector<std::vector<carve::geom2d::P2> > &p
       case 'L': {
         readVals(in, vals);
         for (unsigned i = 0; i < vals.size(); i += 2) {
-          curr = carve::geom::VECTOR(vals[i], vals[i+1]);
+          curr = carve::geom::VECTOR(vals[i], vals[i + 1]);
           add(points, curr);
         }
         curr_ctrl = curr;
@@ -244,7 +253,7 @@ void parsePath(std::istream &in, std::vector<std::vector<carve::geom2d::P2> > &p
       case 'l': {
         readVals(in, vals);
         for (unsigned i = 0; i < vals.size(); i += 2) {
-          curr += carve::geom::VECTOR(vals[i], vals[i+1]);
+          curr += carve::geom::VECTOR(vals[i], vals[i + 1]);
           add(points, curr);
         }
         curr_ctrl = curr;
@@ -290,8 +299,8 @@ void parsePath(std::istream &in, std::vector<std::vector<carve::geom2d::P2> > &p
         readVals(in, vals);
         for (unsigned i = 0; i < vals.size(); i += 4) {
           carve::geom2d::P2 c1 = curr - (curr_ctrl - curr);
-          carve::geom2d::P2 c2 = carve::geom::VECTOR(vals[i+0], vals[i+1]);
-          carve::geom2d::P2 p2 = carve::geom::VECTOR(vals[i+2], vals[i+3]);
+          carve::geom2d::P2 c2 = carve::geom::VECTOR(vals[i + 0], vals[i + 1]);
+          carve::geom2d::P2 p2 = carve::geom::VECTOR(vals[i + 2], vals[i + 3]);
           add(points, make_bezier(curr, c1, c2, p2));
           curr_ctrl = c2;
           curr = p2;
@@ -302,8 +311,10 @@ void parsePath(std::istream &in, std::vector<std::vector<carve::geom2d::P2> > &p
         readVals(in, vals);
         for (unsigned i = 0; i < vals.size(); i += 4) {
           carve::geom2d::P2 c1 = curr - (curr_ctrl - curr);
-          carve::geom2d::P2 c2 = curr + carve::geom::VECTOR(vals[i+0], vals[i+1]);
-          carve::geom2d::P2 p2 = curr + carve::geom::VECTOR(vals[i+2], vals[i+3]);
+          carve::geom2d::P2 c2 =
+              curr + carve::geom::VECTOR(vals[i + 0], vals[i + 1]);
+          carve::geom2d::P2 p2 =
+              curr + carve::geom::VECTOR(vals[i + 2], vals[i + 3]);
           add(points, make_bezier(curr, c1, c2, p2));
           curr_ctrl = c2;
           curr = p2;
@@ -313,9 +324,9 @@ void parsePath(std::istream &in, std::vector<std::vector<carve::geom2d::P2> > &p
       case 'C': {
         readVals(in, vals);
         for (unsigned i = 0; i < vals.size(); i += 6) {
-          carve::geom2d::P2 c1 = carve::geom::VECTOR(vals[i+0], vals[i+1]);
-          carve::geom2d::P2 c2 = carve::geom::VECTOR(vals[i+2], vals[i+3]);
-          carve::geom2d::P2 p2 = carve::geom::VECTOR(vals[i+4], vals[i+5]);
+          carve::geom2d::P2 c1 = carve::geom::VECTOR(vals[i + 0], vals[i + 1]);
+          carve::geom2d::P2 c2 = carve::geom::VECTOR(vals[i + 2], vals[i + 3]);
+          carve::geom2d::P2 p2 = carve::geom::VECTOR(vals[i + 4], vals[i + 5]);
           add(points, make_bezier(curr, c1, c2, p2));
           curr_ctrl = c2;
           curr = p2;
@@ -325,9 +336,12 @@ void parsePath(std::istream &in, std::vector<std::vector<carve::geom2d::P2> > &p
       case 'c': {
         readVals(in, vals);
         for (unsigned i = 0; i < vals.size(); i += 6) {
-          carve::geom2d::P2 c1 = curr + carve::geom::VECTOR(vals[i+0], vals[i+1]);
-          carve::geom2d::P2 c2 = curr + carve::geom::VECTOR(vals[i+2], vals[i+3]);
-          carve::geom2d::P2 p2 = curr + carve::geom::VECTOR(vals[i+4], vals[i+5]);
+          carve::geom2d::P2 c1 =
+              curr + carve::geom::VECTOR(vals[i + 0], vals[i + 1]);
+          carve::geom2d::P2 c2 =
+              curr + carve::geom::VECTOR(vals[i + 2], vals[i + 3]);
+          carve::geom2d::P2 p2 =
+              curr + carve::geom::VECTOR(vals[i + 4], vals[i + 5]);
           add(points, make_bezier(curr, c1, c2, p2));
           curr_ctrl = c2;
           curr = p2;
@@ -336,14 +350,13 @@ void parsePath(std::istream &in, std::vector<std::vector<carve::geom2d::P2> > &p
       }
       case 'Z':
       case 'z': {
-
         std::cerr << "path coords: " << std::endl;
         for (size_t i = 0; i < points.size(); ++i) {
           std::cerr << " " << i << ": " << points[i].x << "," << points[i].y;
         }
         if (points.back() == points.front()) points.pop_back();
         std::cerr << std::endl;
-        paths.push_back(points);                     
+        paths.push_back(points);
         curr = curr_ctrl = carve::geom::VECTOR(0.0, 0.0);
         break;
       }
@@ -355,16 +368,19 @@ void parsePath(std::istream &in, std::vector<std::vector<carve::geom2d::P2> > &p
   }
 }
 
-void parsePath(std::string &s, std::vector<std::vector<carve::geom2d::P2> > &paths) {
+void parsePath(std::string& s,
+               std::vector<std::vector<carve::geom2d::P2> >& paths) {
   std::istringstream in(s);
   return parsePath(in, paths);
 }
 
-carve::poly::Polyhedron *extrude(const std::vector<std::vector<carve::geom2d::P2> > &paths, carve::geom3d::Vector dir) {
+carve::poly::Polyhedron* extrude(
+    const std::vector<std::vector<carve::geom2d::P2> >& paths,
+    carve::geom3d::Vector dir) {
   carve::input::PolyhedronData data;
 
   for (size_t p = 0; p < paths.size(); ++p) {
-    const std::vector<carve::geom2d::P2> &path = paths[p];
+    const std::vector<carve::geom2d::P2>& path = paths[p];
     const unsigned N = path.size();
     std::cerr << "N=" << N << std::endl;
 
@@ -374,7 +390,7 @@ carve::poly::Polyhedron *extrude(const std::vector<std::vector<carve::geom2d::P2
 
     std::map<carve::geom3d::Vector, size_t> vert_idx;
     std::set<std::pair<size_t, size_t> > edges;
-        
+
     for (size_t i = 0; i < path.size(); ++i) {
       carve::geom3d::Vector v;
       std::map<carve::geom3d::Vector, size_t>::iterator j;
@@ -383,7 +399,7 @@ carve::poly::Polyhedron *extrude(const std::vector<std::vector<carve::geom2d::P2
       j = vert_idx.find(v);
       if (j == vert_idx.end()) {
         data.addVertex(v);
-        fwd.push_back(vert_idx[v] = data.getVertexCount()-1);
+        fwd.push_back(vert_idx[v] = data.getVertexCount() - 1);
       } else {
         fwd.push_back((*j).second);
       }
@@ -392,7 +408,7 @@ carve::poly::Polyhedron *extrude(const std::vector<std::vector<carve::geom2d::P2
       j = vert_idx.find(v);
       if (j == vert_idx.end()) {
         data.addVertex(v);
-        rev.push_back(vert_idx[v] = data.getVertexCount()-1);
+        rev.push_back(vert_idx[v] = data.getVertexCount() - 1);
       } else {
         rev.push_back((*j).second);
       }
@@ -401,25 +417,26 @@ carve::poly::Polyhedron *extrude(const std::vector<std::vector<carve::geom2d::P2
     data.addFace(fwd.begin(), fwd.end());
     data.addFace(rev.rbegin(), rev.rend());
 
-    for (size_t i = 0; i < path.size()-1; ++i) {
-      edges.insert(std::make_pair(fwd[i+1], fwd[i]));
+    for (size_t i = 0; i < path.size() - 1; ++i) {
+      edges.insert(std::make_pair(fwd[i + 1], fwd[i]));
     }
-    edges.insert(std::make_pair(fwd[0], fwd[N-1]));
+    edges.insert(std::make_pair(fwd[0], fwd[N - 1]));
 
-    for (size_t i = 0; i < path.size()-1; ++i) {
-      if (edges.find(std::make_pair(fwd[i], fwd[i+1])) == edges.end()) {
-        data.addFace(fwd[i+1], fwd[i], rev[i], rev[i+1]);
+    for (size_t i = 0; i < path.size() - 1; ++i) {
+      if (edges.find(std::make_pair(fwd[i], fwd[i + 1])) == edges.end()) {
+        data.addFace(fwd[i + 1], fwd[i], rev[i], rev[i + 1]);
       }
     }
-    if (edges.find(std::make_pair(fwd[N-1], fwd[0])) == edges.end()) {
-      data.addFace(fwd[0], fwd[N-1], rev[N-1], rev[0]);
+    if (edges.find(std::make_pair(fwd[N - 1], fwd[0])) == edges.end()) {
+      data.addFace(fwd[0], fwd[N - 1], rev[N - 1], rev[0]);
     }
   }
 
-  return new carve::poly::Polyhedron(data.points, data.getFaceCount(), data.faceIndices);
+  return new carve::poly::Polyhedron(data.points, data.getFaceCount(),
+                                     data.faceIndices);
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   typedef std::vector<carve::geom2d::P2> loop_t;
 
   std::ifstream in(argv[1]);
@@ -441,7 +458,7 @@ int main(int argc, char **argv) {
 
       merged.resize(result.size());
       for (size_t i = 0; i < result.size(); ++i) {
-        std::vector<std::pair<size_t, size_t> > &p = result[i];
+        std::vector<std::pair<size_t, size_t> >& p = result[i];
         merged[i].reserve(p.size());
         for (size_t j = 0; j < p.size(); ++j) {
           merged[i].push_back(paths[p[j].first][p[j].second]);
@@ -451,7 +468,7 @@ int main(int argc, char **argv) {
       paths.swap(merged);
     }
 
-    carve::poly::Polyhedron *p = extrude(paths, carve::geom::VECTOR(0,0,100));
+    carve::poly::Polyhedron* p = extrude(paths, carve::geom::VECTOR(0, 0, 100));
     p->transform(carve::math::Matrix::TRANS(-p->aabb.pos));
     std::ostringstream outf;
     outf << "file_" << file_num++ << ".ply";

@@ -22,10 +22,9 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #include <carve/geom.hpp>
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   carve::geom::vector<4> v;
   v.x = 1.0;
 }

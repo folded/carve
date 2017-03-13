@@ -22,23 +22,28 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #if defined(HAVE_CONFIG_H)
-#  include <carve_config.h>
+#include <carve_config.h>
 #endif
 
-#include <carve/matrix.hpp>
 #include <carve/math.hpp>
+#include <carve/matrix.hpp>
 
 #include <iostream>
 
 #define D(x) strtod(x, NULL)
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   carve::math::Matrix3 m;
-  m._11 = D(argv[1]); m._12 = D(argv[2]); m._13 = D(argv[3]);
-  m._21 = D(argv[2]); m._22 = D(argv[4]); m._23 = D(argv[5]);
-  m._31 = D(argv[3]); m._32 = D(argv[5]); m._33 = D(argv[6]);
+  m._11 = D(argv[1]);
+  m._12 = D(argv[2]);
+  m._13 = D(argv[3]);
+  m._21 = D(argv[2]);
+  m._22 = D(argv[4]);
+  m._23 = D(argv[5]);
+  m._31 = D(argv[3]);
+  m._32 = D(argv[5]);
+  m._33 = D(argv[6]);
 
   double l1, l2, l3;
   carve::geom::vector<3> e1, e2, e3;
@@ -48,14 +53,16 @@ int main(int argc, char **argv) {
   std::cout << l2 << " " << e2 << std::endl;
   std::cout << l3 << " " << e3 << std::endl;
 
-  std::cout << m * e1 - l1 * e1 << "  " << (m * e1 - l1 * e1).isZero() << std::endl;
-  std::cout << m * e2 - l2 * e2 << "  " << (m * e2 - l2 * e2).isZero() << std::endl;
-  std::cout << m * e3 - l3 * e3 << "  " << (m * e3 - l3 * e3).isZero() << std::endl;
+  std::cout << m * e1 - l1 * e1 << "  " << (m * e1 - l1 * e1).isZero()
+            << std::endl;
+  std::cout << m * e2 - l2 * e2 << "  " << (m * e2 - l2 * e2).isZero()
+            << std::endl;
+  std::cout << m * e3 - l3 * e3 << "  " << (m * e3 - l3 * e3).isZero()
+            << std::endl;
 
   eigSolve(m, l1, l2, l3);
 
   std::cout << l1 << " " << e1 << std::endl;
   std::cout << l2 << " " << e2 << std::endl;
   std::cout << l3 << " " << e3 << std::endl;
-
 }

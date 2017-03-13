@@ -22,14 +22,12 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #pragma once
 
 #include "intersect_common.hpp"
 
-template<typename T>
-static int is_same(const std::vector<T> &a,
-                   const std::vector<T> &b) {
+template <typename T>
+static int is_same(const std::vector<T>& a, const std::vector<T>& b) {
   if (a.size() != b.size()) return false;
 
   const size_t S = a.size();
@@ -40,13 +38,17 @@ static int is_same(const std::vector<T> &a,
   }
   if (p == S) return 0;
 
-  for (i = 1, j = p + 1; j < S; ++i, ++j) if (a[i] != b[j]) goto not_fwd;
-  for (       j = 0;     i < S; ++i, ++j) if (a[i] != b[j]) goto not_fwd;
+  for (i = 1, j = p + 1; j < S; ++i, ++j)
+    if (a[i] != b[j]) goto not_fwd;
+  for (j = 0; i < S; ++i, ++j)
+    if (a[i] != b[j]) goto not_fwd;
   return +1;
 
 not_fwd:
-  for (i = 1, j = p - 1; j != (size_t)-1; ++i, --j) if (a[i] != b[j]) goto not_rev;
-  for (       j = S - 1;           i < S; ++i, --j) if (a[i] != b[j]) goto not_rev;
+  for (i = 1, j = p - 1; j != (size_t)-1; ++i, --j)
+    if (a[i] != b[j]) goto not_rev;
+  for (j = S - 1; i < S; ++i, --j)
+    if (a[i] != b[j]) goto not_rev;
   return -1;
 
 not_rev:

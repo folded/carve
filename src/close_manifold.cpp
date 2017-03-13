@@ -22,28 +22,26 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #if defined(HAVE_CONFIG_H)
-#  include <carve_config.h>
+#include <carve_config.h>
 #endif
 
 #include <carve/csg.hpp>
 #include <carve/csg_triangulator.hpp>
-#include <carve/poly.hpp>
 #include <carve/geom3d.hpp>
+#include <carve/poly.hpp>
 
 #include "opts.hpp"
 #include "read_ply.hpp"
 #include "write_ply.hpp"
 
-
-#include <fstream>
 #include <algorithm>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <set>
 #include <string>
 #include <utility>
-#include <set>
-#include <iostream>
-#include <iomanip>
 
 struct Options : public opt::Parser {
   bool ascii;
@@ -56,30 +54,53 @@ struct Options : public opt::Parser {
 
   std::string file;
 
-  virtual void optval(const std::string &o, const std::string &v) {
-    if (o == "--binary"       || o == "-b") { ascii = false; return; }
-    if (o == "--obj"          || o == "-O") { obj = true; return; }
-    if (o == "--vtk"          || o == "-V") { vtk = true; return; }
-    if (o == "--ascii"        || o == "-a") { ascii = true; return; }
-    if (o == "--flip"         || o == "-f") { flip = true; return; }
-    if (                         o == "-x") { axis = X; pos = strtod(v.c_str(), NULL); }
-    if (                         o == "-y") { axis = Y; pos = strtod(v.c_str(), NULL); }
-    if (                         o == "-z") { axis = Z; pos = strtod(v.c_str(), NULL); }
+  virtual void optval(const std::string& o, const std::string& v) {
+    if (o == "--binary" || o == "-b") {
+      ascii = false;
+      return;
+    }
+    if (o == "--obj" || o == "-O") {
+      obj = true;
+      return;
+    }
+    if (o == "--vtk" || o == "-V") {
+      vtk = true;
+      return;
+    }
+    if (o == "--ascii" || o == "-a") {
+      ascii = true;
+      return;
+    }
+    if (o == "--flip" || o == "-f") {
+      flip = true;
+      return;
+    }
+    if (o == "-x") {
+      axis = X;
+      pos = strtod(v.c_str(), NULL);
+    }
+    if (o == "-y") {
+      axis = Y;
+      pos = strtod(v.c_str(), NULL);
+    }
+    if (o == "-z") {
+      axis = Z;
+      pos = strtod(v.c_str(), NULL);
+    }
   }
 
   virtual std::string usageStr() {
-    return std::string ("Usage: ") + progname + std::string(" [options] expression");
+    return std::string("Usage: ") + progname +
+           std::string(" [options] expression");
   };
 
-  virtual void arg(const std::string &a) {
+  virtual void arg(const std::string& a) {
     if (file == "") {
       file = a;
     }
   }
 
-  virtual void help(std::ostream &out) {
-    this->opt::Parser::help(out);
-  }
+  virtual void help(std::ostream& out) { this->opt::Parser::help(out); }
 
   Options() {
     ascii = true;
@@ -90,33 +111,31 @@ struct Options : public opt::Parser {
     axis = ERR;
     file = "";
 
-    option("binary",       'b', false, "Produce binary output.");
-    option("ascii",        'a', false, "ASCII output (default).");
-    option("obj",          'O', false, "Output in .obj format.");
-    option("vtk",          'V', false, "Output in .vtk format.");
-    option("flip",         'f', false, "Flip orientation of input faces.");
-    option(                'x', true,  "close with plane x={arg}.");
-    option(                'y', true,  "close with plane y={arg}.");
-    option(                'z', true,  "close with plane z={arg}.");
+    option("binary", 'b', false, "Produce binary output.");
+    option("ascii", 'a', false, "ASCII output (default).");
+    option("obj", 'O', false, "Output in .obj format.");
+    option("vtk", 'V', false, "Output in .vtk format.");
+    option("flip", 'f', false, "Flip orientation of input faces.");
+    option('x', true, "close with plane x={arg}.");
+    option('y', true, "close with plane y={arg}.");
+    option('z', true, "close with plane z={arg}.");
   }
 };
 
-
-
 static Options options;
 
-static bool endswith(const std::string &a, const std::string &b) {
+static bool endswith(const std::string& a, const std::string& b) {
   if (a.size() < b.size()) return false;
 
-  for (unsigned i = a.size(), j = b.size(); j; ) {
+  for (unsigned i = a.size(), j = b.size(); j;) {
     if (tolower(a[--i]) != tolower(b[--j])) return false;
   }
   return true;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   options.parse(argc, argv);
-  carve::mesh::MeshSet<3> *poly;
+  carve::mesh::MeshSet<3>* poly;
 
   if (options.axis == Options::ERR) {
     std::cerr << "need to specify a closure plane." << std::endl;
@@ -140,24 +159,24 @@ int main(int argc, char **argv) {
 
   std::cerr << "poly aabb = " << poly->getAABB() << std::endl;
 
-  if (poly->getAABB().compareAxis(carve::geom::axis_pos(options.axis, options.pos)) == 0) {
+  if (poly->getAABB().compareAxis(
+          carve::geom::axis_pos(options.axis, options.pos)) == 0) {
     std::cerr << "poly aabb intersects closure plane." << std::endl;
     exit(1);
   }
 
-
   for (size_t i = 0; i < poly->meshes.size(); ++i) {
-    carve::mesh::MeshSet<3>::mesh_t *mesh = poly->meshes[i];
+    carve::mesh::MeshSet<3>::mesh_t* mesh = poly->meshes[i];
     const size_t N = mesh->open_edges.size();
     if (N == 0) continue;
 
     mesh->faces.reserve(N + 1);
 
-    carve::mesh::MeshSet<3>::edge_t *start = mesh->open_edges[0];
+    carve::mesh::MeshSet<3>::edge_t* start = mesh->open_edges[0];
 
-    std::vector<carve::mesh::MeshSet<3>::edge_t *> edges_to_close;
+    std::vector<carve::mesh::MeshSet<3>::edge_t*> edges_to_close;
     edges_to_close.resize(N);
-    carve::mesh::MeshSet<3>::edge_t *edge = start;
+    carve::mesh::MeshSet<3>::edge_t* edge = start;
     size_t j = 0;
     do {
       edges_to_close[j++] = edge;
@@ -177,8 +196,9 @@ int main(int argc, char **argv) {
 
     for (j = 0; j < N; ++j) {
       edge = edges_to_close[j];
-      carve::mesh::MeshSet<3>::face_t *quad =
-        new carve::mesh::MeshSet<3>::face_t(edge->v2(), edge->v1(), &projected[j], &projected[(j+1)%N]);
+      carve::mesh::MeshSet<3>::face_t* quad =
+          new carve::mesh::MeshSet<3>::face_t(
+              edge->v2(), edge->v1(), &projected[j], &projected[(j + 1) % N]);
       quad->mesh = mesh;
       edge->rev = quad->edge;
       quad->edge->rev = edge;
@@ -186,8 +206,9 @@ int main(int argc, char **argv) {
     }
 
     for (j = 0; j < N; ++j) {
-      carve::mesh::MeshSet<3>::edge_t *e1 = edges_to_close[j]->rev->prev;
-      carve::mesh::MeshSet<3>::edge_t *e2 = edges_to_close[(j+1)%N]->rev->next;
+      carve::mesh::MeshSet<3>::edge_t* e1 = edges_to_close[j]->rev->prev;
+      carve::mesh::MeshSet<3>::edge_t* e2 =
+          edges_to_close[(j + 1) % N]->rev->next;
       e1->rev = e2;
       e2->rev = e1;
     }
@@ -197,8 +218,9 @@ int main(int argc, char **argv) {
       edge->validateLoop();
     }
 
-    carve::mesh::MeshSet<3>::face_t *loop =
-      carve::mesh::MeshSet<3>::face_t::closeLoop(edges_to_close[0]->rev->next->next);
+    carve::mesh::MeshSet<3>::face_t* loop =
+        carve::mesh::MeshSet<3>::face_t::closeLoop(
+            edges_to_close[0]->rev->next->next);
 
     loop->mesh = mesh;
     mesh->faces.push_back(loop);

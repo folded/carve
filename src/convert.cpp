@@ -22,14 +22,13 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #if defined(HAVE_CONFIG_H)
-#  include <carve_config.h>
+#include <carve_config.h>
 #endif
 
 #include <carve/csg.hpp>
-#include <carve/tree.hpp>
 #include <carve/csg_triangulator.hpp>
+#include <carve/tree.hpp>
 
 #include "geometry.hpp"
 #include "glu_triangulator.hpp"
@@ -39,17 +38,15 @@
 
 #include "opts.hpp"
 
-#include <fstream>
 #include <algorithm>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <set>
 #include <string>
 #include <utility>
-#include <set>
-#include <iostream>
-#include <iomanip>
 
 #include <time.h>
-
-
 
 struct Options : public opt::Parser {
   bool ascii;
@@ -59,28 +56,45 @@ struct Options : public opt::Parser {
   bool triangulate;
 
   std::string file;
-  
-  virtual void optval(const std::string &o, const std::string &v) {
-    if (o == "--canonicalize" || o == "-c") { canonicalize = true; return; }
-    if (o == "--binary"       || o == "-b") { ascii = false; return; }
-    if (o == "--obj"          || o == "-O") { obj = true; return; }
-    if (o == "--vtk"          || o == "-V") { vtk = true; return; }
-    if (o == "--ascii"        || o == "-a") { ascii = true; return; }
-    if (o == "--triangulate"  || o == "-t") { triangulate = true; return; }
-    if (o == "--help"         || o == "-h") { help(std::cout); exit(0); }
+
+  virtual void optval(const std::string& o, const std::string& v) {
+    if (o == "--canonicalize" || o == "-c") {
+      canonicalize = true;
+      return;
+    }
+    if (o == "--binary" || o == "-b") {
+      ascii = false;
+      return;
+    }
+    if (o == "--obj" || o == "-O") {
+      obj = true;
+      return;
+    }
+    if (o == "--vtk" || o == "-V") {
+      vtk = true;
+      return;
+    }
+    if (o == "--ascii" || o == "-a") {
+      ascii = true;
+      return;
+    }
+    if (o == "--triangulate" || o == "-t") {
+      triangulate = true;
+      return;
+    }
+    if (o == "--help" || o == "-h") {
+      help(std::cout);
+      exit(0);
+    }
   }
 
   virtual std::string usageStr() {
-    return std::string ("Usage: ") + progname + std::string(" [options] file");
+    return std::string("Usage: ") + progname + std::string(" [options] file");
   };
 
-  virtual void arg(const std::string &a) {
-    file = a;
-  }
+  virtual void arg(const std::string& a) { file = a; }
 
-  virtual void help(std::ostream &out) {
-    this->opt::Parser::help(out);
-  }
+  virtual void help(std::ostream& out) { this->opt::Parser::help(out); }
 
   Options() {
     ascii = true;
@@ -88,38 +102,35 @@ struct Options : public opt::Parser {
     vtk = false;
     triangulate = false;
 
-    option("canonicalize", 'c', false, "Canonicalize before output (for comparing output).");
-    option("binary",       'b', false, "Produce binary output.");
-    option("ascii",        'a', false, "ASCII output (default).");
-    option("obj",          'O', false, "Output in .obj format.");
-    option("vtk",          'V', false, "Output in .vtk format.");
-    option("triangulate",  't', false, "Triangulate output.");
-    option("help",         'h', false, "This help message.");
+    option("canonicalize", 'c', false,
+           "Canonicalize before output (for comparing output).");
+    option("binary", 'b', false, "Produce binary output.");
+    option("ascii", 'a', false, "ASCII output (default).");
+    option("obj", 'O', false, "Output in .obj format.");
+    option("vtk", 'V', false, "Output in .vtk format.");
+    option("triangulate", 't', false, "Triangulate output.");
+    option("help", 'h', false, "This help message.");
   }
 };
 
-
-
 static Options options;
 
-
-
-static bool endswith(const std::string &a, const std::string &b) {
+static bool endswith(const std::string& a, const std::string& b) {
   if (a.size() < b.size()) return false;
 
-  for (unsigned i = a.size(), j = b.size(); j; ) {
+  for (unsigned i = a.size(), j = b.size(); j;) {
     if (tolower(a[--i]) != tolower(b[--j])) return false;
   }
   return true;
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   options.parse(argc, argv);
 
   carve::input::Input inputs;
-  std::vector<carve::mesh::MeshSet<3> *> polys;
-  std::vector<carve::line::PolylineSet *> lines;
-  std::vector<carve::point::PointSet *> points;
+  std::vector<carve::mesh::MeshSet<3>*> polys;
+  std::vector<carve::line::PolylineSet*> lines;
+  std::vector<carve::point::PointSet*> points;
 
   if (options.file == "") {
     readPLY(std::cin, inputs);
@@ -133,12 +144,14 @@ int main(int argc, char **argv) {
     }
   }
 
-  for (std::list<carve::input::Data *>::const_iterator i = inputs.input.begin(); i != inputs.input.end(); ++i) {
-    carve::mesh::MeshSet<3> *p;
-    carve::point::PointSet *ps;
-    carve::line::PolylineSet *l;
+  for (std::list<carve::input::Data*>::const_iterator i = inputs.input.begin();
+       i != inputs.input.end(); ++i) {
+    carve::mesh::MeshSet<3>* p;
+    carve::point::PointSet* ps;
+    carve::line::PolylineSet* l;
 
-    if ((p = carve::input::Input::create<carve::mesh::MeshSet<3> >(*i)) != NULL)  {
+    if ((p = carve::input::Input::create<carve::mesh::MeshSet<3> >(*i)) !=
+        NULL) {
       if (options.canonicalize) p->canonicalize();
       if (options.obj) {
         writeOBJ(std::cout, p);
@@ -148,7 +161,8 @@ int main(int argc, char **argv) {
         writePLY(std::cout, p, options.ascii);
       }
       delete p;
-    } else if ((l = carve::input::Input::create<carve::line::PolylineSet>(*i)) != NULL)  {
+    } else if ((l = carve::input::Input::create<carve::line::PolylineSet>(
+                    *i)) != NULL) {
       if (options.obj) {
         writeOBJ(std::cout, l);
       } else if (options.vtk) {
@@ -157,7 +171,8 @@ int main(int argc, char **argv) {
         writePLY(std::cout, l, options.ascii);
       }
       delete l;
-    } else if ((ps = carve::input::Input::create<carve::point::PointSet>(*i)) != NULL)  {
+    } else if ((ps = carve::input::Input::create<carve::point::PointSet>(*i)) !=
+               NULL) {
       if (options.obj) {
         std::cerr << "Can't write a point set in .obj format" << std::endl;
       } else if (options.vtk) {

@@ -22,9 +22,8 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #if defined(HAVE_CONFIG_H)
-#  include <carve_config.h>
+#include <carve_config.h>
 #endif
 
 #include <carve/geom2d.hpp>
@@ -38,9 +37,9 @@
 #include <sstream>
 
 #if defined(__APPLE__)
+#include <GLUT/glut.h>
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
-#include <GLUT/glut.h>
 #else
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -54,33 +53,27 @@
 #endif
 
 #if defined(GLU_TESS_CALLBACK_VARARGS)
-  typedef GLvoid (_stdcall *GLUTessCallback)(...);
+typedef GLvoid(_stdcall* GLUTessCallback)(...);
 #else
-    typedef void (__stdcall *GLUTessCallback)();
+typedef void(__stdcall* GLUTessCallback)();
 #endif
 
 struct TestScene : public Scene {
   GLuint d_list;
 
-  virtual bool key(unsigned char k, int x, int y) {
-    return true;
-  }
+  virtual bool key(unsigned char k, int x, int y) { return true; }
 
-  virtual GLvoid draw() {
-    glCallList(d_list);
-  }
+  virtual GLvoid draw() { glCallList(d_list); }
 
-  TestScene(int argc, char **argv) : Scene(argc, argv) {
+  TestScene(int argc, char** argv) : Scene(argc, argv) {
     d_list = glGenLists(1);
   }
 
-  virtual ~TestScene() {
-    glDeleteLists(d_list, 1);
-  }
+  virtual ~TestScene() { glDeleteLists(d_list, 1); }
 };
 
-int main(int argc, char **argv) {
-  TestScene *scene = new TestScene(argc, argv);
+int main(int argc, char** argv) {
+  TestScene* scene = new TestScene(argc, argv);
 
   typedef std::vector<carve::geom2d::P2> loop_t;
   std::vector<loop_t> poly;
@@ -93,7 +86,7 @@ int main(int argc, char **argv) {
       poly.push_back(loop_t());
     } else {
       std::istringstream in_s(s);
-      double x,y;
+      double x, y;
       in_s >> x >> y;
       poly.back().push_back(carve::geom::VECTOR(x, y));
     }
@@ -170,7 +163,8 @@ int main(int argc, char **argv) {
   glColor4f(1, 1, 1, 1);
   glBegin(GL_LINE_LOOP);
   for (size_t i = 0; i < merged.size(); ++i) {
-    glVertex3f((merged[i].x - aabb.pos.x) * scale, (merged[i].y - aabb.pos.y) * scale, 2.0);
+    glVertex3f((merged[i].x - aabb.pos.x) * scale,
+               (merged[i].y - aabb.pos.y) * scale, 2.0);
   }
   glEnd();
 

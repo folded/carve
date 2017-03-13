@@ -41,21 +41,21 @@
 #include <carve/csg.hpp>
 
 class GLUTriangulator : public carve::csg::CSG::Hook {
-  GLUtesselator *tess;
+  GLUtesselator* tess;
   GLenum curr_type;
 
-  std::vector<const carve::poly::Vertex<3> *> vertices;
-  std::vector<carve::poly::Face<3> *> new_faces;
-  const carve::poly::Face<3> *orig_face;
+  std::vector<const carve::poly::Vertex<3>*> vertices;
+  std::vector<carve::poly::Face<3>*> new_faces;
+  const carve::poly::Face<3>* orig_face;
 
-public:
+ public:
   GLUTriangulator();
   virtual ~GLUTriangulator();
-  virtual void processOutputFace(std::vector<carve::poly::Face<3> *> &faces,
-                                 const carve::poly::Face<3> *orig,
+  virtual void processOutputFace(std::vector<carve::poly::Face<3>*>& faces,
+                                 const carve::poly::Face<3>* orig,
                                  bool flipped);
 
   void faceBegin(GLenum type);
-  void faceVertex(const carve::poly::Vertex<3> *vertex);
+  void faceVertex(const carve::poly::Vertex<3>* vertex);
   void faceEnd();
 };

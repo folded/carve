@@ -22,14 +22,13 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #if defined(HAVE_CONFIG_H)
-#  include <carve_config.h>
+#include <carve_config.h>
 #endif
 
 #include <carve/csg.hpp>
-#include <carve/tree.hpp>
 #include <carve/csg_triangulator.hpp>
+#include <carve/tree.hpp>
 
 #include "geometry.hpp"
 #include "glu_triangulator.hpp"
@@ -39,75 +38,79 @@
 
 #include "opts.hpp"
 
-#include <fstream>
 #include <algorithm>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <set>
 #include <string>
 #include <utility>
-#include <set>
-#include <iostream>
-#include <iomanip>
 
 #include <time.h>
 typedef std::vector<std::string>::iterator TOK;
-
-
 
 struct Options : public opt::Parser {
   bool ascii;
   bool rescale;
 
   std::vector<std::string> args;
-  
-  virtual void optval(const std::string &o, const std::string &v) {
-    if (o == "--binary"       || o == "-b") { ascii = false; return; }
-    if (o == "--ascii"        || o == "-a") { ascii = true; return; }
-    if (o == "--rescale"      || o == "-r") { rescale = true; return; }
-    if (o == "--epsilon"      || o == "-E") { carve::setEpsilon(strtod(v.c_str(), NULL)); return; }
-    if (o == "--help"         || o == "-h") { help(std::cout); exit(0); }
+
+  virtual void optval(const std::string& o, const std::string& v) {
+    if (o == "--binary" || o == "-b") {
+      ascii = false;
+      return;
+    }
+    if (o == "--ascii" || o == "-a") {
+      ascii = true;
+      return;
+    }
+    if (o == "--rescale" || o == "-r") {
+      rescale = true;
+      return;
+    }
+    if (o == "--epsilon" || o == "-E") {
+      carve::setEpsilon(strtod(v.c_str(), NULL));
+      return;
+    }
+    if (o == "--help" || o == "-h") {
+      help(std::cout);
+      exit(0);
+    }
   }
 
   virtual std::string usageStr() {
-    return std::string ("Usage: ") + progname + std::string(" [options] expression");
+    return std::string("Usage: ") + progname +
+           std::string(" [options] expression");
   };
 
-  virtual void arg(const std::string &a) {
-    args.push_back(a);
-  }
+  virtual void arg(const std::string& a) { args.push_back(a); }
 
-  virtual void help(std::ostream &out) {
-    this->opt::Parser::help(out);
-  }
+  virtual void help(std::ostream& out) { this->opt::Parser::help(out); }
 
   Options() {
     ascii = true;
     rescale = false;
 
-    option("binary",       'b', false, "Produce binary output.");
-    option("ascii",        'a', false, "ASCII output (default).");
-    option("rescale",      'r', false, "Rescale prior to CSG operations.");
-    option("epsilon",      'E', true,  "Set epsilon used for calculations.");
-    option("help",         'h', false, "This help message.");
+    option("binary", 'b', false, "Produce binary output.");
+    option("ascii", 'a', false, "ASCII output (default).");
+    option("rescale", 'r', false, "Rescale prior to CSG operations.");
+    option("epsilon", 'E', true, "Set epsilon used for calculations.");
+    option("help", 'h', false, "This help message.");
   }
 };
 
-
-
 static Options options;
 
-
-
-static bool endswith(const std::string &a, const std::string &b) {
+static bool endswith(const std::string& a, const std::string& b) {
   if (a.size() < b.size()) return false;
 
-  for (unsigned i = a.size(), j = b.size(); j; ) {
+  for (unsigned i = a.size(), j = b.size(); j;) {
     if (tolower(a[--i]) != tolower(b[--j])) return false;
   }
   return true;
 }
 
-
-
-carve::mesh::MeshSet<3> *read(const std::string &s) {
+carve::mesh::MeshSet<3>* read(const std::string& s) {
   if (endswith(s, ".vtk")) {
     return readVTKasMesh(s);
   } else if (endswith(s, ".obj")) {
@@ -117,43 +120,52 @@ carve::mesh::MeshSet<3> *read(const std::string &s) {
   }
 }
 
-
-
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   options.parse(argc, argv);
   if (options.args.size() != 2) {
     std::cerr << "expected exactly two arguments" << std::endl;
     exit(1);
   }
 
-  
   carve::mesh::MeshSet<3> *a, *b;
   a = read(options.args[0]);
-  if (!a) { std::cerr << "failed to read [" << options.args[0] << "]" << std::endl; exit(1); }
+  if (!a) {
+    std::cerr << "failed to read [" << options.args[0] << "]" << std::endl;
+    exit(1);
+  }
   b = read(options.args[1]);
-  if (!b) { std::cerr << "failed to read [" << options.args[1] << "]" << std::endl; exit(1); }
+  if (!b) {
+    std::cerr << "failed to read [" << options.args[1] << "]" << std::endl;
+    exit(1);
+  }
 
   std::list<carve::mesh::MeshSet<3> *> a_sliced, b_sliced;
   carve::csg::V2Set shared_edges;
   carve::csg::CSG csg;
-  
+
   csg.slice(a, b, a_sliced, b_sliced, &shared_edges);
-  std::cerr << "result: " << a_sliced.size() << " connected components from a" << std::endl;
-  std::cerr << "      : " << b_sliced.size() << " connected components from b" << std::endl;
-  std::cerr << "      : " << shared_edges.size() << " edges in the line of intersection" << std::endl;
+  std::cerr << "result: " << a_sliced.size() << " connected components from a"
+            << std::endl;
+  std::cerr << "      : " << b_sliced.size() << " connected components from b"
+            << std::endl;
+  std::cerr << "      : " << shared_edges.size()
+            << " edges in the line of intersection" << std::endl;
 
   typedef std::unordered_map<
-  const carve::mesh::MeshSet<3>::vertex_t *,
-    std::set<const carve::mesh::MeshSet<3>::vertex_t *> > VVSMap;
+      const carve::mesh::MeshSet<3>::vertex_t*,
+      std::set<const carve::mesh::MeshSet<3>::vertex_t*> >
+      VVSMap;
 
   VVSMap edge_graph;
 
-  for (carve::csg::V2Set::const_iterator i = shared_edges.begin(); i != shared_edges.end(); ++i) {
+  for (carve::csg::V2Set::const_iterator i = shared_edges.begin();
+       i != shared_edges.end(); ++i) {
     edge_graph[(*i).first].insert((*i).second);
     edge_graph[(*i).second].insert((*i).first);
   }
 
-  for (VVSMap::const_iterator i = edge_graph.begin(); i != edge_graph.end(); ++i) {
+  for (VVSMap::const_iterator i = edge_graph.begin(); i != edge_graph.end();
+       ++i) {
     if ((*i).second.size() > 2) {
       std::cerr << "branch at: " << (*i).first << std::endl;
     }
@@ -166,28 +178,38 @@ int main(int argc, char **argv) {
   {
     carve::line::PolylineSet intersection_graph;
     intersection_graph.vertices.resize(edge_graph.size());
-    std::map<const carve::mesh::MeshSet<3>::vertex_t *, size_t> vmap;
+    std::map<const carve::mesh::MeshSet<3>::vertex_t*, size_t> vmap;
 
     size_t j = 0;
-    for (VVSMap::const_iterator i = edge_graph.begin(); i != edge_graph.end(); ++i) {
+    for (VVSMap::const_iterator i = edge_graph.begin(); i != edge_graph.end();
+         ++i) {
       intersection_graph.vertices[j].v = (*i).first->v;
       vmap[(*i).first] = j++;
     }
 
     while (edge_graph.size()) {
       VVSMap::iterator prior_i = edge_graph.begin();
-      const carve::mesh::MeshSet<3>::vertex_t *prior = (*prior_i).first;
+      const carve::mesh::MeshSet<3>::vertex_t* prior = (*prior_i).first;
       std::vector<size_t> connected;
       connected.push_back(vmap[prior]);
       while (prior_i != edge_graph.end() && (*prior_i).second.size()) {
-        const carve::mesh::MeshSet<3>::vertex_t *next = *(*prior_i).second.begin();
+        const carve::mesh::MeshSet<3>::vertex_t* next =
+            *(*prior_i).second.begin();
         VVSMap::iterator next_i = edge_graph.find(next);
         assert(next_i != edge_graph.end());
         connected.push_back(vmap[next]);
         (*prior_i).second.erase(next);
         (*next_i).second.erase(prior);
-        if (!(*prior_i).second.size()) { edge_graph.erase(prior); prior = NULL; prior_i = edge_graph.end(); }
-        if (!(*next_i).second.size()) { edge_graph.erase(next); next = NULL; next_i = edge_graph.end(); }
+        if (!(*prior_i).second.size()) {
+          edge_graph.erase(prior);
+          prior = NULL;
+          prior_i = edge_graph.end();
+        }
+        if (!(*next_i).second.size()) {
+          edge_graph.erase(next);
+          next = NULL;
+          next_i = edge_graph.end();
+        }
         prior_i = next_i;
         prior = next;
       }
@@ -196,7 +218,8 @@ int main(int argc, char **argv) {
         std::cerr << " " << connected[k];
       }
       std::cerr << std::endl;
-      intersection_graph.addPolyline(closed, connected.begin(), connected.end());
+      intersection_graph.addPolyline(closed, connected.begin(),
+                                     connected.end());
     }
 
     writePLY(std::cout, &intersection_graph, true);

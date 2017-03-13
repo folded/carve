@@ -25,11 +25,10 @@
 #include <gtest/gtest.h>
 
 #if defined(HAVE_CONFIG_H)
-#  include <carve_config.h>
+#include <carve_config.h>
 #endif
 
 #include <carve/carve.hpp>
 #include <carve/geom.hpp>
 
-TEST(TriPtDistTest, TriPtDistTest1) {
-}
+TEST(TriPtDistTest, TriPtDistTest1) {}

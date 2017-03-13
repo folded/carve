@@ -22,15 +22,13 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #if defined(HAVE_CONFIG_H)
-#  include <carve_config.h>
+#include <carve_config.h>
 #endif
 
 #include <carve/spacetree.hpp>
 
-int main(int argc, char **argv) {
-  carve::space::SpatialSubdivTree<3, carve::space::nodedata_FaceEdge>
-    octree(carve::geom::VECTOR(0,0,0),
-           carve::geom::VECTOR(1,1,1));
+int main(int argc, char** argv) {
+  carve::space::SpatialSubdivTree<3, carve::space::nodedata_FaceEdge> octree(
+      carve::geom::VECTOR(0, 0, 0), carve::geom::VECTOR(1, 1, 1));
 }

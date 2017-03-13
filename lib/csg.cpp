@@ -22,16 +22,14 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #if defined(HAVE_CONFIG_H)
-#  include <carve_config.h>
+#include <carve_config.h>
 #endif
 
 #include <carve/csg.hpp>
 #include "csg_detail.hpp"
 
-
-const char *carve::csg::ENUM(carve::csg::FaceClass f) {
+const char* carve::csg::ENUM(carve::csg::FaceClass f) {
   if (f == FACE_ON_ORIENT_OUT) return "FACE_ON_ORIENT_OUT";
   if (f == FACE_OUT) return "FACE_OUT";
   if (f == FACE_IN) return "FACE_IN";
@@ -39,9 +37,7 @@ const char *carve::csg::ENUM(carve::csg::FaceClass f) {
   return "???";
 }
 
-
-
-const char *carve::csg::ENUM(carve::PointClass p) {
+const char* carve::csg::ENUM(carve::PointClass p) {
   if (p == POINT_UNK) return "POINT_UNK";
   if (p == POINT_OUT) return "POINT_OUT";
   if (p == POINT_ON) return "POINT_ON";
@@ -51,9 +47,7 @@ const char *carve::csg::ENUM(carve::PointClass p) {
   return "???";
 }
 
-
-
-void carve::csg::detail::LoopEdges::addFaceLoop(FaceLoop *fl) {
+void carve::csg::detail::LoopEdges::addFaceLoop(FaceLoop* fl) {
   carve::mesh::MeshSet<3>::vertex_t *v1, *v2;
   v1 = fl->vertices[fl->vertices.size() - 1];
   for (unsigned j = 0; j < fl->vertices.size(); ++j) {
@@ -63,17 +57,13 @@ void carve::csg::detail::LoopEdges::addFaceLoop(FaceLoop *fl) {
   }
 }
 
-
-
 void carve::csg::detail::LoopEdges::sortFaceLoopLists() {
   for (super::iterator i = begin(), e = end(); i != e; ++i) {
     (*i).second.sort();
   }
 }
 
-
-
-void carve::csg::detail::LoopEdges::removeFaceLoop(FaceLoop *fl) {
+void carve::csg::detail::LoopEdges::removeFaceLoop(FaceLoop* fl) {
   carve::mesh::MeshSet<3>::vertex_t *v1, *v2;
   v1 = fl->vertices[fl->vertices.size() - 1];
   for (unsigned j = 0; j < fl->vertices.size(); ++j) {
@@ -89,10 +79,10 @@ void carve::csg::detail::LoopEdges::removeFaceLoop(FaceLoop *fl) {
   }
 }
 
-
-
-carve::csg::FaceClass carve::csg::FaceLoopGroup::classificationAgainst(const carve::mesh::MeshSet<3>::mesh_t *mesh) const {
-  for (std::list<ClassificationInfo>::const_iterator i = classification.begin(); i != classification.end(); ++i) {
+carve::csg::FaceClass carve::csg::FaceLoopGroup::classificationAgainst(
+    const carve::mesh::MeshSet<3>::mesh_t* mesh) const {
+  for (std::list<ClassificationInfo>::const_iterator i = classification.begin();
+       i != classification.end(); ++i) {
     if ((*i).intersected_mesh == mesh) {
       return (*i).classification;
     }

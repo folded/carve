@@ -22,27 +22,25 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #if defined(HAVE_CONFIG_H)
-#  include <carve_config.h>
+#include <carve_config.h>
 #endif
 
 #include <carve/carve.hpp>
-#include <carve/poly.hpp>
-#include <carve/polyline.hpp>
-#include <carve/pointset.hpp>
-#include <carve/rtree.hpp>
-#include <carve/mesh_ops.hpp>
-#include <carve/mesh_simplify.hpp>
 #include <carve/geom2d.hpp>
 #include <carve/heap.hpp>
+#include <carve/mesh_ops.hpp>
+#include <carve/mesh_simplify.hpp>
+#include <carve/pointset.hpp>
+#include <carve/poly.hpp>
+#include <carve/polyline.hpp>
+#include <carve/rtree.hpp>
 
-
+#include <algorithm>
 #include <fstream>
+#include <set>
 #include <string>
 #include <utility>
-#include <set>
-#include <algorithm>
 
 typedef carve::mesh::MeshSet<3> meshset_t;
 typedef carve::mesh::Mesh<3> mesh_t;
@@ -55,12 +53,13 @@ typedef mesh_t::face_t face_t;
 
 #include "opts.hpp"
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   try {
     carve::input::Input inputs;
     readPLY(std::string(argv[1]), inputs);
-    carve::mesh::MeshSet<3> *p;
-    p = carve::input::Input::create<carve::mesh::MeshSet<3> >(*inputs.input.begin());
+    carve::mesh::MeshSet<3>* p;
+    p = carve::input::Input::create<carve::mesh::MeshSet<3> >(
+        *inputs.input.begin());
 
     carve::mesh::MeshSimplifier simplifier;
 
@@ -68,8 +67,9 @@ int main(int argc, char **argv) {
     simplifier.removeLowVolumeManifolds(p, 1.0);
 
     // p->transform(carve::geom::quantize<10,3>());
-    simplifier.simplify(p, 1e-2, 1.0, M_PI/180.0, 2e-3);
-    // std::cerr << "n_flips: " << simplifier.improveMesh_conservative(p) << std::endl;
+    simplifier.simplify(p, 1e-2, 1.0, M_PI / 180.0, 2e-3);
+    // std::cerr << "n_flips: " << simplifier.improveMesh_conservative(p) <<
+    // std::endl;
 
     simplifier.removeFins(p);
     simplifier.removeLowVolumeManifolds(p, 1.0);

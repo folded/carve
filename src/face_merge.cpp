@@ -22,34 +22,33 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-
 #if defined(HAVE_CONFIG_H)
-#  include <carve_config.h>
+#include <carve_config.h>
 #endif
 
 #include <carve/carve.hpp>
-#include <carve/poly.hpp>
-#include <carve/polyline.hpp>
-#include <carve/pointset.hpp>
-#include <carve/rtree.hpp>
-#include <carve/mesh_ops.hpp>
-#include <carve/mesh_simplify.hpp>
 #include <carve/geom2d.hpp>
 #include <carve/heap.hpp>
+#include <carve/mesh_ops.hpp>
+#include <carve/mesh_simplify.hpp>
+#include <carve/pointset.hpp>
+#include <carve/poly.hpp>
+#include <carve/polyline.hpp>
+#include <carve/rtree.hpp>
 
 #include "read_ply.hpp"
 #include "write_ply.hpp"
 
 #include "opts.hpp"
 
+#include <algorithm>
 #include <fstream>
+#include <set>
 #include <string>
 #include <utility>
-#include <set>
-#include <algorithm>
 
-#include <time.h>
 #include <sys/time.h>
+#include <time.h>
 
 typedef carve::mesh::MeshSet<3> meshset_t;
 typedef carve::mesh::Mesh<3> mesh_t;
@@ -57,12 +56,13 @@ typedef mesh_t::vertex_t vertex_t;
 typedef mesh_t::edge_t edge_t;
 typedef mesh_t::face_t face_t;
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   try {
     carve::input::Input inputs;
     readPLY(std::string(argv[1]), inputs);
-    carve::mesh::MeshSet<3> *p;
-    p = carve::input::Input::create<carve::mesh::MeshSet<3> >(*inputs.input.begin());
+    carve::mesh::MeshSet<3>* p;
+    p = carve::input::Input::create<carve::mesh::MeshSet<3> >(
+        *inputs.input.begin());
 
     carve::mesh::MeshSimplifier simplifier;
 
