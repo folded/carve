@@ -111,7 +111,7 @@ struct Options : public opt::Parser {
       return;
     }
     if (o == "--epsilon" || o == "-E") {
-      carve::setEpsilon(strtod(v.c_str(), NULL));
+      carve::setEpsilon(strtod(v.c_str(), nullptr));
       return;
     }
     if (o == "--help" || o == "-h") {
@@ -220,7 +220,7 @@ class Slice : public carve::csg::CSG::Collector {
              e = grp->classification.end();
          i != e; ++i) {
       if ((*i).classification == carve::csg::FACE_IN) {
-        if ((*i).intersected_mesh == NULL || (*i).intersectedMeshIsClosed()) {
+        if ((*i).intersected_mesh == nullptr || (*i).intersectedMeshIsClosed()) {
           include = true;
           break;
         }
@@ -298,10 +298,10 @@ static carve::mesh::MeshSet<3>* load(const std::string& file) {
     readOBJ(file, inputs);
   }
 
-  carve::mesh::MeshSet<3>* poly = NULL;
+  carve::mesh::MeshSet<3>* poly = nullptr;
 
   for (std::list<carve::input::Data*>::const_iterator i = inputs.input.begin();
-       poly == NULL && i != inputs.input.end(); ++i) {
+       poly == nullptr && i != inputs.input.end(); ++i) {
     poly = inputs.create<carve::mesh::MeshSet<3> >(*i);
   }
 
@@ -319,20 +319,20 @@ int main(int argc, char** argv) {
   }
 
   carve::mesh::MeshSet<3>* object = load(options.args[0]);
-  if (object == NULL) {
+  if (object == nullptr) {
     std::cerr << "failed to load object file [" << options.args[0] << "]"
               << std::endl;
     exit(1);
   }
 
   carve::mesh::MeshSet<3>* planes = load(options.args[1]);
-  if (planes == NULL) {
+  if (planes == nullptr) {
     std::cerr << "failed to load split plane file [" << options.args[1] << "]"
               << std::endl;
     exit(1);
   }
 
-  carve::mesh::MeshSet<3>* result = NULL;
+  carve::mesh::MeshSet<3>* result = nullptr;
 
   carve::csg::CSG csg;
 
@@ -363,7 +363,7 @@ int main(int argc, char** argv) {
   }
 
   Slice slice_collector(object, planes);
-  result = csg.compute(object, planes, slice_collector, NULL,
+  result = csg.compute(object, planes, slice_collector, nullptr,
                        carve::csg::CSG::CLASSIFY_EDGE);
 
   if (result) {

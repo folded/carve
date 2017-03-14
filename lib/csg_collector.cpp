@@ -134,7 +134,7 @@ class BaseCollector : public CSG::Collector {
              i = grp->classification.begin(),
              e = grp->classification.end();
          i != e; ++i) {
-      if ((*i).intersected_mesh == NULL) {
+      if ((*i).intersected_mesh == nullptr) {
         // classifier only returns global info
         fc_closed_bits = class_to_class_bit((*i).classification);
         break;
@@ -369,7 +369,7 @@ CSG::Collector* makeCollector(CSG::OP op, const carve::mesh::MeshSet<3>* poly_a,
     case CSG::ALL:
       return new AllCollector(poly_a, poly_b);
   }
-  return NULL;
+  return nullptr;
 }
 }  // namespace csg
 }  // namespace carve

@@ -67,7 +67,7 @@ class MeshSimplifier {
       const vertex_t* v1 = edge->vert;
       const vertex_t* v2 = edge->next->vert;
       const vertex_t* v3 = edge->next->next->vert;
-      const vertex_t* v4 = edge->rev ? edge->rev->next->next->vert : NULL;
+      const vertex_t* v4 = edge->rev ? edge->rev->next->next->vert : nullptr;
 
       l[0] = (v1->v - v2->v).length();
 
@@ -94,7 +94,7 @@ class MeshSimplifier {
 
     EdgeInfo(edge_t* e) : edge(e) { update(); }
 
-    EdgeInfo() : edge(NULL) {
+    EdgeInfo() : edge(nullptr) {
       delta_v = 0.0;
       c[0] = c[1] = c[2] = c[3] = 0.0;
       l[0] = l[1] = 0.0;
@@ -115,7 +115,7 @@ class MeshSimplifier {
 
     FlippableBase(double _min_dp = 0.0) : min_dp(_min_dp) {}
 
-    bool open(const EdgeInfo* e) const { return e->edge->rev == NULL; }
+    bool open(const EdgeInfo* e) const { return e->edge->rev == nullptr; }
 
     bool wouldCreateDegenerateEdge(const EdgeInfo* e) const {
       return e->edge->prev->vert == e->edge->rev->prev->vert;
@@ -774,7 +774,7 @@ class MeshSimplifier {
 
       int i1 = countIntersectionPairs(affected_faces.begin(),
                                       affected_faces.end(), near_faces.begin(),
-                                      near_faces.end(), NULL, NULL, merge);
+                                      near_faces.end(), nullptr, nullptr, merge);
       int i2 = countIntersectionPairs(affected_faces.begin(),
                                       affected_faces.end(), near_faces.begin(),
                                       near_faces.end(), v1, v2, merge);
@@ -835,8 +835,8 @@ class MeshSimplifier {
           }
           EdgeInfo* e1i = edge_info[e1];
           EdgeInfo* e2i = edge_info[e2];
-          CARVE_ASSERT(e1i != NULL);
-          CARVE_ASSERT(e2i != NULL);
+          CARVE_ASSERT(e1i != nullptr);
+          CARVE_ASSERT(e2i != nullptr);
           vert_to_edges[e1->v1()].erase(e1i);
           vert_to_edges[e1->v2()].erase(e1i);
           vert_to_edges[e2->v1()].erase(e2i);
@@ -887,7 +887,7 @@ class MeshSimplifier {
       }
 
       edge_t* removed = edge->mergeFaces();
-      if (removed == NULL) {
+      if (removed == nullptr) {
         coplanar_face_edges.erase(edge);
         ++n_merge;
       } else {
@@ -1139,12 +1139,12 @@ class MeshSimplifier {
   }
 
   size_t removeFin(face_t* face) {
-    if (face->edge == NULL || face->nEdges() != 3) {
+    if (face->edge == nullptr || face->nEdges() != 3) {
       return 0;
     }
     edge_t* e = face->edge;
     do {
-      if (e->rev != NULL) {
+      if (e->rev != nullptr) {
         face_t* revface = e->rev->face;
         if (revface->nEdges() == 3) {
           if (e->next->rev && e->next->rev->face == revface) {
@@ -1424,13 +1424,13 @@ class MeshSimplifier {
     for (size_t i = 0; i < meshset->meshes.size(); ++i) {
       if (fabs(meshset->meshes[i]->volume()) < min_abs_volume) {
         delete meshset->meshes[i];
-        meshset->meshes[i] = NULL;
+        meshset->meshes[i] = nullptr;
         ++n_removed;
       }
     }
     meshset->meshes.erase(
         std::remove_if(meshset->meshes.begin(), meshset->meshes.end(),
-                       std::bind2nd(std::equal_to<mesh_t*>(), (mesh_t*)NULL)),
+                       std::bind2nd(std::equal_to<mesh_t*>(), (mesh_t*)nullptr)),
         meshset->meshes.end());
     return n_removed;
   }
@@ -1507,7 +1507,7 @@ class MeshSimplifier {
     point_enumerator_t* pt;
     std::set<face_t*> faces;
 
-    quantization_info_t() : pt(NULL), faces() {}
+    quantization_info_t() : pt(nullptr), faces() {}
 
     ~quantization_info_t() {
       if (pt) {
@@ -1569,7 +1569,7 @@ class MeshSimplifier {
 
         int n_intersections = countIntersectionPairs(
             qi.faces.begin(), qi.faces.end(), overlapping.begin(),
-            overlapping.end(), vert, NULL, q_pt);
+            overlapping.end(), vert, nullptr, q_pt);
 
         if (n_intersections == 0) {
           vert->v = q_pt;

@@ -222,14 +222,14 @@ Face<ndim>* Face<ndim>::closeLoop(typename Face<ndim>::edge_t* start) {
   edge_t* e = start;
   std::vector<edge_t*> loop_edges;
   do {
-    CARVE_ASSERT(e->rev == NULL);
+    CARVE_ASSERT(e->rev == nullptr);
     loop_edges.push_back(e);
     e = e->perimNext();
   } while (e != start);
 
   const size_t N = loop_edges.size();
   for (size_t i = 0; i < N; ++i) {
-    loop_edges[i]->rev = new edge_t(loop_edges[i]->v2(), NULL);
+    loop_edges[i]->rev = new edge_t(loop_edges[i]->v2(), nullptr);
   }
 
   for (size_t i = 0; i < N; ++i) {
@@ -394,7 +394,7 @@ void FaceStitcher::extractPath(std::vector<const vertex_t*>& path) {
 
   const vertex_t* init = (*iter).first;
   const vertex_t* next = *(*iter).second.begin();
-  const vertex_t* prev = NULL;
+  const vertex_t* prev = nullptr;
   const vertex_t* vert = init;
 
   while ((*iter).second.size() == 2) {
@@ -734,8 +734,8 @@ void FaceStitcher::extractConnectedEdges(
 
     for (size_t k = 0; k < Nfwd; ++k) {
       Edge<3>* e_next = efwd[k].back()->perimNext();
-      CARVE_ASSERT(e_next == NULL || e_next->rev == NULL);
-      if (e_next == NULL || e_next->v2() != *e2) {
+      CARVE_ASSERT(e_next == nullptr || e_next->rev == nullptr);
+      if (e_next == nullptr || e_next->v2() != *e2) {
         goto done;
       }
       CARVE_ASSERT(e_next->v1() == *e1);
@@ -746,7 +746,7 @@ void FaceStitcher::extractConnectedEdges(
 
     for (size_t k = 0; k < Nrev; ++k) {
       Edge<3>* e_next = erev[k].back()->perimPrev();
-      if (e_next == NULL || e_next->v1() != *e2) {
+      if (e_next == nullptr || e_next->v1() != *e2) {
         goto done;
       }
       CARVE_ASSERT(e_next->v2() == *e1);
@@ -1038,8 +1038,8 @@ poly::Polyhedron* polyhedronFromMesh(const mesh::MeshSet<3>* mesh,
       if (face_map.find(edge->face) != face_map.end()) {
         poly->connectivity.edge_to_face[i].push_back(
             &poly->faces[face_map[edge->face]]);
-        if (edge->rev == NULL) {
-          poly->connectivity.edge_to_face[i].push_back(NULL);
+        if (edge->rev == nullptr) {
+          poly->connectivity.edge_to_face[i].push_back(nullptr);
         } else {
           poly->connectivity.edge_to_face[i].push_back(
               &poly->faces[face_map[edge->rev->face]]);
@@ -1050,8 +1050,8 @@ poly::Polyhedron* polyhedronFromMesh(const mesh::MeshSet<3>* mesh,
          ++j) {
       mesh::Edge<3>* edge = *j;
       if (face_map.find(edge->face) != face_map.end()) {
-        if (edge->rev == NULL) {
-          poly->connectivity.edge_to_face[i].push_back(NULL);
+        if (edge->rev == nullptr) {
+          poly->connectivity.edge_to_face[i].push_back(nullptr);
           poly->connectivity.edge_to_face[i].push_back(
               &poly->faces[face_map[edge->face]]);
         }
@@ -1091,7 +1091,7 @@ carve::PointClass carve::mesh::classifyPoint(
     const carve::geom::vector<3>& v, bool even_odd,
     const carve::mesh::Mesh<3>* mesh, const carve::mesh::Face<3>** hit_face) {
   if (hit_face) {
-    *hit_face = NULL;
+    *hit_face = nullptr;
   }
 
 #if defined(DEBUG_CONTAINS_VERTEX)
@@ -1114,7 +1114,7 @@ carve::PointClass carve::mesh::classifyPoint(
   face_rtree->search(v, std::back_inserter(near_faces));
 
   for (size_t i = 0; i < near_faces.size(); i++) {
-    if (mesh != NULL && mesh != near_faces[i]->mesh) {
+    if (mesh != nullptr && mesh != near_faces[i]->mesh) {
       continue;
     }
 
@@ -1163,7 +1163,7 @@ carve::PointClass carve::mesh::classifyPoint(
     face_rtree->search(line, std::back_inserter(near_faces));
 
     for (unsigned i = 0; !failed && i < near_faces.size(); i++) {
-      if (mesh != NULL && mesh != near_faces[i]->mesh) {
+      if (mesh != nullptr && mesh != near_faces[i]->mesh) {
         continue;
       }
 

@@ -193,7 +193,7 @@ struct vertex_info {
   bool failed;
 
   vertex_info(const carve::geom2d::P2& _p, size_t _idx)
-      : prev(NULL), next(NULL), p(_p), idx(_idx), score(0.0), convex(false) {}
+      : prev(nullptr), next(nullptr), p(_p), idx(_idx), score(0.0), convex(false) {}
 
   static double triScore(const vertex_info* p, const vertex_info* v,
                          const vertex_info* n);
@@ -266,7 +266,7 @@ struct tri_pair_t {
   double score;
   size_t idx;
 
-  tri_pair_t() : a(NULL), b(NULL), score(0.0) {}
+  tri_pair_t() : a(nullptr), b(nullptr), score(0.0) {}
 
   static inline unsigned N(unsigned i) { return (i + 1) % 3; }
   static inline unsigned P(unsigned i) { return (i + 2) % 3; }
@@ -422,7 +422,7 @@ struct tri_pairs_t {
     storage_t::iterator i;
     i = storage.find(e);
     if (i == storage.end()) {
-      return NULL;
+      return nullptr;
     }
     return (*i).second;
   }
@@ -463,12 +463,12 @@ struct tri_pairs_t {
     tri_pair_t* tp2;
 
     tp2 = get(perim[0]);
-    if (tp2 != NULL) {
+    if (tp2 != nullptr) {
       updateEdge(tp2, project, poly, dist, edges, n);
     }
 
     tp2 = get(perim[1]);
-    if (tp2 != NULL) {
+    if (tp2 != nullptr) {
       CARVE_ASSERT(tp2->a == tp->b || tp2->b == tp->b);
       if (tp2->a == tp->b) {
         tp2->a = tp->a;
@@ -479,12 +479,12 @@ struct tri_pairs_t {
     }
 
     tp2 = get(perim[2]);
-    if (tp2 != NULL) {
+    if (tp2 != nullptr) {
       updateEdge(tp2, project, poly, dist, edges, n);
     }
 
     tp2 = get(perim[3]);
-    if (tp2 != NULL) {
+    if (tp2 != nullptr) {
       CARVE_ASSERT(tp2->a == tp->a || tp2->b == tp->a);
       if (tp2->a == tp->a) {
         tp2->a = tp->b;

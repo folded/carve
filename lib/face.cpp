@@ -132,7 +132,7 @@ Face<ndim>::Face(const std::vector<const vertex_t*>& _vertices,
                  bool delay_recalc)
     : tagable() {
   vertices = _vertices;
-  edges.resize(nVertices(), NULL);
+  edges.resize(nVertices(), nullptr);
   if (!delay_recalc && !recalc()) {
   }
 }
@@ -145,7 +145,7 @@ Face<ndim>::Face(const vertex_t* a, const vertex_t* b, const vertex_t* c,
   vertices.push_back(a);
   vertices.push_back(b);
   vertices.push_back(c);
-  edges.resize(3, NULL);
+  edges.resize(3, nullptr);
   if (!delay_recalc && !recalc()) {
   }
 }
@@ -159,7 +159,7 @@ Face<ndim>::Face(const vertex_t* a, const vertex_t* b, const vertex_t* c,
   vertices.push_back(b);
   vertices.push_back(c);
   vertices.push_back(d);
-  edges.resize(4, NULL);
+  edges.resize(4, nullptr);
   if (!delay_recalc && !recalc()) {
   }
 }
@@ -169,7 +169,7 @@ void Face<ndim>::invert() {
   size_t n_verts = vertices.size();
   std::reverse(vertices.begin(), vertices.end());
 
-  if (project != NULL) {
+  if (project != nullptr) {
     plane_eqn.negate();
 
     int da = carve::geom::largestAxis(plane_eqn.N);

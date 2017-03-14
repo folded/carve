@@ -321,8 +321,8 @@ bool Polyhedron::initConnectivity() {
       mesh::Edge<3>* edge = *j;
       if (face_map.find(edge->face) != face_map.end()) {
         connectivity.edge_to_face[i].push_back(&faces[face_map[edge->face]]);
-        if (edge->rev == NULL) {
-          connectivity.edge_to_face[i].push_back(NULL);
+        if (edge->rev == nullptr) {
+          connectivity.edge_to_face[i].push_back(nullptr);
         } else {
           connectivity.edge_to_face[i].push_back(
               &faces[face_map[edge->rev->face]]);
@@ -333,8 +333,8 @@ bool Polyhedron::initConnectivity() {
          ++j) {
       mesh::Edge<3>* edge = *j;
       if (face_map.find(edge->face) != face_map.end()) {
-        if (edge->rev == NULL) {
-          connectivity.edge_to_face[i].push_back(NULL);
+        if (edge->rev == nullptr) {
+          connectivity.edge_to_face[i].push_back(nullptr);
           connectivity.edge_to_face[i].push_back(&faces[face_map[edge->face]]);
         }
       }
@@ -651,7 +651,7 @@ void Polyhedron::collectFaceVertices(
     face_t& f = faces[i];
 
     for (size_t j = 0, jl = f.nVertices(); j != jl; ++j) {
-      vmap[f.vertex(j)] = NULL;
+      vmap[f.vertex(j)] = nullptr;
     }
   }
 
@@ -799,7 +799,7 @@ PointClass Polyhedron::containsVertex(const carve::geom3d::Vector& v,
                                       const face_t** hit_face, bool even_odd,
                                       int manifold_id) const {
   if (hit_face) {
-    *hit_face = NULL;
+    *hit_face = nullptr;
   }
 
 #if defined(DEBUG_CONTAINS_VERTEX)

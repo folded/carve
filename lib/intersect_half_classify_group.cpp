@@ -69,7 +69,7 @@ struct GroupPoly : public CSG::Collector {
 
     std::vector<carve::mesh::MeshSet<3>::face_t*> faces;
     faces.reserve(grp->face_loops.size());
-    for (FaceLoop* loop = grp->face_loops.head; loop != NULL;
+    for (FaceLoop* loop = grp->face_loops.head; loop != nullptr;
          loop = loop->next) {
       faces.push_back(loop->orig_face->create(loop->vertices.begin(),
                                               loop->vertices.end(), false));
@@ -79,7 +79,7 @@ struct GroupPoly : public CSG::Collector {
   }
 
   carve::mesh::MeshSet<3>* done(CSG::Hooks& /* hooks */) override {
-    return NULL;
+    return nullptr;
   }
 };
 

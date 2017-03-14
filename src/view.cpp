@@ -382,7 +382,7 @@ struct TestScene : public Scene {
       }
     } else {
       t = strchr(l, k);
-      if (t != NULL) {
+      if (t != nullptr) {
         CARVE_ASSERT(t >= l);
         unsigned layer = t - l;
         if (layer < draw_flags.size()) {
@@ -472,7 +472,7 @@ int main(int argc, char** argv) {
     carve::line::PolylineSet* l;
 
     if ((p = carve::input::Input::create<carve::mesh::MeshSet<3> >(
-             *i, carve::input::opts("avoid_cavities", "true"))) != NULL) {
+             *i, carve::input::opts("avoid_cavities", "true"))) != nullptr) {
       polys.push_back(p);
       std::cerr << "loaded polyhedron " << polys.back() << " has "
                 << polys.back()->meshes.size() << " manifolds ("
@@ -494,11 +494,11 @@ int main(int argc, char** argv) {
       std::cerr << std::endl;
 
     } else if ((l = carve::input::Input::create<carve::line::PolylineSet>(
-                    *i)) != NULL) {
+                    *i)) != nullptr) {
       lines.push_back(l);
       std::cerr << "loaded polyline set " << lines.back() << std::endl;
     } else if ((ps = carve::input::Input::create<carve::point::PointSet>(*i)) !=
-               NULL) {
+               nullptr) {
       points.push_back(ps);
       std::cerr << "loaded point set " << points.back() << std::endl;
     }

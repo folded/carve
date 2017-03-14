@@ -41,7 +41,7 @@ void carve::csg::CSG::makeEdgeMap(const carve::csg::FaceLoopList& loops,
 
   for (carve::csg::FaceLoop* i = loops.head; i; i = i->next) {
     edge_map.addFaceLoop(i);
-    i->group = NULL;
+    i->group = nullptr;
   }
 }
 
@@ -207,7 +207,7 @@ void carve::csg::CSG::groupFaceLoops(
                      k = (*j).second.begin(),
                      ke = (*j).second.end();
                  k != ke; ++k) {
-              if ((*k)->group != NULL ||
+              if ((*k)->group != nullptr ||
                   (*k)->orig_face->mesh != expand->orig_face->mesh) {
                 continue;
               }
@@ -223,7 +223,7 @@ void carve::csg::CSG::groupFaceLoops(
                      k = (*j).second.begin(),
                      ke = (*j).second.end();
                  k != ke; ++k) {
-              if ((*k)->group != NULL ||
+              if ((*k)->group != nullptr ||
                   (*k)->orig_face->mesh != expand->orig_face->mesh) {
                 continue;
               }

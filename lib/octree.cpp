@@ -36,9 +36,9 @@ namespace csg {
 
 Octree::Node::Node(const carve::geom3d::Vector& newMin,
                    const carve::geom3d::Vector& newMax)
-    : parent(NULL), is_leaf(true), min(newMin), max(newMax) {
+    : parent(nullptr), is_leaf(true), min(newMin), max(newMax) {
   for (int i = 0; i < 8; ++i) {
-    children[i] = NULL;
+    children[i] = nullptr;
   }
   aabb = Octree::makeAABB(this);
 }
@@ -50,18 +50,18 @@ Octree::Node::Node(Node* p, double x1, double y1, double z1, double x2,
       min(carve::geom::VECTOR(x1, y1, z1)),
       max(carve::geom::VECTOR(x2, y2, z2)) {
   for (int i = 0; i < 8; ++i) {
-    children[i] = NULL;
+    children[i] = nullptr;
   }
   aabb = Octree::makeAABB(this);
 }
 
 Octree::Node::~Node() {
   for (int i = 0; i < 8; ++i) {
-    if (children[i] != NULL) {
+    if (children[i] != nullptr) {
       (*children[i]).~Node();
     }
   }
-  if (children[0] != NULL) {
+  if (children[0] != nullptr) {
     char* ptr = (char*)children[0];
     delete[] ptr;
   }
@@ -135,7 +135,7 @@ bool Octree::Node::hasGeometry() {
   return faces.size() > 0 || edges.size() > 0 || vertices.size() > 0;
 }
 
-Octree::Octree() { root = NULL; }
+Octree::Octree() { root = nullptr; }
 
 Octree::~Octree() {
   if (root) {
@@ -186,7 +186,7 @@ carve::geom3d::AABB Octree::makeAABB(const Node* node) {
 void Octree::doFindEdges(const carve::geom::aabb<3>& aabb, Node* node,
                          std::vector<const carve::poly::Edge<3>*>& out,
                          unsigned depth) const {
-  if (node == NULL) {
+  if (node == nullptr) {
     return;
   }
 
@@ -220,7 +220,7 @@ void Octree::doFindEdges(const carve::geom::aabb<3>& aabb, Node* node,
 void Octree::doFindEdges(const carve::geom3d::LineSegment& l, Node* node,
                          std::vector<const carve::poly::Edge<3>*>& out,
                          unsigned depth) const {
-  if (node == NULL) {
+  if (node == nullptr) {
     return;
   }
 
@@ -254,7 +254,7 @@ void Octree::doFindEdges(const carve::geom3d::LineSegment& l, Node* node,
 void Octree::doFindEdges(const carve::geom3d::Vector& v, Node* node,
                          std::vector<const carve::poly::Edge<3>*>& out,
                          unsigned depth) const {
-  if (node == NULL) {
+  if (node == nullptr) {
     return;
   }
 
@@ -288,7 +288,7 @@ void Octree::doFindEdges(const carve::geom3d::Vector& v, Node* node,
 void Octree::doFindFaces(const carve::geom::aabb<3>& aabb, Node* node,
                          std::vector<const carve::poly::Face<3>*>& out,
                          unsigned depth) const {
-  if (node == NULL) {
+  if (node == nullptr) {
     return;
   }
 
@@ -322,7 +322,7 @@ void Octree::doFindFaces(const carve::geom::aabb<3>& aabb, Node* node,
 void Octree::doFindFaces(const carve::geom3d::LineSegment& l, Node* node,
                          std::vector<const carve::poly::Face<3>*>& out,
                          unsigned depth) const {
-  if (node == NULL) {
+  if (node == nullptr) {
     return;
   }
 
@@ -356,7 +356,7 @@ void Octree::doFindFaces(const carve::geom3d::LineSegment& l, Node* node,
 void Octree::doFindVerticesAllowDupes(
     const carve::geom3d::Vector& v, Node* node,
     std::vector<const carve::poly::Vertex<3>*>& out, unsigned depth) const {
-  if (node == NULL) {
+  if (node == nullptr) {
     return;
   }
 

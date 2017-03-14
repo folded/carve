@@ -155,7 +155,7 @@ int main(int argc, char** argv) {
     carve::line::PolylineSet* l;
 
     if ((p = carve::input::Input::create<carve::mesh::MeshSet<3> >(*i)) !=
-        NULL) {
+        nullptr) {
       if (options.canonicalize) {
         p->canonicalize();
       }
@@ -168,7 +168,7 @@ int main(int argc, char** argv) {
       }
       delete p;
     } else if ((l = carve::input::Input::create<carve::line::PolylineSet>(
-                    *i)) != NULL) {
+                    *i)) != nullptr) {
       if (options.obj) {
         writeOBJ(std::cout, l);
       } else if (options.vtk) {
@@ -178,7 +178,7 @@ int main(int argc, char** argv) {
       }
       delete l;
     } else if ((ps = carve::input::Input::create<carve::point::PointSet>(*i)) !=
-               NULL) {
+               nullptr) {
       if (options.obj) {
         std::cerr << "Can't write a point set in .obj format" << std::endl;
       } else if (options.vtk) {

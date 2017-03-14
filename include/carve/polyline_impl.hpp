@@ -44,7 +44,7 @@ inline PolylineEdge* PolylineEdge::prevEdge() const {
     if (parent->closed) {
       return parent->edge(parent->edgeCount() - 1);
     } else {
-      return NULL;
+      return nullptr;
     }
   }
 }
@@ -56,7 +56,7 @@ inline PolylineEdge* PolylineEdge::nextEdge() const {
     if (parent->closed) {
       return parent->edge(0);
     } else {
-      return NULL;
+      return nullptr;
     }
   }
 }
@@ -81,7 +81,7 @@ inline const Vertex* Polyline::vertex(size_t v) const {
   if (closed) {
     v %= edgeCount();
   } else if (v >= edgeCount()) {
-    return v == edgeCount() ? edges.back()->v2 : NULL;
+    return v == edgeCount() ? edges.back()->v2 : nullptr;
   }
   return edges[v]->v1;
 }
@@ -90,7 +90,7 @@ inline Vertex* Polyline::vertex(size_t v) {
   if (closed) {
     v %= edgeCount();
   } else if (v >= edgeCount()) {
-    return v == edgeCount() ? edges.back()->v2 : NULL;
+    return v == edgeCount() ? edges.back()->v2 : nullptr;
   }
   return edges[v]->v1;
 }
@@ -128,11 +128,11 @@ void Polyline::_init(bool c, iter_t begin, iter_t end,
       edges[i]->v1->addEdgePair(edges[i - 1], edges[i]);
     }
   } else {
-    edges.front()->v1->addEdgePair(NULL, edges.front());
+    edges.front()->v1->addEdgePair(nullptr, edges.front());
     for (size_t i = 1; i < edges.size(); ++i) {
       edges[i]->v1->addEdgePair(edges[i - 1], edges[i]);
     }
-    edges.back()->v2->addEdgePair(edges.back(), NULL);
+    edges.back()->v2->addEdgePair(edges.back(), nullptr);
   }
 }
 

@@ -128,7 +128,7 @@ struct Options : public opt::Parser {
       return;
     }
     if (o == "--epsilon" || o == "-E") {
-      carve::setEpsilon(strtod(v.c_str(), NULL));
+      carve::setEpsilon(strtod(v.c_str(), nullptr));
       return;
     }
     if (o == "--help" || o == "-h") {
@@ -275,9 +275,9 @@ static bool endswith(const std::string& a, const std::string& b) {
   return true;
 }
 
-bool charTok(char ch) { return strchr("()|&^,-:", ch) != NULL; }
+bool charTok(char ch) { return strchr("()|&^,-:", ch) != nullptr; }
 
-bool beginsNumber(char ch) { return strchr("+-0123456789.", ch) != NULL; }
+bool beginsNumber(char ch) { return strchr("+-0123456789.", ch) != nullptr; }
 
 bool STRTOD(const std::string& str, double& v) {
   char* ptr;
@@ -380,12 +380,12 @@ bool parseOP(TOK& tok, carve::csg::CSG::OP& op);
 carve::csg::CSG_TreeNode* parseBracketExpr(TOK& tok) {
   carve::csg::CSG_TreeNode* result;
   if (*tok != "(") {
-    return NULL;
+    return nullptr;
   }
   ++tok;
   result = parseExpr(tok);
-  if (result == NULL || *tok != ")") {
-    return NULL;
+  if (result == nullptr || *tok != ")") {
+    return nullptr;
   }
   ++tok;
   return result;
@@ -395,7 +395,7 @@ carve::csg::CSG_TreeNode* parseAtom(TOK& tok) {
   if (*tok == "(") {
     return parseBracketExpr(tok);
   } else {
-    carve::mesh::MeshSet<3>* poly = NULL;
+    carve::mesh::MeshSet<3>* poly = nullptr;
 
     if (*tok == "CUBE") {
       poly = makeCube();
@@ -404,31 +404,31 @@ carve::csg::CSG_TreeNode* parseAtom(TOK& tok) {
       double rad, height;
       ++tok;
       if (*tok != "(") {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (!STRTOUL(*tok, slices)) {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (*tok != ",") {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (!STRTOD(*tok, rad)) {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (*tok != ",") {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (!STRTOD(*tok, height)) {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (*tok != ")") {
-        return NULL;
+        return nullptr;
       }
       poly = makeCone(slices, rad, height);
     } else if (*tok == "CYLINDER") {
@@ -436,31 +436,31 @@ carve::csg::CSG_TreeNode* parseAtom(TOK& tok) {
       double rad, height;
       ++tok;
       if (*tok != "(") {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (!STRTOUL(*tok, slices)) {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (*tok != ",") {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (!STRTOD(*tok, rad)) {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (*tok != ",") {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (!STRTOD(*tok, height)) {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (*tok != ")") {
-        return NULL;
+        return nullptr;
       }
       poly = makeCylinder(slices, rad, height);
     } else if (*tok == "TORUS") {
@@ -468,39 +468,39 @@ carve::csg::CSG_TreeNode* parseAtom(TOK& tok) {
       double rad1, rad2;
       ++tok;
       if (*tok != "(") {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (!STRTOUL(*tok, slices)) {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (*tok != ",") {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (!STRTOUL(*tok, rings)) {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (*tok != ",") {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (!STRTOD(*tok, rad1)) {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (*tok != ",") {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (!STRTOD(*tok, rad2)) {
-        return NULL;
+        return nullptr;
       }
       ++tok;
       if (*tok != ")") {
-        return NULL;
+        return nullptr;
       }
       poly = makeTorus(slices, rings, rad1, rad2);
     } else if (endswith(*tok, ".ply")) {
@@ -510,8 +510,8 @@ carve::csg::CSG_TreeNode* parseAtom(TOK& tok) {
     } else if (endswith(*tok, ".obj")) {
       poly = readOBJasMesh(*tok);
     }
-    if (poly == NULL) {
-      return NULL;
+    if (poly == nullptr) {
+      return nullptr;
     }
 
     std::cerr << "loaded polyhedron " << poly << " has " << poly->meshes.size()
@@ -543,13 +543,13 @@ carve::csg::CSG_TreeNode* parseTransform(TOK& tok) {
   if (*tok == "FLIP") {
     ++tok;
     if (*tok != "(") {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     carve::csg::CSG_TreeNode* child = parseTransform(tok);
     if (*tok != ")") {
       delete child;
-      return NULL;
+      return nullptr;
     }
     ++tok;
 
@@ -560,7 +560,7 @@ carve::csg::CSG_TreeNode* parseTransform(TOK& tok) {
 
     ++tok;
     if (*tok != "(") {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     while (1) {
@@ -571,11 +571,11 @@ carve::csg::CSG_TreeNode* parseTransform(TOK& tok) {
       if (*tok == ":") {
         ++tok;
         if (!STRTOUL(*tok, id2)) {
-          return NULL;
+          return nullptr;
         }
         ++tok;
         if (*tok != ",") {
-          return NULL;
+          return nullptr;
         }
         ++tok;
         while (id <= id2) {
@@ -583,7 +583,7 @@ carve::csg::CSG_TreeNode* parseTransform(TOK& tok) {
         }
       } else {
         if (*tok != ",") {
-          return NULL;
+          return nullptr;
         }
         ++tok;
         sel_ids.insert(id);
@@ -591,13 +591,13 @@ carve::csg::CSG_TreeNode* parseTransform(TOK& tok) {
     }
 
     carve::csg::CSG_TreeNode* child = parseTransform(tok);
-    if (child == NULL) {
-      return NULL;
+    if (child == nullptr) {
+      return nullptr;
     }
 
     if (*tok != ")") {
       delete child;
-      return NULL;
+      return nullptr;
     }
     ++tok;
 
@@ -607,11 +607,11 @@ carve::csg::CSG_TreeNode* parseTransform(TOK& tok) {
     bool deg = false;
     ++tok;
     if (*tok != "(") {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (!STRTOD(*tok, ang)) {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (*tok == "deg") {
@@ -619,42 +619,42 @@ carve::csg::CSG_TreeNode* parseTransform(TOK& tok) {
       ++tok;
     }
     if (*tok != ",") {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (!STRTOD(*tok, x)) {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (*tok != ",") {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (!STRTOD(*tok, y)) {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (*tok != ",") {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (!STRTOD(*tok, z)) {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (*tok != ",") {
-      return NULL;
+      return nullptr;
     }
     ++tok;
 
     carve::csg::CSG_TreeNode* child = parseTransform(tok);
-    if (child == NULL) {
-      return NULL;
+    if (child == nullptr) {
+      return nullptr;
     }
 
     if (*tok != ")") {
       delete child;
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (deg) {
@@ -665,42 +665,42 @@ carve::csg::CSG_TreeNode* parseTransform(TOK& tok) {
   } else if (*tok == "TRANS") {
     ++tok;
     if (*tok != "(") {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (!STRTOD(*tok, x)) {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (*tok != ",") {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (!STRTOD(*tok, y)) {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (*tok != ",") {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (!STRTOD(*tok, z)) {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (*tok != ",") {
-      return NULL;
+      return nullptr;
     }
     ++tok;
 
     carve::csg::CSG_TreeNode* child = parseTransform(tok);
-    if (child == NULL) {
-      return NULL;
+    if (child == nullptr) {
+      return nullptr;
     }
 
     if (*tok != ")") {
       delete child;
-      return NULL;
+      return nullptr;
     }
     ++tok;
     result = new carve::csg::CSG_TransformNode(
@@ -708,42 +708,42 @@ carve::csg::CSG_TreeNode* parseTransform(TOK& tok) {
   } else if (*tok == "SCALE") {
     ++tok;
     if (*tok != "(") {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (!STRTOD(*tok, x)) {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (*tok != ",") {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (!STRTOD(*tok, y)) {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (*tok != ",") {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (!STRTOD(*tok, z)) {
-      return NULL;
+      return nullptr;
     }
     ++tok;
     if (*tok != ",") {
-      return NULL;
+      return nullptr;
     }
     ++tok;
 
     carve::csg::CSG_TreeNode* child = parseTransform(tok);
-    if (child == NULL) {
-      return NULL;
+    if (child == nullptr) {
+      return nullptr;
     }
 
     if (*tok != ")") {
       delete child;
-      return NULL;
+      return nullptr;
     }
     ++tok;
     result = new carve::csg::CSG_TransformNode(
@@ -775,15 +775,15 @@ bool parseOP(TOK& tok, carve::csg::CSG::OP& op) {
 carve::csg::CSG_TreeNode* parseExpr(TOK& tok) {
   carve::csg::CSG_TreeNode* lhs = parseTransform(tok);
   carve::csg::CSG::OP op;
-  if (lhs == NULL) {
-    return NULL;
+  if (lhs == nullptr) {
+    return nullptr;
   }
 
   while (parseOP(tok, op)) {
     carve::csg::CSG_TreeNode* rhs = parseTransform(tok);
-    if (rhs == NULL) {
+    if (rhs == nullptr) {
       delete lhs;
-      return NULL;
+      return nullptr;
     }
     lhs = new carve::csg::CSG_OPNode(lhs, rhs, op, options.rescale,
                                      options.classifier);
@@ -793,8 +793,8 @@ carve::csg::CSG_TreeNode* parseExpr(TOK& tok) {
 
 carve::csg::CSG_TreeNode* parse(TOK& tok) {
   carve::csg::CSG_TreeNode* result = parseExpr(tok);
-  if (result == NULL || *tok != "$") {
-    return NULL;
+  if (result == nullptr || *tok != "$") {
+    return nullptr;
   }
   return result;
 }
@@ -822,9 +822,9 @@ int main(int argc, char** argv) {
 
   std::cerr << "Parse time " << duration << " seconds" << std::endl;
 
-  if (p != NULL) {
+  if (p != nullptr) {
     carve::Timing::start(EVAL_BLOCK);
-    carve::mesh::MeshSet<3>* result = NULL;
+    carve::mesh::MeshSet<3>* result = nullptr;
 
     try {
       carve::csg::CSG csg;

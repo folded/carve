@@ -156,7 +156,7 @@ struct TestScene : public Scene {
     const char* t;
     static const char* l = "1234567890!@#$%^&*()";
     t = strchr(l, k);
-    if (t != NULL) {
+    if (t != nullptr) {
       int layer = t - l;
       if (layer < draw_flags.size()) {
         draw_flags[layer] = !draw_flags[layer];

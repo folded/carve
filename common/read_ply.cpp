@@ -63,7 +63,7 @@ struct line_idx : public gloop::stream::reader<int> {
   line* l;
   line_idx(line* _l) : l(_l) {}
   virtual void length(size_t len) {
-    if (l > 0) {
+    if (l > nullptr) {
       l->curr().second.reserve(len);
     }
   }
@@ -301,7 +301,7 @@ template <typename filetype_t>
 bool readFile(std::istream& in, carve::mesh::MeshSet<3>*& result,
               const carve::math::Matrix& transform) {
   carve::input::Input inputs;
-  result = NULL;
+  result = nullptr;
   if (!readFile<filetype_t>(in, inputs, transform)) {
     return false;
   }
@@ -347,7 +347,7 @@ carve::poly::Polyhedron* readPLY(std::istream& in,
                                  const carve::math::Matrix& transform) {
   carve::poly::Polyhedron* result;
   if (!readFile<gloop::ply::PlyReader>(in, result, transform)) {
-    return NULL;
+    return nullptr;
   }
   return result;
 }
@@ -356,7 +356,7 @@ carve::poly::Polyhedron* readPLY(const std::string& in_file,
                                  const carve::math::Matrix& transform) {
   carve::poly::Polyhedron* result;
   if (!readFile<gloop::ply::PlyReader>(in_file, result, transform)) {
-    return NULL;
+    return nullptr;
   }
   return result;
 }
@@ -366,7 +366,7 @@ carve::mesh::MeshSet<3>* readPLYasMesh(std::istream& in,
   carve::mesh::MeshSet<3>* result;
 
   if (!readFile<gloop::ply::PlyReader>(in, result, transform)) {
-    return NULL;
+    return nullptr;
   }
   return result;
 }
@@ -376,7 +376,7 @@ carve::mesh::MeshSet<3>* readPLYasMesh(const std::string& in_file,
   carve::mesh::MeshSet<3>* result;
 
   if (!readFile<gloop::ply::PlyReader>(in_file, result, transform)) {
-    return NULL;
+    return nullptr;
   }
   return result;
 }
@@ -395,7 +395,7 @@ carve::poly::Polyhedron* readOBJ(std::istream& in,
                                  const carve::math::Matrix& transform) {
   carve::poly::Polyhedron* result;
   if (!readFile<gloop::obj::ObjReader>(in, result, transform)) {
-    return NULL;
+    return nullptr;
   }
   return result;
 }
@@ -404,7 +404,7 @@ carve::poly::Polyhedron* readOBJ(const std::string& in_file,
                                  const carve::math::Matrix& transform) {
   carve::poly::Polyhedron* result;
   if (!readFile<gloop::obj::ObjReader>(in_file, result, transform)) {
-    return NULL;
+    return nullptr;
   }
   return result;
 }
@@ -413,7 +413,7 @@ carve::mesh::MeshSet<3>* readOBJasMesh(std::istream& in,
                                        const carve::math::Matrix& transform) {
   carve::mesh::MeshSet<3>* result;
   if (!readFile<gloop::obj::ObjReader>(in, result, transform)) {
-    return NULL;
+    return nullptr;
   }
   return result;
 }
@@ -422,7 +422,7 @@ carve::mesh::MeshSet<3>* readOBJasMesh(const std::string& in_file,
                                        const carve::math::Matrix& transform) {
   carve::mesh::MeshSet<3>* result;
   if (!readFile<gloop::obj::ObjReader>(in_file, result, transform)) {
-    return NULL;
+    return nullptr;
   }
   return result;
 }
@@ -441,7 +441,7 @@ carve::poly::Polyhedron* readVTK(std::istream& in,
                                  const carve::math::Matrix& transform) {
   carve::poly::Polyhedron* result;
   if (!readFile<gloop::vtk::VtkReader>(in, result, transform)) {
-    return NULL;
+    return nullptr;
   }
   return result;
 }
@@ -450,7 +450,7 @@ carve::poly::Polyhedron* readVTK(const std::string& in_file,
                                  const carve::math::Matrix& transform) {
   carve::poly::Polyhedron* result;
   if (!readFile<gloop::vtk::VtkReader>(in_file, result, transform)) {
-    return NULL;
+    return nullptr;
   }
   return result;
 }
@@ -459,7 +459,7 @@ carve::mesh::MeshSet<3>* readVTKasMesh(std::istream& in,
                                        const carve::math::Matrix& transform) {
   carve::mesh::MeshSet<3>* result;
   if (!readFile<gloop::vtk::VtkReader>(in, result, transform)) {
-    return NULL;
+    return nullptr;
   }
   return result;
 }
@@ -468,7 +468,7 @@ carve::mesh::MeshSet<3>* readVTKasMesh(const std::string& in_file,
                                        const carve::math::Matrix& transform) {
   carve::mesh::MeshSet<3>* result;
   if (!readFile<gloop::vtk::VtkReader>(in_file, result, transform)) {
-    return NULL;
+    return nullptr;
   }
   return result;
 }

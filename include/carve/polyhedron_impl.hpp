@@ -171,7 +171,7 @@ int Geometry<3>::edgeToFaces(const edge_t* e, T result) const {
       connectivity.edge_to_face[(size_t)edgeToIndex_fast(e)];
   int c = 0;
   for (size_t i = 0; i < edge_faces.size(); ++i) {
-    if (edge_faces[i] != NULL) {
+    if (edge_faces[i] != nullptr) {
       *result++ = edge_faces[i];
       ++c;
     }
@@ -188,7 +188,7 @@ inline const Geometry<3>::face_t* Geometry<3>::connectedFace(
       return edge_faces[i ^ 1];
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 inline void Polyhedron::invert(int m_id) {

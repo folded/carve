@@ -31,7 +31,7 @@ void Octree::doFindEdges(
     const carve::poly::Geometry<3>::face_t& f, Node* node,
     std::vector<const carve::poly::Geometry<3>::edge_t*>& out, unsigned depth,
     filter_t filter) const {
-  if (node == NULL) {
+  if (node == nullptr) {
     return;
   }
 

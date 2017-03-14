@@ -59,7 +59,7 @@ carve::mesh::MeshSet<3>* makeSubdividedCube(
     const carve::math::Matrix& transform) {
   carve::input::PolyhedronData data;
 
-  if (inc == NULL) {
+  if (inc == nullptr) {
     inc = _all;
   }
 

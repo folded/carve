@@ -109,7 +109,7 @@ struct Options : public opt::Parser {
 
 static Options options;
 
-carve::mesh::MeshSet<3>* g_result = NULL;
+carve::mesh::MeshSet<3>* g_result = nullptr;
 
 std::vector<carve::geom3d::LineSegment> rays;
 
@@ -127,7 +127,7 @@ struct TestScene : public Scene {
     const char* t;
     static const char* l = "1234567890!@#$%^&*()";
     t = strchr(l, k);
-    if (t != NULL) {
+    if (t != nullptr) {
       int layer = t - l;
       if ((size_t)layer < draw_flags.size()) {
         draw_flags[layer]->setChecked(!draw_flags[layer]->isChecked());
@@ -221,7 +221,7 @@ bool even(int x, int y, int z) { return ((x + y + z) & 1) == 0; }
 class Input {
  public:
   Input() {
-    poly = NULL;
+    poly = nullptr;
     op = carve::csg::CSG::UNION;
     ownsPoly = true;
   }
@@ -256,9 +256,9 @@ class Input {
 
 void getInputsFromTest(int test, std::list<Input>& inputs) {
   carve::csg::CSG::OP op = carve::csg::CSG::INTERSECTION;
-  carve::mesh::MeshSet<3>* a = NULL;
-  carve::mesh::MeshSet<3>* b = NULL;
-  carve::mesh::MeshSet<3>* c = NULL;
+  carve::mesh::MeshSet<3>* a = nullptr;
+  carve::mesh::MeshSet<3>* b = nullptr;
+  carve::mesh::MeshSet<3>* c = nullptr;
 
   switch (test) {
     case 0:
@@ -312,7 +312,7 @@ void getInputsFromTest(int test, std::list<Input>& inputs) {
 
     case 9:
       a = makeCube();
-      b = makeSubdividedCube(3, 3, 3, NULL,
+      b = makeSubdividedCube(3, 3, 3, nullptr,
                              carve::math::Matrix::TRANS(0.0, 0.0, 0.5) *
                                  carve::math::Matrix::SCALE(0.5, 0.5, 0.5));
       break;
@@ -326,8 +326,8 @@ void getInputsFromTest(int test, std::list<Input>& inputs) {
       break;
 
     case 13:
-      a = makeSubdividedCube(3, 3, 3, NULL);
-      b = makeSubdividedCube(3, 3, 3, NULL,
+      a = makeSubdividedCube(3, 3, 3, nullptr);
+      b = makeSubdividedCube(3, 3, 3, nullptr,
                              carve::math::Matrix::TRANS(0.0, 0.0, 0.5) *
                                  carve::math::Matrix::SCALE(0.5, 0.5, 0.5));
       break;
@@ -515,13 +515,13 @@ void getInputsFromTest(int test, std::list<Input>& inputs) {
       break;
   }
 
-  if (a != NULL) {
+  if (a != nullptr) {
     inputs.push_back(Input(a, carve::csg::CSG::UNION));
   }
-  if (b != NULL) {
+  if (b != nullptr) {
     inputs.push_back(Input(b, op));
   }
-  if (c != NULL) {
+  if (c != nullptr) {
     inputs.push_back(Input(c, op));
   }
 
@@ -567,7 +567,7 @@ void testCSG(GLuint& dlist, std::list<Input>::const_iterator begin,
 
   // If this is the first time around, we use the first input as our first
   // intermediate result.
-  if (finalResult == NULL) {
+  if (finalResult == nullptr) {
     finalResult = begin->poly;
     result_is_temp = false;
     ++begin;
@@ -590,10 +590,10 @@ void testCSG(GLuint& dlist, std::list<Input>::const_iterator begin,
         group->createOption("Debug data visible", false));
     scene->wireframe_flags.push_back(true);
     if (a && b) {
-      carve::mesh::MeshSet<3>* result = NULL;
+      carve::mesh::MeshSet<3>* result = nullptr;
       try {
         result = carve::csg::CSG().compute(
-            a, b, op, NULL, options.edge_classifier
+            a, b, op, nullptr, options.edge_classifier
                                 ? carve::csg::CSG::CLASSIFY_EDGE
                                 : carve::csg::CSG::CLASSIFY_NORMAL);
 
@@ -630,7 +630,7 @@ void testCSG(GLuint& dlist, std::list<Input>::const_iterator begin,
         if (result_is_temp && finalResult) {
           delete finalResult;
         }
-        finalResult = NULL;
+        finalResult = nullptr;
       }
     }
     ++begin;
@@ -718,7 +718,7 @@ void genSceneDisplayList(const std::list<Input>& inputs, TestScene* scene) {
   g_scale = scale_fac;
   std::cerr << "scale fac: " << scale_fac << std::endl;
 
-  g_result = NULL;
+  g_result = nullptr;
 
   GLuint currentList = scene->draw_list_base;
 

@@ -86,7 +86,7 @@ struct mesh_face_idx : public gloop::stream::writer<size_t> {
   int max_length;
 
   mesh_face_idx(mesh_face& _r, gloop::stream::Type _data_type, int _max_length)
-      : r(_r), f(NULL), data_type(_data_type), max_length(_max_length) {}
+      : r(_r), f(nullptr), data_type(_data_type), max_length(_max_length) {}
   void begin() override {
     f = r.curr();
     i = f->begin();
@@ -120,7 +120,7 @@ struct face_idx : public gloop::stream::writer<size_t> {
   int max_length;
 
   face_idx(face& _r, gloop::stream::Type _data_type, int _max_length)
-      : r(_r), f(NULL), i(0), data_type(_data_type), max_length(_max_length) {}
+      : r(_r), f(nullptr), i(0), data_type(_data_type), max_length(_max_length) {}
   void begin() override {
     f = r.curr();
     i = 0;
@@ -168,7 +168,7 @@ struct line_vi : public gloop::stream::writer<size_t> {
 
   line_vi(lineset& _ls, gloop::stream::Type _data_type, int _max_length)
       : ls(_ls),
-        l(NULL),
+        l(nullptr),
         i(0),
         data_type(_data_type),
         max_length(_max_length) {}

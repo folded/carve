@@ -150,7 +150,7 @@ class SpatialSubdivTree {
     inline bool isLeaf() const { return children == NULL; }
 
     Node(Node* _parent, const vector_t& _min, const vector_t& _max)
-        : parent(_parent), children(NULL), min(_min), max(_max) {
+        : parent(_parent), children(nullptr), min(_min), max(_max) {
       aabb = makeAABB();
     }
 
@@ -221,7 +221,7 @@ class SpatialSubdivTree {
   Node* root;
 
   SpatialSubdivTree(const vector_t& _min, const vector_t& _max)
-      : root(new Node(NULL, _min, _max)) {}
+      : root(new Node(nullptr, _min, _max)) {}
 
   ~SpatialSubdivTree() { delete root; }
 

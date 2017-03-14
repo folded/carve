@@ -63,7 +63,7 @@ struct EdgeSurface {
   FaceLoop* rev;
   double rev_ang;
 
-  EdgeSurface() : fwd(NULL), fwd_ang(0.0), rev(NULL), rev_ang(0.0) {}
+  EdgeSurface() : fwd(nullptr), fwd_ang(0.0), rev(nullptr), rev_ang(0.0) {}
 };
 
 typedef std::map<const carve::mesh::MeshSet<3>::mesh_t*, EdgeSurface>
@@ -346,7 +346,7 @@ static bool processForwardEdgeSurfaces(
   for (std::list<FaceLoop *>::const_iterator i = fwd.begin(), e = fwd.end();
        i != e; ++i) {
     EdgeSurface& es = (edge_surfaces[(*i)->orig_face->mesh]);
-    if (es.fwd != NULL) {
+    if (es.fwd != nullptr) {
       return false;
     }
     es.fwd = (*i);
@@ -363,7 +363,7 @@ static bool processReverseEdgeSurfaces(
   for (std::list<FaceLoop *>::const_iterator i = rev.begin(), e = rev.end();
        i != e; ++i) {
     EdgeSurface& es = (edge_surfaces[(*i)->orig_face->mesh]);
-    if (es.rev != NULL) {
+    if (es.rev != nullptr) {
       return false;
     }
     es.rev = (*i);
@@ -569,7 +569,7 @@ static inline std::string CODE(const FaceLoopGroup* grp) {
            i = grp->classification.begin(),
            e = grp->classification.end();
        i != e; ++i) {
-    if ((*i).intersected_mesh == NULL) {
+    if ((*i).intersected_mesh == nullptr) {
       // classifier only returns global info
       fc = (*i).classification;
       break;
@@ -847,7 +847,7 @@ void CSG::classifyFaceGroupsEdge(
       std::cerr << " non intersecting group (poly a): " << &(*i) << std::endl;
 #endif
       bool classified = false;
-      for (FaceLoop* fl = (*i).face_loops.head; !classified && fl != NULL;
+      for (FaceLoop* fl = (*i).face_loops.head; !classified && fl != nullptr;
            fl = fl->next) {
         for (size_t fli = 0; !classified && fli < fl->vertices.size(); ++fli) {
           if (vclass[fl->vertices[fli]].cls[1] == POINT_UNK) {
@@ -856,11 +856,11 @@ void CSG::classifyFaceGroupsEdge(
           }
           switch (vclass[fl->vertices[fli]].cls[1]) {
             case POINT_IN:
-              (*i).classification.push_back(ClassificationInfo(NULL, FACE_IN));
+              (*i).classification.push_back(ClassificationInfo(nullptr, FACE_IN));
               classified = true;
               break;
             case POINT_OUT:
-              (*i).classification.push_back(ClassificationInfo(NULL, FACE_OUT));
+              (*i).classification.push_back(ClassificationInfo(nullptr, FACE_OUT));
               classified = true;
               break;
             default:
@@ -882,7 +882,7 @@ void CSG::classifyFaceGroupsEdge(
       std::cerr << " non intersecting group (poly b): " << &(*i) << std::endl;
 #endif
       bool classified = false;
-      for (FaceLoop* fl = (*i).face_loops.head; !classified && fl != NULL;
+      for (FaceLoop* fl = (*i).face_loops.head; !classified && fl != nullptr;
            fl = fl->next) {
         for (size_t fli = 0; !classified && fli < fl->vertices.size(); ++fli) {
           if (vclass[fl->vertices[fli]].cls[0] == POINT_UNK) {
@@ -891,11 +891,11 @@ void CSG::classifyFaceGroupsEdge(
           }
           switch (vclass[fl->vertices[fli]].cls[0]) {
             case POINT_IN:
-              (*i).classification.push_back(ClassificationInfo(NULL, FACE_IN));
+              (*i).classification.push_back(ClassificationInfo(nullptr, FACE_IN));
               classified = true;
               break;
             case POINT_OUT:
-              (*i).classification.push_back(ClassificationInfo(NULL, FACE_OUT));
+              (*i).classification.push_back(ClassificationInfo(nullptr, FACE_OUT));
               classified = true;
               break;
             default:

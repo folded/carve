@@ -63,7 +63,7 @@ Face<ndim>* Face<ndim>::init(const Face<ndim>* base, iter_t vbegin, iter_t vend,
   }
 
   edges.clear();
-  edges.resize(nVertices(), NULL);
+  edges.resize(nVertices(), nullptr);
 
   aabb.fit(vertices.begin(), vertices.end(), vec_adapt_vertex_ptr());
   untag();
@@ -95,7 +95,7 @@ Face<ndim>* Face<ndim>::clone(bool flipped) const {
 
 template <unsigned ndim>
 void Face<ndim>::getVertexLoop(std::vector<const vertex_t*>& loop) const {
-  loop.resize(nVertices(), NULL);
+  loop.resize(nVertices(), nullptr);
   std::copy(vbegin(), vend(), loop.begin());
 }
 

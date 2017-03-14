@@ -115,8 +115,8 @@ static void performClassifySimpleOnFaceGroups(FLGroupList& a_groups,
         // oriented out, otherwise oriented in.
         FaceClass fc = s == +1 ? FACE_ON_ORIENT_OUT : FACE_ON_ORIENT_IN;
 
-        (*a).classification.push_back(ClassificationInfo(NULL, fc));
-        (*b).classification.push_back(ClassificationInfo(NULL, fc));
+        (*a).classification.push_back(ClassificationInfo(nullptr, fc));
+        (*b).classification.push_back(ClassificationInfo(nullptr, fc));
 
         collector.collect(&*a, hooks);
         collector.collect(&*b, hooks);
@@ -171,7 +171,7 @@ static void performClassifyEasyFaceGroups(
     ++i;
     continue;
   accept : {
-    grp.classification.push_back(ClassificationInfo(NULL, fc));
+    grp.classification.push_back(ClassificationInfo(nullptr, fc));
     collector.collect(&grp, hooks);
     i = group.erase(i);
   }
@@ -234,7 +234,7 @@ static void performClassifyHardFaceGroups(
     if (n_out) { fc = FACE_OUT;
 }
 
-    grp.classification.push_back(ClassificationInfo(NULL, fc));
+    grp.classification.push_back(ClassificationInfo(nullptr, fc));
     collector.collect(&grp, hooks);
     i = group.erase(i);
   }
@@ -275,7 +275,7 @@ void performFaceLoopWork(
 
     const carve::mesh::MeshSet<3>::face_t* hit_face;
     PointClass pc = carve::mesh::classifyPoint(poly_a, poly_a_rtree, v, false,
-                                               NULL, &hit_face);
+                                               nullptr, &hit_face);
     switch (pc) {
       case POINT_IN:
         fc = FACE_IN;
@@ -299,7 +299,7 @@ void performFaceLoopWork(
               << std::endl;
 #endif
 
-    (*i).classification.push_back(ClassificationInfo(NULL, fc));
+    (*i).classification.push_back(ClassificationInfo(nullptr, fc));
     collector.collect(&*i, hooks);
     i = b_loops_grouped.erase(i);
   }
@@ -379,8 +379,8 @@ void performClassifyFaceGroups(
         a_map[std::min_element(it_begin, it_end)->first].remove(j);
       }
 
-      (*i).classification.push_back(ClassificationInfo(NULL, fc));
-      (*j).classification.push_back(ClassificationInfo(NULL, fc));
+      (*i).classification.push_back(ClassificationInfo(nullptr, fc));
+      (*j).classification.push_back(ClassificationInfo(nullptr, fc));
 
       collector.collect(&*i, hooks);
       collector.collect(&*j, hooks);

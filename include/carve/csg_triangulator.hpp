@@ -183,7 +183,7 @@ class CarveTriangulationQuadMerger : public csg::CSG::Hook {
 
   carve::mesh::MeshSet<3>::face_t* mergeQuad(edge_map_t::iterator i,
                                              edge_map_t& edge_map) {
-    return NULL;
+    return nullptr;
   }
 
   void recordEdge(carve::mesh::MeshSet<3>::vertex_t* v1,

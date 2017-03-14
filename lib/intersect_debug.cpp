@@ -62,7 +62,7 @@ bool intersect_debugEnabled() { return true; }
 
 IntersectDebugHooks* intersect_installDebugHooks(
     IntersectDebugHooks* /* hooks */) {
-  return NULL;
+  return nullptr;
 }
 
 bool intersect_debugEnabled() { return false; }

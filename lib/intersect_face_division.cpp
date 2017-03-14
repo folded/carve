@@ -138,9 +138,9 @@ struct GraphEdge {
 
   GraphEdge(carve::mesh::MeshSet<3>::vertex_t* _src,
             carve::mesh::MeshSet<3>::vertex_t* _tgt)
-      : next(NULL),
-        prev(NULL),
-        loop_next(NULL),
+      : next(nullptr),
+        prev(nullptr),
+        loop_next(nullptr),
         src(_src),
         tgt(_tgt),
         ang(0.0),
@@ -151,7 +151,7 @@ struct GraphEdges {
   GraphEdge* edges;
   carve::geom2d::P2 proj;
 
-  GraphEdges() : edges(NULL), proj() {}
+  GraphEdges() : edges(nullptr), proj() {}
 };
 
 struct Graph {
@@ -244,17 +244,17 @@ struct Graph {
   }
 
   void removeEdge(GraphEdge* edge) {
-    if (edge->prev != NULL) {
+    if (edge->prev != nullptr) {
       edge->prev->next = edge->next;
     } else {
-      if (edge->next != NULL) {
+      if (edge->next != nullptr) {
         GraphEdges& edges = (graph[edge->src]);
         edges.edges = edge->next;
       } else {
         graph.erase(edge->src);
       }
     }
-    if (edge->next != NULL) {
+    if (edge->next != nullptr) {
       edge->next->prev = edge->prev;
     }
     delete edge;
@@ -267,7 +267,7 @@ struct Graph {
     // always succeed.
     for (graph_t::iterator i = graph.begin(); i != graph.end(); ++i) {
       GraphEdges& ge = i->second;
-      if (ge.edges->next == NULL) {
+      if (ge.edges->next == nullptr) {
         return ge.edges;
       }
     }
@@ -322,25 +322,25 @@ static void splitFace(
       }
 
       GraphEdge* opts;
-      GraphEdge* out = NULL;
+      GraphEdge* out = nullptr;
       double best = M_TWOPI + 1.0;
 
       for (opts = graph.outboundEdges(edge->tgt); opts; opts = opts->next) {
         if (opts->tgt == edge->src) {
-          if (out == NULL && opts->next == NULL) {
+          if (out == nullptr && opts->next == nullptr) {
             out = opts;
           }
         } else {
           double out_ang = carve::math::ANG(in_ang - opts->ang);
 
-          if (out == NULL || out_ang < best) {
+          if (out == nullptr || out_ang < best) {
             out = opts;
             best = out_ang;
           }
         }
       }
 
-      CARVE_ASSERT(out != NULL);
+      CARVE_ASSERT(out != nullptr);
 
       edge->loop_next = out;
 
@@ -348,7 +348,7 @@ static void splitFace(
         while (start != out) {
           GraphEdge* e = start;
           start = start->loop_next;
-          e->loop_next = NULL;
+          e->loop_next = nullptr;
           e->visited = -1;
         }
         len = edge->visited - out->visited + 1;
@@ -698,7 +698,7 @@ static void mergeFacesAndHoles(
         std::vector<carve::mesh::MeshSet<3>::vertex_t*>& f_loop = face_loops[f];
         std::vector<carve::mesh::MeshSet<3>::vertex_t*>& h_loop = hole_loops[i];
 
-        f_loop.insert(f_loop.begin() + f_idx + 1, h_loop.size(), NULL);
+        f_loop.insert(f_loop.begin() + f_idx + 1, h_loop.size(), nullptr);
 
         unsigned p = f_idx + 1;
         for (unsigned a = h_idx + 1; a < h_loop.size(); ++a, ++p) {

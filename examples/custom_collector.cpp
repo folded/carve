@@ -59,7 +59,7 @@ struct TestScene : public Scene {
     const char* t;
     static const char* l = "1234567890!@#$%^&*()";
     t = strchr(l, k);
-    if (t != NULL) {
+    if (t != nullptr) {
       int layer = t - l;
       if (layer < draw_flags.size()) {
         draw_flags[layer] = !draw_flags[layer];
@@ -167,7 +167,7 @@ int main(int argc, char** argv) {
 
   Between between_collector(a, b);
   carve::mesh::MeshSet<3>* c = carve::csg::CSG().compute(
-      a, b, between_collector, NULL, carve::csg::CSG::CLASSIFY_EDGE);
+      a, b, between_collector, nullptr, carve::csg::CSG::CLASSIFY_EDGE);
 
   TestScene* scene = new TestScene(argc, argv, 3);
 

@@ -69,7 +69,7 @@ struct Options : public opt::Parser {
       return;
     }
     if (o == "--epsilon" || o == "-E") {
-      carve::setEpsilon(strtod(v.c_str(), NULL));
+      carve::setEpsilon(strtod(v.c_str(), nullptr));
       return;
     }
     if (o == "--help" || o == "-h") {
@@ -206,12 +206,12 @@ int main(int argc, char** argv) {
         (*next_i).second.erase(prior);
         if (!(*prior_i).second.size()) {
           edge_graph.erase(prior);
-          prior = NULL;
+          prior = nullptr;
           prior_i = edge_graph.end();
         }
         if (!(*next_i).second.size()) {
           edge_graph.erase(next);
-          next = NULL;
+          next = nullptr;
           next_i = edge_graph.end();
         }
         prior_i = next_i;

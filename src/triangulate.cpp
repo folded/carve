@@ -149,8 +149,8 @@ carve::mesh::MeshSet<3>* readModel(const std::string& file) {
     poly = readOBJasMesh(file);
   }
 
-  if (poly == NULL) {
-    return NULL;
+  if (poly == nullptr) {
+    return nullptr;
   }
 
   std::cerr << "loaded polyhedron " << poly << " has " << poly->meshes.size()

@@ -115,7 +115,7 @@ class Polyhedron : public Geometry<3> {
                                         bool ignore_orentation) const;
 
   PointClass containsVertex(const carve::geom3d::Vector& v,
-                            const face_t** hit_face = NULL,
+                            const face_t** hit_face = nullptr,
                             bool even_odd = false, int manifold_id = -1) const;
 
   // *** locality queries

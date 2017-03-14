@@ -82,7 +82,7 @@ TEST(HookTest, ResultFace) {
 
   csg.hooks.registerHook(new ResultFaceHook(counter),
                          carve::csg::CSG::Hooks::RESULT_FACE_BIT);
-  csg.compute(a, b, carve::csg::CSG::UNION, NULL,
+  csg.compute(a, b, carve::csg::CSG::UNION, nullptr,
               carve::csg::CSG::CLASSIFY_EDGE);
 
   ASSERT_EQ(counter.size(), 2);

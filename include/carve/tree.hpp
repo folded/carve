@@ -160,7 +160,7 @@ class CSG_SelectNode : public CSG_TreeNode {
     for (size_t i = 0; i < c->meshes.size(); ++i) {
       if (i >= selected_meshes.size() || !selected_meshes[i]) {
         delete c->meshes[i];
-        c->meshes[i] = NULL;
+        c->meshes[i] = nullptr;
       } else {
         c->meshes[j++] = c->meshes[i];
       }
@@ -264,11 +264,11 @@ class CSG_OPNode : public CSG_TreeNode {
     l->transform(fwd_r);
     r->transform(fwd_r);
 
-    carve::mesh::MeshSet<3>* result = NULL;
+    carve::mesh::MeshSet<3>* result = nullptr;
     {
       static carve::TimingName FUNC_NAME("csg.compute()");
       carve::TimingBlock block(FUNC_NAME);
-      result = csg.compute(l, r, op, NULL, classify_type);
+      result = csg.compute(l, r, op, nullptr, classify_type);
     }
 
     {
@@ -292,11 +292,11 @@ class CSG_OPNode : public CSG_TreeNode {
     l = left->eval(l_temp, csg);
     r = right->eval(r_temp, csg);
 
-    carve::mesh::MeshSet<3>* result = NULL;
+    carve::mesh::MeshSet<3>* result = nullptr;
     {
       static carve::TimingName FUNC_NAME("csg.compute()");
       carve::TimingBlock block(FUNC_NAME);
-      result = csg.compute(l, r, op, NULL, classify_type);
+      result = csg.compute(l, r, op, nullptr, classify_type);
     }
 
     {

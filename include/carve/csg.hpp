@@ -431,7 +431,7 @@ class CSG {
    * @return
    */
   meshset_t* compute(meshset_t* a, meshset_t* b, CSG::Collector& collector,
-                     V2Set* shared_edges = NULL,
+                     V2Set* shared_edges = nullptr,
                      CLASSIFY_TYPE classify_type = CLASSIFY_NORMAL);
 
   /**
@@ -447,15 +447,15 @@ class CSG {
    * @return
    */
   meshset_t* compute(meshset_t* a, meshset_t* b, OP op,
-                     V2Set* shared_edges = NULL,
+                     V2Set* shared_edges = nullptr,
                      CLASSIFY_TYPE classify_type = CLASSIFY_NORMAL);
 
   void slice(meshset_t* a, meshset_t* b, std::list<meshset_t*>& a_sliced,
-             std::list<meshset_t*>& b_sliced, V2Set* shared_edges = NULL);
+             std::list<meshset_t*>& b_sliced, V2Set* shared_edges = nullptr);
 
   bool sliceAndClassify(meshset_t* closed, meshset_t* open,
                         std::list<std::pair<FaceClass, meshset_t*> >& result,
-                        V2Set* shared_edges = NULL);
+                        V2Set* shared_edges = nullptr);
 };
 }  // namespace csg
 }  // namespace carve

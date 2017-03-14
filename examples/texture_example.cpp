@@ -244,7 +244,7 @@ struct TestScene : public Scene {
     const char* t;
     static const char* l = "1234567890!@#$%^&*()";
     t = strchr(l, k);
-    if (t != NULL) {
+    if (t != nullptr) {
       int layer = t - l;
       if (layer < draw_flags.size()) {
         draw_flags[layer] = !draw_flags[layer];
@@ -298,7 +298,7 @@ int main(int argc, char** argv) {
 
   carve::interpolate::FaceVertexAttr<tex_t> fv_tex;
   carve::interpolate::FaceAttr<GLuint> f_tex_num;
-  carve::mesh::MeshSet<3>* base = NULL;
+  carve::mesh::MeshSet<3>* base = nullptr;
 
   bool b = true;
   for (int x = -10; x <= +10; x += 5) {
@@ -339,10 +339,10 @@ int main(int argc, char** argv) {
   f_tex_num.installHooks(csg);
 
   carve::mesh::MeshSet<3>* r3 =
-      csg.compute(base, r1, carve::csg::CSG::INTERSECTION, NULL,
+      csg.compute(base, r1, carve::csg::CSG::INTERSECTION, nullptr,
                   carve::csg::CSG::CLASSIFY_EDGE);
   carve::mesh::MeshSet<3>* r4 = csg.compute(
-      r3, r2, carve::csg::CSG::UNION, NULL, carve::csg::CSG::CLASSIFY_EDGE);
+      r3, r2, carve::csg::CSG::UNION, nullptr, carve::csg::CSG::CLASSIFY_EDGE);
 
   glNewList(scene->draw_list_base, GL_COMPILE);
   drawTexturedPolyhedron(r4, fv_tex, f_tex_num);

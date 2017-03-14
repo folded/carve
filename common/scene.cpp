@@ -37,9 +37,9 @@ static int lastx = 0, lasty = 0;
 static unsigned buttons;
 static int lastbutton = 0;
 
-static Scene* g_scene = NULL;
+static Scene* g_scene = nullptr;
 static int g_mainWindow = 0;
-static GLUI* g_rightPanel = NULL;
+static GLUI* g_rightPanel = nullptr;
 static double near_plane = 0.2;
 static double far_plane = 200;
 carve::math::Matrix g_projection, g_modelview;
@@ -394,11 +394,11 @@ OptionGroup* Scene::createOptionGroup(const char* caption) {
 
 Option* OptionGroup::createOption(const char* caption, bool initialValue) {
   GLUI_Rollout* rollout = groupToRollouts[this];
-  if (rollout == NULL) {
-    return NULL;
+  if (rollout == nullptr) {
+    return nullptr;
   }
 
-  GLUI_Checkbox* cb = new GLUI_Checkbox(rollout, caption, NULL, 1, control_cb);
+  GLUI_Checkbox* cb = new GLUI_Checkbox(rollout, caption, nullptr, 1, control_cb);
   cb->set_int_val(initialValue);
 
   Option* option = new Option();
@@ -410,7 +410,7 @@ Option* OptionGroup::createOption(const char* caption, bool initialValue) {
 
 bool Option::isChecked() {
   GLUI_Checkbox* cb = optionToCheckboxes[this];
-  if (cb != NULL) {
+  if (cb != nullptr) {
     return cb->get_int_val() != 0;
   } else {
     return false;
@@ -419,7 +419,7 @@ bool Option::isChecked() {
 
 void Option::setChecked(bool value) {
   GLUI_Checkbox* cb = optionToCheckboxes[this];
-  if (cb != NULL) {
+  if (cb != nullptr) {
     return cb->set_int_val(value);
   }
 }
@@ -431,7 +431,7 @@ void Scene::init() {
     GLUI_Master.set_glutDisplayFunc(s_draw);
     GLUI_Master.set_glutReshapeFunc(s_resize);
     GLUI_Master.set_glutKeyboardFunc(s_key);
-    GLUI_Master.set_glutSpecialFunc(NULL);
+    GLUI_Master.set_glutSpecialFunc(nullptr);
     GLUI_Master.set_glutMouseFunc(s_click);
     GLUI_Master.set_glutMotionFunc(s_drag);
 
@@ -494,7 +494,7 @@ Scene::Scene(int argc, char** argv) {
   g_scene = this;
 }
 
-Scene::~Scene() { g_scene = NULL; }
+Scene::~Scene() { g_scene = nullptr; }
 
 void Scene::run() {
   init();

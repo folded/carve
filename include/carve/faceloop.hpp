@@ -41,18 +41,18 @@ struct FaceLoop {
 
   FaceLoop(const carve::mesh::MeshSet<3>::face_t* f,
            const std::vector<carve::mesh::MeshSet<3>::vertex_t*>& v)
-      : next(NULL), prev(NULL), orig_face(f), vertices(v), group(NULL) {}
+      : next(nullptr), prev(nullptr), orig_face(f), vertices(v), group(nullptr) {}
 };
 
 struct FaceLoopList {
   FaceLoop *head, *tail;
   unsigned count;
 
-  FaceLoopList() : head(NULL), tail(NULL), count(0) {}
+  FaceLoopList() : head(nullptr), tail(nullptr), count(0) {}
 
   void append(FaceLoop* f) {
     f->prev = tail;
-    f->next = NULL;
+    f->next = nullptr;
     if (tail) {
       tail->next = f;
     }
@@ -65,7 +65,7 @@ struct FaceLoopList {
 
   void prepend(FaceLoop* f) {
     f->next = head;
-    f->prev = NULL;
+    f->prev = nullptr;
     if (head) {
       head->prev = f;
     }
@@ -90,7 +90,7 @@ struct FaceLoopList {
     } else {
       tail = f->prev;
     }
-    f->next = f->prev = NULL;
+    f->next = f->prev = nullptr;
     count--;
     return r;
   }

@@ -172,7 +172,7 @@ struct RTreeNode {
 
   template <typename iter_t>
   RTreeNode(iter_t begin, iter_t end)
-      : bbox(), child(NULL), sibling(NULL), data() {
+      : bbox(), child(nullptr), sibling(nullptr), data() {
     _fill(begin, end, typename std::iterator_traits<iter_t>::value_type());
   }
 

@@ -81,8 +81,8 @@ struct TriangulationData {
           p(_p),
           convex(false),
           failed(false),
-          next(NULL),
-          prev(NULL),
+          next(nullptr),
+          prev(nullptr),
           edge(_edge) {}
 
     bool isCandidate() const { return convex && !failed; }
@@ -330,7 +330,7 @@ struct TriangulationData {
       v2 = v2->next;
     } while (v1 != a);
 
-    return diag_t(NULL, NULL);
+    return diag_t(nullptr, nullptr);
   }
 
   diag_t scanAllDiagonals(VertexInfo* a) const {
@@ -342,19 +342,19 @@ struct TriangulationData {
 
     // loops of length 2 or 3 have no possible diagonal.
     if (a->next == a || a->next->next == a) {
-      return diag_t(NULL, NULL);
+      return diag_t(nullptr, nullptr);
     }
 
     VertexInfo* b = findMidpoint(a);
     while (b != a->next) {
       diag_t d = scanDiagonals(a, b);
-      if (d != diag_t(NULL, NULL)) {
+      if (d != diag_t(nullptr, nullptr)) {
         return d;
       }
       b = b->prev;
     }
 
-    return diag_t(NULL, NULL);
+    return diag_t(nullptr, nullptr);
   }
 
   diag_t findDiagonal(VertexInfo* vert) const { return scanAllDiagonals(vert); }
@@ -405,9 +405,9 @@ struct TriangulationData {
 
   void splitEdgeLoop(VertexInfo* v1, VertexInfo* v2) {
     VertexInfo* v1_copy =
-        new VertexInfo(new Edge<ndim>(v1->edge->vert, NULL), v1->p);
+        new VertexInfo(new Edge<ndim>(v1->edge->vert, nullptr), v1->p);
     VertexInfo* v2_copy =
-        new VertexInfo(new Edge<ndim>(v2->edge->vert, NULL), v2->p);
+        new VertexInfo(new Edge<ndim>(v2->edge->vert, nullptr), v2->p);
 
     v1_copy->edge->rev = v2_copy->edge;
     v2_copy->edge->rev = v1_copy->edge;
@@ -441,7 +441,7 @@ struct TriangulationData {
     VertexInfo* v = edge;
 
     if (v->next == v || v->next->next == v) {
-      return NULL;
+      return nullptr;
     }
 
     do {
@@ -474,7 +474,7 @@ struct TriangulationData {
       v = v->next;
     } while (v != edge);
 
-    return NULL;
+    return nullptr;
   }
 
   // Clip off a vertex at vert, producing a triangle (with appropriate rev
@@ -486,8 +486,8 @@ struct TriangulationData {
     edge_t* p_edge = vert->edge->prev;
     edge_t* n_edge = vert->edge->next;
 
-    edge_t* p_copy = new edge_t(p_edge->vert, NULL);
-    edge_t* n_copy = new edge_t(n_edge->vert, NULL);
+    edge_t* p_copy = new edge_t(p_edge->vert, nullptr);
+    edge_t* n_copy = new edge_t(n_edge->vert, nullptr);
 
     n_copy->next = p_copy;
     n_copy->prev = vert->edge;
@@ -516,7 +516,7 @@ struct TriangulationData {
         vert->edge->face->edge = n_edge;
       }
       vert->edge->face->n_edges--;
-      vert->edge->face = NULL;
+      vert->edge->face = nullptr;
     }
 
     vert->next->prev = vert->prev;
@@ -532,7 +532,7 @@ struct TriangulationData {
     VertexInfo* v;
     size_t count = 0;
 
-    while ((v = findDegenerateEar(begin)) != NULL) {
+    while ((v = findDegenerateEar(begin)) != nullptr) {
       begin = clipEar(v, out);
       ++count;
     }
@@ -544,7 +544,7 @@ struct TriangulationData {
     diag_t diag;
 
     diag = findDiagonal(begin);
-    if (diag == diag_t(NULL, NULL)) {
+    if (diag == diag_t(nullptr, nullptr)) {
       std::cerr << "failed to find diagonal" << std::endl;
       return false;
     }
@@ -583,10 +583,10 @@ struct TriangulationData {
 
   VertexInfo* init(edge_t* begin) {
     edge_t* e = begin;
-    VertexInfo *head = NULL, *tail = NULL, *v;
+    VertexInfo *head = nullptr, *tail = nullptr, *v;
     do {
       VertexInfo* v = new VertexInfo(e, proj(e->vert->v));
-      if (tail != NULL) {
+      if (tail != nullptr) {
         tail->next = v;
         v->prev = tail;
       } else {
@@ -920,7 +920,7 @@ bool TriangulationData<ndim, proj_t>::doTriangulate(VertexInfo* begin,
       // XXX: this test will fail in cases where the boundary is
       // twisted so that a negative area balances a positive area.
       std::cerr << "got to here" << std::endl;
-      dumpPoly(begin->edge, NULL, "interesting_case_");
+      dumpPoly(begin->edge, nullptr, "interesting_case_");
       goto done;
     }
   }
@@ -966,7 +966,7 @@ void triangulate(Edge<ndim>* edge, proj_t proj, out_iter_t out) {
 // b-c-d
 template <unsigned ndim>
 void flipTriEdge(Edge<ndim>* edge) {
-  CARVE_ASSERT(edge->rev != NULL);
+  CARVE_ASSERT(edge->rev != nullptr);
   CARVE_ASSERT(edge->face->nEdges() == 3);
   CARVE_ASSERT(edge->rev->face->nEdges() == 3);
 

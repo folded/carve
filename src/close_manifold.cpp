@@ -77,15 +77,15 @@ struct Options : public opt::Parser {
     }
     if (o == "-x") {
       axis = X;
-      pos = strtod(v.c_str(), NULL);
+      pos = strtod(v.c_str(), nullptr);
     }
     if (o == "-y") {
       axis = Y;
-      pos = strtod(v.c_str(), NULL);
+      pos = strtod(v.c_str(), nullptr);
     }
     if (o == "-z") {
       axis = Z;
-      pos = strtod(v.c_str(), NULL);
+      pos = strtod(v.c_str(), nullptr);
     }
   }
 
@@ -156,7 +156,7 @@ int main(int argc, char** argv) {
     poly = readOBJasMesh(options.file);
   }
 
-  if (poly == NULL) {
+  if (poly == nullptr) {
     std::cerr << "failed to load polyhedron" << std::endl;
     exit(1);
   }

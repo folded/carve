@@ -502,7 +502,7 @@ static carve::mesh::MeshSet<3>::vertex_t* chooseWeldPoint(
     carve::csg::VertexPool& vertex_pool) {
   // XXX: choose a better weld point.
   if (!equivalent.size()) {
-    return NULL;
+    return nullptr;
   }
 
   for (carve::csg::detail::VSet::const_iterator i = equivalent.begin(),
@@ -534,7 +534,7 @@ static const carve::mesh::MeshSet<3>::vertex_t* weld(
 #endif
 
   if (!weld_point) {
-    return NULL;
+    return nullptr;
   }
 
   carve::csg::VertexIntersections::mapped_type& weld_tgt =
@@ -1588,7 +1588,7 @@ carve::mesh::MeshSet<3>* carve::csg::CSG::compute(
   }
 
   meshset_t* result = collector.done(hooks);
-  if (result != NULL && shared_edges_ptr != NULL) {
+  if (result != nullptr && shared_edges_ptr != nullptr) {
     std::list<meshset_t*> result_list;
     result_list.push_back(result);
     returnSharedEdges(shared_edges, result_list, shared_edges_ptr);
@@ -1613,7 +1613,7 @@ carve::mesh::MeshSet<3>* carve::csg::CSG::compute(
     carve::csg::V2Set* shared_edges, CLASSIFY_TYPE classify_type) {
   Collector* coll = makeCollector(op, a, b);
   if (!coll) {
-    return NULL;
+    return nullptr;
   }
 
   meshset_t* result = compute(a, b, *coll, shared_edges, classify_type);
@@ -1680,7 +1680,7 @@ bool carve::csg::CSG::sliceAndClassify(
                          a_loops_grouped, a_edge_map, open, open_rtree.get(),
                          b_loops_grouped, b_edge_map, result);
 
-  if (shared_edges_ptr != NULL) {
+  if (shared_edges_ptr != nullptr) {
     std::list<meshset_t*> result_list;
     for (std::list<std::pair<FaceClass, meshset_t*> >::iterator it =
              result.begin();
@@ -1758,7 +1758,7 @@ void carve::csg::CSG::slice(meshset_t* a, meshset_t* b,
 
     delete all;
   }
-  if (shared_edges_ptr != NULL) {
+  if (shared_edges_ptr != nullptr) {
     std::list<meshset_t*> result_list;
     result_list.insert(result_list.end(), a_sliced.begin(), a_sliced.end());
     result_list.insert(result_list.end(), b_sliced.begin(), b_sliced.end());

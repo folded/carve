@@ -687,7 +687,7 @@ int main(int argc, char** argv) {
       break;
     }
   }
-  if (poly == NULL) {
+  if (poly == nullptr) {
     std::cerr << "failed to load polyhedron" << std::endl;
     exit(1);
   }

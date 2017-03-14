@@ -63,7 +63,7 @@ class DetailClip : public carve::csg::CSG::Collector {
     if (grp->face_loops.head->orig_face->mesh->meshset != src_b) {
       return;
     }
-    if (grp->classificationAgainst(NULL) == carve::csg::FACE_IN) {
+    if (grp->classificationAgainst(nullptr) == carve::csg::FACE_IN) {
       return;
     }
     if (grp->classificationAgainst(src_a->meshes[0]) == carve::csg::FACE_IN) {
@@ -92,7 +92,7 @@ int main(int argc, char** argv) {
   b = readPLYasMesh(argv[2]);
   DetailClip detail_clip_collector(a, b);
   carve::mesh::MeshSet<3>* c = carve::csg::CSG().compute(
-      a, b, detail_clip_collector, NULL, carve::csg::CSG::CLASSIFY_EDGE);
+      a, b, detail_clip_collector, nullptr, carve::csg::CSG::CLASSIFY_EDGE);
   writePLY(std::cout, c, false);
   return 0;
 }

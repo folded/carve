@@ -89,8 +89,8 @@ struct list_iter_t {
 
 template <unsigned ndim>
 Edge<ndim>* Edge<ndim>::mergeFaces() {
-  if (rev == NULL) {
-    return NULL;
+  if (rev == nullptr) {
+    return nullptr;
   }
 
   face_t* fwdface = face;
@@ -107,7 +107,7 @@ Edge<ndim>* Edge<ndim>::mergeFaces() {
 
   if (splice_beg == this) {
     // edge loops are completely matched.
-    return NULL;
+    return nullptr;
   }
 
   Edge* splice_end = this;
@@ -154,24 +154,24 @@ Edge<ndim>* Edge<ndim>::mergeFaces() {
   fwdface->n_edges -= n_removed;
 
   revface->n_edges = 0;
-  revface->edge = NULL;
+  revface->edge = nullptr;
 
-  _setloopface(left_loop, NULL);
-  _setloopface(left_loop->rev, NULL);
+  _setloopface(left_loop, nullptr);
+  _setloopface(left_loop->rev, nullptr);
 
   return left_loop;
 }
 
 template <unsigned ndim>
 Edge<ndim>* Edge<ndim>::removeHalfEdge() {
-  Edge* n = NULL;
+  Edge* n = nullptr;
   if (face) {
     face->n_edges--;
   }
 
   if (next == this) {
     if (face) {
-      face->edge = NULL;
+      face->edge = nullptr;
     }
   } else {
     if (face && face->edge == this) {
@@ -196,12 +196,12 @@ Edge<ndim>* Edge<ndim>::removeEdge() {
 template <unsigned ndim>
 void Edge<ndim>::unlink() {
   if (rev) {
-    rev->rev = NULL;
-    rev = NULL;
+    rev->rev = nullptr;
+    rev = nullptr;
   }
   if (prev->rev) {
-    prev->rev->rev = NULL;
-    prev->rev = NULL;
+    prev->rev->rev = nullptr;
+    prev->rev = nullptr;
   }
 
   if (face) {
@@ -209,7 +209,7 @@ void Edge<ndim>::unlink() {
     if (face->edge == this) {
       face->edge = next;
     }
-    face = NULL;
+    face = nullptr;
   }
 
   next->prev = prev;
@@ -229,8 +229,8 @@ void Edge<ndim>::insertBefore(Edge<ndim>* other) {
   prev->next = this;
 
   if (prev->rev) {
-    prev->rev->rev = NULL;
-    prev->rev = NULL;
+    prev->rev->rev = nullptr;
+    prev->rev = nullptr;
   }
 }
 
@@ -245,8 +245,8 @@ void Edge<ndim>::insertAfter(Edge<ndim>* other) {
   prev->next = this;
 
   if (prev->rev) {
-    prev->rev->rev = NULL;
-    prev->rev = NULL;
+    prev->rev->rev = nullptr;
+    prev->rev = nullptr;
   }
 }
 
@@ -264,7 +264,7 @@ size_t Edge<ndim>::loopSize() const {
 template <unsigned ndim>
 Edge<ndim>* Edge<ndim>::perimNext() const {
   if (rev) {
-    return NULL;
+    return nullptr;
   }
   Edge* e = next;
   while (e->rev) {
@@ -276,7 +276,7 @@ Edge<ndim>* Edge<ndim>::perimNext() const {
 template <unsigned ndim>
 Edge<ndim>* Edge<ndim>::perimPrev() const {
   if (rev) {
-    return NULL;
+    return nullptr;
   }
   Edge* e = prev;
   while (e->rev) {
@@ -287,7 +287,7 @@ Edge<ndim>* Edge<ndim>::perimPrev() const {
 
 template <unsigned ndim>
 Edge<ndim>::Edge(vertex_t* _vert, face_t* _face)
-    : vert(_vert), face(_face), prev(NULL), next(NULL), rev(NULL) {
+    : vert(_vert), face(_face), prev(nullptr), next(nullptr), rev(nullptr) {
   prev = next = this;
 }
 
@@ -334,7 +334,7 @@ void Face<ndim>::clearEdges() {
     curr = next;
   } while (curr != edge);
 
-  edge = NULL;
+  edge = nullptr;
 
   n_edges = 0;
 }
@@ -485,7 +485,7 @@ Face<ndim>* Face<ndim>::clone(
   Face* r = new Face(*this);
 
   edge_t* e = edge;
-  edge_t* r_p = NULL;
+  edge_t* r_p = nullptr;
   edge_t* r_e;
   do {
     r_e = new edge_t(e->vert - old_base + new_base, r);
@@ -522,7 +522,7 @@ Mesh<ndim>::Mesh(std::vector<face_t*>& _faces,
   std::swap(open_edges, _open_edges);
   std::swap(closed_edges, _closed_edges);
   is_negative = _is_negative;
-  meshset = NULL;
+  meshset = nullptr;
 
   for (size_t i = 0; i < faces.size(); ++i) {
     faces[i]->mesh = this;
@@ -537,7 +537,7 @@ void FaceStitcher::initEdges(iter_t begin, iter_t end) {
     face_t* face = *i;
     CARVE_ASSERT(
         face->mesh ==
-        NULL);  // for the moment, can only insert a face into a mesh once.
+        nullptr);  // for the moment, can only insert a face into a mesh once.
 
     face->id = c++;
     edge_t* e = face->edge;
@@ -545,8 +545,8 @@ void FaceStitcher::initEdges(iter_t begin, iter_t end) {
       edges[vpair_t(e->v1(), e->v2())].push_back(e);
       e = e->next;
       if (e->rev) {
-        e->rev->rev = NULL;
-        e->rev = NULL;
+        e->rev->rev = nullptr;
+        e->rev = nullptr;
       }
     } while (e != face->edge);
   }
@@ -600,7 +600,7 @@ void Mesh<ndim>::cacheEdges() {
     face_t* face = faces[i];
     edge_t* e = face->edge;
     do {
-      if (e->rev == NULL) {
+      if (e->rev == nullptr) {
         open_edges.push_back(e);
       } else if (e < e->rev) {
         closed_edges.push_back(e);
@@ -612,7 +612,7 @@ void Mesh<ndim>::cacheEdges() {
 
 template <unsigned ndim>
 Mesh<ndim>::Mesh(std::vector<face_t*>& _faces)
-    : faces(), open_edges(), closed_edges(), meshset(NULL) {
+    : faces(), open_edges(), closed_edges(), meshset(nullptr) {
   faces.swap(_faces);
   for (size_t i = 0; i < faces.size(); ++i) {
     faces[i]->mesh = this;
@@ -855,7 +855,7 @@ MeshSet<ndim>::MeshSet(std::vector<typename MeshSet<ndim>::mesh_t*>& _meshes) {
 
   for (size_t m = 0; m < meshes.size(); ++m) {
     mesh_t* mesh = meshes[m];
-    CARVE_ASSERT(mesh->meshset == NULL);
+    CARVE_ASSERT(mesh->meshset == nullptr);
     mesh->meshset = this;
     for (size_t f = 0; f < mesh->faces.size(); ++f) {
       face_t* face = mesh->faces[f];

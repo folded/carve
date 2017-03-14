@@ -39,7 +39,7 @@ carve::mesh::MeshSet<3>* makeCube(
 
 carve::mesh::MeshSet<3>* makeSubdividedCube(
     int sub_x = 3, int sub_y = 3, int sub_z = 3,
-    bool (*inc)(int, int, int) = NULL,
+    bool (*inc)(int, int, int) = nullptr,
     const carve::math::Matrix& transform = carve::math::Matrix());
 
 carve::mesh::MeshSet<3>* makeDoubleCube(

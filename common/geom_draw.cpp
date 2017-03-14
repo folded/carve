@@ -416,7 +416,7 @@ void drawFaceWireframe(carve::poly::Face<3>* face, bool normal, float r,
   glBegin(GL_LINES);
   for (size_t i = 0, l = face->nEdges(); i != l; ++i) {
     if (static_cast<carve::poly::Polyhedron*>(face->owner)
-            ->connectedFace(face, face->edge(i)) == NULL) {
+            ->connectedFace(face, face->edge(i)) == nullptr) {
       glVertex(face->edge(i)->v1);
       glVertex(face->edge(i)->v2);
     }
@@ -561,7 +561,7 @@ void DebugHooks::drawFaceLoop(
   glNormal3dv(normal.v);
   glColor4f(r, g, b, a);
 
-  gluTessBeginPolygon(tess, (void*)NULL);
+  gluTessBeginPolygon(tess, (void*)nullptr);
   gluTessBeginContour(tess);
 
   std::vector<carve::geom3d::Vector> v;

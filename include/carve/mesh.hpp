@@ -185,7 +185,7 @@ class Edge : public tagable {
     size_t c = 0;
     do {
       ++c;
-      CARVE_ASSERT(e->rev == NULL || e->rev->rev == e);
+      CARVE_ASSERT(e->rev == nullptr || e->rev->rev == e);
       CARVE_ASSERT(e->next == e || e->next->vert != e->vert);
       CARVE_ASSERT(e->prev == e || e->prev->vert != e->vert);
       CARVE_ASSERT(e->next->prev == e);
@@ -193,7 +193,7 @@ class Edge : public tagable {
       CARVE_ASSERT(e->face == f);
       e = e->next;
     } while (e != this);
-    CARVE_ASSERT(f == NULL || c == f->n_edges);
+    CARVE_ASSERT(f == nullptr || c == f->n_edges);
   }
 
   size_t loopLen() { return _looplen(this); }
@@ -301,18 +301,18 @@ class Face : public tagable {
 
  protected:
   Face()
-      : edge(NULL),
+      : edge(nullptr),
         n_edges(0),
-        mesh(NULL),
+        mesh(nullptr),
         id(0),
         plane(),
-        project(NULL),
-        unproject(NULL) {}
+        project(nullptr),
+        unproject(nullptr) {}
 
   Face(const Face& other)
-      : edge(NULL),
+      : edge(nullptr),
         n_edges(other.n_edges),
-        mesh(NULL),
+        mesh(nullptr),
         id(other.id),
         plane(other.plane),
         project(other.project),
@@ -389,7 +389,7 @@ class Face : public tagable {
 
   static Face* closeLoop(edge_t* open_edge);
 
-  Face(edge_t* e) : edge(e), n_edges(0), mesh(NULL) {
+  Face(edge_t* e) : edge(e), n_edges(0), mesh(nullptr) {
     do {
       e->face = this;
       n_edges++;
@@ -399,19 +399,19 @@ class Face : public tagable {
   }
 
   Face(vertex_t* a, vertex_t* b, vertex_t* c)
-      : edge(NULL), n_edges(0), mesh(NULL) {
+      : edge(nullptr), n_edges(0), mesh(nullptr) {
     init(a, b, c);
     recalc();
   }
 
   Face(vertex_t* a, vertex_t* b, vertex_t* c, vertex_t* d)
-      : edge(NULL), n_edges(0), mesh(NULL) {
+      : edge(nullptr), n_edges(0), mesh(nullptr) {
     init(a, b, c, d);
     recalc();
   }
 
   template <typename iter_t>
-  Face(iter_t begin, iter_t end) : edge(NULL), n_edges(0), mesh(NULL) {
+  Face(iter_t begin, iter_t end) : edge(nullptr), n_edges(0), mesh(nullptr) {
     init(begin, end);
     recalc();
   }
@@ -426,7 +426,7 @@ class Face : public tagable {
     edge_t* e = edge;
     do {
       if (e->rev) {
-        e->rev->rev = NULL;
+        e->rev->rev = nullptr;
       }
       e = e->next;
     } while (e != edge);
@@ -870,8 +870,8 @@ carve::PointClass classifyPoint(
     const carve::mesh::MeshSet<3>* meshset,
     const carve::geom::RTreeNode<3, carve::mesh::Face<3>*>* face_rtree,
     const carve::geom::vector<3>& v, bool even_odd = false,
-    const carve::mesh::Mesh<3>* mesh = NULL,
-    const carve::mesh::Face<3>** hit_face = NULL);
+    const carve::mesh::Mesh<3>* mesh = nullptr,
+    const carve::mesh::Face<3>** hit_face = nullptr);
 }  // namespace mesh
 
 mesh::MeshSet<3>* meshFromPolyhedron(const poly::Polyhedron*, int manifold_id);
