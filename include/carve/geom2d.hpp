@@ -435,5 +435,5 @@ bool pickContainedPoint(const std::vector<T>& poly, adapt_t adapt, P2& result) {
   }
   return false;
 }
-}
-}
+}  // namespace geom2d
+}  // namespace carve

@@ -71,9 +71,9 @@ class LoopEdges
   void sortFaceLoopLists();
   void removeFaceLoop(FaceLoop* fl);
 };
-}
-}
-}
+}  // namespace detail
+}  // namespace csg
+}  // namespace carve
 
 static inline std::ostream& operator<<(std::ostream& o,
                                        const carve::csg::detail::FSet& s) {

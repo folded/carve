@@ -87,5 +87,5 @@ template <typename func_t>
 void Octree::iterateNodes(const func_t& f) const {
   doIterate(0, root, f);
 }
-}
-}
+}  // namespace csg
+}  // namespace carve

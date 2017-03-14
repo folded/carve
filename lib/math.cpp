@@ -380,5 +380,5 @@ void eigSolve(const Matrix3& m, double& l1, double& l2, double& l3) {
   }
   std::cerr << std::endl;
 }
-}
-}
+}  // namespace math
+}  // namespace carve

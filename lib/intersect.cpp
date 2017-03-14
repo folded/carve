@@ -240,7 +240,7 @@ void selectOrderingProjection(
     }
   }
 }
-}
+}  // namespace
 
 namespace {
 struct dump_data {
@@ -401,7 +401,7 @@ void facesForObject(const carve::csg::IObj& obj,
       break;
   }
 }
-}
+}  // namespace
 
 bool carve::csg::CSG::Hooks::hasHook(unsigned hook_num) {
   return hooks[hook_num].size() > 0;

@@ -173,7 +173,7 @@ static inline void improve(const std::vector<carve::geom2d::P2>& poly,
                            std::vector<tri_idx>& result) {
   improve(carve::geom2d::p2_adapt_ident(), poly, result);
 }
-}
-}
+}  // namespace triangulate
+}  // namespace carve
 
 #include <carve/triangulator_impl.hpp>

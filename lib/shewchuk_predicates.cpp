@@ -4063,4 +4063,4 @@ double insphere(const double* pa, const double* pb, const double* pc,
 
   return insphereadapt(pa, pb, pc, pd, pe, permanent);
 }
-}
+}  // namespace shewchuk

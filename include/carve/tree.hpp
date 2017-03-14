@@ -323,5 +323,5 @@ class CSG_OPNode : public CSG_TreeNode {
     }
   }
 };
-}
-}
+}  // namespace csg
+}  // namespace carve

@@ -117,5 +117,5 @@ static inline std::ostream& operator<<(std::ostream& o,
   }
   return o;
 }
-}
-}
+}  // namespace csg
+}  // namespace carve

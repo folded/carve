@@ -513,7 +513,7 @@ static inline void square_2(const double* a, double* r) {
   double t6[4];
   op<2, 2>::add(t5, t4 + 1, r + 2);
 }
-}
+}  // namespace detail
 
 void exact_t::compress() {
   double sum[2];
@@ -736,5 +736,5 @@ double orient3dexact(const double* pa, const double* pb, const double* pc,
 
   return det[det.size() - 1];
 }
-}
-}
+}  // namespace exact
+}  // namespace carve

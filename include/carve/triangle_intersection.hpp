@@ -60,5 +60,5 @@ TriangleIntType triangle_linesegment_intersection_exact(
     const vector<2> tri_a[3], const vector<2> line_b[2]);
 TriangleIntType triangle_point_intersection_exact(const vector<2> tri_a[3],
                                                   const vector<2>& pt_b);
-}
-}
+}  // namespace geom
+}  // namespace carve

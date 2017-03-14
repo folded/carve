@@ -436,5 +436,5 @@ class FaceAttr : public Interpolator {
 
   virtual ~FaceAttr() {}
 };
-}
-}
+}  // namespace interpolate
+}  // namespace carve

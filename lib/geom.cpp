@@ -157,5 +157,5 @@ vector<3> closestPoint(const tri<3>& tri, const vector<3>& pt) {
 
   return closest;
 }
-}
-}
+}  // namespace geom
+}  // namespace carve

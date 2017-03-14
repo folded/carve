@@ -522,5 +522,5 @@ inline bool aabb<3>::intersects(tri<3> tri) const {
 
   return true;
 }
-}
-}
+}  // namespace geom
+}  // namespace carve

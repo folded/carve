@@ -330,5 +330,5 @@ static inline double antiClockwiseOrdering(const Vector& from, const Vector& to,
     }
   }
 }
-}
-}
+}  // namespace geom3d
+}  // namespace carve

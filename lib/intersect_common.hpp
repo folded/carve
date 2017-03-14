@@ -93,5 +93,5 @@ static inline void drawEdges(T begin, T end, float rB, float gB, float bB,
 }
 
 #endif
-}
-}
+}  // namespace csg
+}  // namespace carve

@@ -91,5 +91,5 @@ class IntersectDebugHooks {
 
 IntersectDebugHooks* intersect_installDebugHooks(IntersectDebugHooks* hooks);
 bool intersect_debugEnabled();
-}
-}
+}  // namespace csg
+}  // namespace carve

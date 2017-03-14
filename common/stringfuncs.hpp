@@ -102,4 +102,4 @@ static inline std::string strip(const std::string& a) {
   }
   return a.substr(p, q - p);
 }
-}
+}  // namespace str

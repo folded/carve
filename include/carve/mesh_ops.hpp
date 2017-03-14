@@ -951,7 +951,7 @@ bool TriangulationData<ndim, proj_t>::doTriangulate(VertexInfo* begin,
 done:
   return ret;
 }
-}
+}  // namespace detail
 
 template <unsigned ndim, typename proj_t, typename out_iter_t>
 void triangulate(Edge<ndim>* edge, proj_t proj, out_iter_t out) {
@@ -1050,5 +1050,5 @@ Edge<ndim>* clipVertex(Edge<ndim>* edge) {
   splitEdgeLoop(edge->prev, edge->next);
   return next;
 }
-}
-}
+}  // namespace mesh
+}  // namespace carve

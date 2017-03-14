@@ -406,7 +406,7 @@ unsigned half_test(const vec3 tri_a[3], const int nb[3], const vec3 tri_b[3]) {
   }
   return c;
 }
-}
+}  // namespace
 
 namespace carve {
 namespace geom {
@@ -741,5 +741,5 @@ TriangleIntType triangle_intersection_exact(const vec3 tri_a[3],
   }
   return TR_TYPE_TOUCH;
 }
-}
-}
+}  // namespace geom
+}  // namespace carve

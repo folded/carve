@@ -64,7 +64,7 @@ bool grahamScan(const std::vector<carve::geom2d::P2>& points, int vpp, int vp,
 
   return false;
 }
-}
+}  // namespace
 
 namespace carve {
 namespace geom {
@@ -108,5 +108,5 @@ std::vector<int> convexHull(const std::vector<carve::geom2d::P2>& points) {
 
   return result;
 }
-}
-}
+}  // namespace geom
+}  // namespace carve

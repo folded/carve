@@ -49,4 +49,4 @@ template <typename set_t>
 inline set_insert_iterator<set_t> set_inserter(set_t& s) {
   return set_insert_iterator<set_t>(s);
 }
-}
+}  // namespace carve

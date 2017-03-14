@@ -179,5 +179,5 @@ class Octree {
 
   void splitTree();
 };
-}
-}
+}  // namespace csg
+}  // namespace carve

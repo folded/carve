@@ -1587,5 +1587,5 @@ class MeshSimplifier {
     }
   }
 };
-}
-}
+}  // namespace mesh
+}  // namespace carve

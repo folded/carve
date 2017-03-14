@@ -463,7 +463,7 @@ struct quantize {
     return r;
   }
 };
-}
-}
+}  // namespace geom
+}  // namespace carve
 
 #include <carve/geom_impl.hpp>

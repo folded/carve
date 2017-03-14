@@ -61,5 +61,5 @@ void PointSet::sortVertices(const carve::geom3d::Vector& axis) {
 
   vertices.swap(vnew);
 }
-}
-}
+}  // namespace point
+}  // namespace carve

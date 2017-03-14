@@ -281,5 +281,5 @@ inline carve::point::PointSet* Input::create(Data* d, const Options& options) {
   }
   return p->create(options);
 }
-}
-}
+}  // namespace input
+}  // namespace carve

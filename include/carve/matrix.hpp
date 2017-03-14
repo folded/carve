@@ -286,5 +286,5 @@ struct matrix_transformation {
     return matrix * vector;
   }
 };
-}
-}
+}  // namespace math
+}  // namespace carve

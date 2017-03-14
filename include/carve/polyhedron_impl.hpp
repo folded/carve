@@ -283,5 +283,5 @@ inline std::ostream& operator<<(std::ostream& o, const Polyhedron& p) {
   p.print(o);
   return o;
 }
-}
-}
+}  // namespace poly
+}  // namespace carve

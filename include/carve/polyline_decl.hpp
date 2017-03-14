@@ -153,5 +153,5 @@ struct PolylineSet {
 
   size_t vertexToIndex_fast(const Vertex* v) const;
 };
-}
-}
+}  // namespace line
+}  // namespace carve

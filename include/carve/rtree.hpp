@@ -540,5 +540,5 @@ struct RTreeNode {
     return construct_TGS(data.begin(), data.end(), leaf_size, internal_size);
   }
 };
-}
-}
+}  // namespace geom
+}  // namespace carve

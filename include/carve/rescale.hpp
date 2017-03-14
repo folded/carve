@@ -126,5 +126,5 @@ struct rev {
                                (v.z * r.scale) + r.dz);
   }
 };
-}
-}
+}  // namespace rescale
+}  // namespace carve

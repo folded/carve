@@ -599,7 +599,7 @@ class FaceStitcher {
   template <typename iter_t>
   void create(iter_t begin, iter_t end, std::vector<Mesh<3>*>& meshes);
 };
-}
+}  // namespace detail
 
 // A Mesh is a connected set of faces. It may be open (some edges
 // have NULL rev members), or closed. On destruction, a Mesh
@@ -872,10 +872,10 @@ carve::PointClass classifyPoint(
     const carve::geom::vector<3>& v, bool even_odd = false,
     const carve::mesh::Mesh<3>* mesh = NULL,
     const carve::mesh::Face<3>** hit_face = NULL);
-}
+}  // namespace mesh
 
 mesh::MeshSet<3>* meshFromPolyhedron(const poly::Polyhedron*, int manifold_id);
 poly::Polyhedron* polyhedronFromMesh(const mesh::MeshSet<3>*, int manifold_id);
-};
+}  // namespace carve
 
 #include <carve/mesh_impl.hpp>

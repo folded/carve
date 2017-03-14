@@ -118,5 +118,5 @@ struct FaceLoopGroup {
 };
 
 typedef std::list<FaceLoopGroup> FLGroupList;
-}
-}
+}  // namespace csg
+}  // namespace carve

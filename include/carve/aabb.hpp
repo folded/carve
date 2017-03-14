@@ -143,8 +143,8 @@ template <unsigned ndim, typename obj_t>
 struct get_aabb<ndim, obj_t*> {
   aabb<ndim> operator()(const obj_t* obj) const { return obj->getAABB(); }
 };
-}
-}
+}  // namespace geom
+}  // namespace carve
 
 namespace carve {
 namespace geom3d {

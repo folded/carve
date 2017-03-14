@@ -96,4 +96,4 @@ struct Timing {
 };
 
 #endif
-}
+}  // namespace carve

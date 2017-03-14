@@ -76,5 +76,5 @@ static inline void HSV2RGB(float H, float S, float V, float& r, float& g,
   }
   r = g = b = 0.0;
 }
-}
-}
+}  // namespace colour
+}  // namespace carve

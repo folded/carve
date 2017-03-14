@@ -230,7 +230,7 @@ void modelSetup(carve::input::Input& inputs,
   model.addReader("polyline", new begin_polyline(model, inputs));
   model.addReader("pointset", new begin_pointset(model, inputs));
 }
-}
+}  // namespace
 
 template <typename filetype_t>
 bool readFile(std::istream& in, carve::input::Input& inputs,

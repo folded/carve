@@ -166,5 +166,5 @@ void PolylineSet::addPolyline(bool closed, iter_t begin, iter_t end) {
 inline size_t PolylineSet::vertexToIndex_fast(const Vertex* v) const {
   return (size_t)(v - &vertices[0]);
 }
-}
-}
+}  // namespace line
+}  // namespace carve

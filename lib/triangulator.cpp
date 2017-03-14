@@ -107,7 +107,7 @@ static inline const carve::geom2d::P2& pvert(
     const std::pair<size_t, size_t>& idx) {
   return poly[idx.first][idx.second];
 }
-}
+}  // namespace
 
 namespace {
 // private code related to triangulation.
@@ -409,7 +409,7 @@ void dumpPoly(const std::vector<carve::geom2d::P2>& points,
   out << "</svg>" << std::endl;
 }
 #endif
-}
+}  // namespace
 
 double carve::triangulate::detail::vertex_info::triScore(const vertex_info* p,
                                                          const vertex_info* v,

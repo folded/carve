@@ -82,7 +82,7 @@ struct order_faces {
                                         b->vend());
   }
 };
-}
+}  // namespace
 
 namespace carve {
 namespace poly {
@@ -1124,5 +1124,5 @@ void Polyhedron::canonicalize() {
   }
   std::swap(faces, sorted_faces);
 }
-}
-}
+}  // namespace poly
+}  // namespace carve

@@ -152,5 +152,5 @@ struct Geometry<3> : public Object {
   template <typename T>
   int vertexToFaces(const vertex_t* v, T result) const;
 };
-}
-}
+}  // namespace poly
+}  // namespace carve

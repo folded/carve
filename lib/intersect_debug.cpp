@@ -68,5 +68,5 @@ IntersectDebugHooks* intersect_installDebugHooks(
 bool intersect_debugEnabled() { return false; }
 
 #endif
-}
-}
+}  // namespace csg
+}  // namespace carve

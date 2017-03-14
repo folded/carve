@@ -262,4 +262,4 @@ class Parser {
     return parse(argv[0], opts);
   }
 };
-}
+}  // namespace opt

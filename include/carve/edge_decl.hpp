@@ -62,5 +62,5 @@ struct hash_edge_ptr {
     return (size_t)e;
   }
 };
-}
-}
+}  // namespace poly
+}  // namespace carve

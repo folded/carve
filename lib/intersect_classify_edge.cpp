@@ -555,7 +555,7 @@ void generateCandidateOnSets(FLGroupList& a_grp, FLGroupList& b_grp,
     }
   }
 }
-}
+}  // namespace
 
 static inline std::string CODE(const FaceLoopGroup* grp) {
   const std::list<ClassificationInfo>& cinfo = (grp->classification);
@@ -954,5 +954,5 @@ void CSG::classifyFaceGroupsEdge(
   // traceIntersectionGraph(shared_edges, a_loops_grouped, b_loops_grouped,
   // a_edge_map, b_edge_map);
 }
-}
-}
+}  // namespace csg
+}  // namespace carve

@@ -334,5 +334,5 @@ inline polyline_edge_iter Polyline::ebegin() {
 inline polyline_edge_iter Polyline::eend() {
   return polyline_edge_iter(this, (ssize_t)edgeCount());
 }
-}
-}
+}  // namespace line
+}  // namespace carve

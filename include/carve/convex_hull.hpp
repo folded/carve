@@ -60,5 +60,5 @@ std::vector<int> convexHull(const project_t& project, iter_t beg, iter_t end,
   }
   return convexHull(proj);
 }
-}
-}
+}  // namespace geom
+}  // namespace carve

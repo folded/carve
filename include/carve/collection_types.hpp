@@ -63,5 +63,5 @@ typedef std::unordered_set<V2, hash_pair> V2Set;
 typedef std::unordered_map<carve::mesh::MeshSet<3>::vertex_t*,
                            carve::mesh::MeshSet<3>::vertex_t*>
     VVMap;
-}
-}
+}  // namespace csg
+}  // namespace carve

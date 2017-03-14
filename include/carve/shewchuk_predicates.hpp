@@ -39,4 +39,4 @@ double insphereadapt(const double* pa, const double* pb, const double* pc,
                      const double* pd, const double* pe, double permanent);
 double insphere(const double* pa, const double* pb, const double* pc,
                 const double* pd, const double* pe);
-}
+}  // namespace shewchuk

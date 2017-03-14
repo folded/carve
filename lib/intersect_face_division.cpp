@@ -1726,7 +1726,7 @@ void generateOneFaceLoop(
     mergeFacesAndHoles(face, face_loops, hole_loops, hooks);
   }
 }
-}
+}  // namespace
 
 /**
  * \brief Build a set of face loops for all (split) faces of a Polyhedron.

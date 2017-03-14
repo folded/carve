@@ -265,7 +265,7 @@ void setup(gloop::stream::model_writer& file,
   file.addWriter("pointset.vertex.y", new vertex_component<1>(*vi));
   file.addWriter("pointset.vertex.z", new vertex_component<2>(*vi));
 }
-}
+}  // namespace
 
 void writePLY(std::ostream& out, const carve::mesh::MeshSet<3>* poly,
               bool ascii) {

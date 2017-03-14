@@ -65,5 +65,5 @@ static inline const T& clamp(const T& val, const T& min, const T& max) {
   }
   return val;
 }
-}
-}
+}  // namespace math
+}  // namespace carve

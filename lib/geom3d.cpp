@@ -81,7 +81,7 @@ not_fwd:
 not_rev:
   return 0;
 }
-}
+}  // namespace
 
 bool planeIntersection(const Plane& a, const Plane& b, Ray& r) {
   Vector N = cross(a.N, b.N);
@@ -187,5 +187,5 @@ RayIntersectionClass rayRayIntersection(const Ray& r1, const Ray& r2,
 
   return (equal(v1, v2)) ? RR_INTERSECTION : RR_NO_INTERSECTION;
 }
-}
-}
+}  // namespace geom3d
+}  // namespace carve

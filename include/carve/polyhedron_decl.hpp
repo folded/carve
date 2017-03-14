@@ -175,5 +175,5 @@ class Polyhedron : public Geometry<3> {
 };
 
 std::ostream& operator<<(std::ostream&, const Polyhedron&);
-}
-}
+}  // namespace poly
+}  // namespace carve

@@ -458,5 +458,5 @@ void Octree::splitTree() {
   // initially split 4 levels
   doSplit(0, root);
 }
-}
-}
+}  // namespace csg
+}  // namespace carve

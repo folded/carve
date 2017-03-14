@@ -147,5 +147,5 @@ std::vector<carve::geom::vector<2> > Face<ndim>::projectedVertices() const {
   }
   return result;
 }
-}
-}
+}  // namespace poly
+}  // namespace carve

@@ -189,5 +189,5 @@ void sortInDirectionOfRay(const Vector& ray_dir, iter_t begin, iter_t end,
       break;
   }
 }
-}
-}
+}  // namespace geom3d
+}  // namespace carve

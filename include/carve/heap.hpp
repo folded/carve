@@ -140,7 +140,7 @@ bool _is_heap(random_access_iter_t begin, distance_t len, pred_t pred) {
 
   return true;
 }
-}
+}  // namespace detail
 
 template <typename random_access_iter_t>
 void adjust_heap(random_access_iter_t begin, random_access_iter_t end,
@@ -328,5 +328,5 @@ void sort_heap(random_access_iter_t begin, random_access_iter_t end,
   }
   notify(begin[0], 0);
 }
-}
-}
+}  // namespace heap
+}  // namespace carve

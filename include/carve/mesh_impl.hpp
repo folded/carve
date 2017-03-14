@@ -85,7 +85,7 @@ struct list_iter_t {
 
   int idx() const { return pos; }
 };
-}
+}  // namespace detail
 
 template <unsigned ndim>
 Edge<ndim>* Edge<ndim>::mergeFaces() {
@@ -589,7 +589,7 @@ void FaceStitcher::create(iter_t begin, iter_t end,
   construct();
   build(begin, end, meshes);
 }
-}
+}  // namespace detail
 
 template <unsigned ndim>
 void Mesh<ndim>::cacheEdges() {
@@ -1101,5 +1101,5 @@ void MeshSet<ndim>::separateMeshes() {
 
   vertex_storage.swap(vout);
 }
-}
-}
+}  // namespace mesh
+}  // namespace carve

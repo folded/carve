@@ -457,5 +457,5 @@ class CSG {
                         std::list<std::pair<FaceClass, meshset_t*> >& result,
                         V2Set* shared_edges = NULL);
 };
-}
-}
+}  // namespace csg
+}  // namespace carve

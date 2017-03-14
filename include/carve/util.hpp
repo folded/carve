@@ -38,5 +38,5 @@ struct max_functor {
     return std::max(a, b);
   }
 };
-}
-}
+}  // namespace util
+}  // namespace carve

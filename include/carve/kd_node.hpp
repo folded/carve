@@ -341,5 +341,5 @@ class kd_node {
     }
   };
 };
-}
-}
+}  // namespace geom
+}  // namespace carve

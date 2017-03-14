@@ -600,7 +600,7 @@ static bool testCandidateAttachment(const project_t& project,
   }
   return true;
 }
-}
+}  // namespace detail
 
 template <typename project_t, typename vert_t>
 static std::vector<vert_t> incorporateHolesIntoPolygon(
@@ -867,5 +867,5 @@ void improve(const project_t& project, const std::vector<vert_t>& poly,
              std::vector<tri_idx>& result) {
   improve(project, poly, carve::geom::distance_functor(), result);
 }
-}
-}
+}  // namespace triangulate
+}  // namespace carve

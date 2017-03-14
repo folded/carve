@@ -127,5 +127,5 @@ typedef std::unordered_map<std::pair<const carve::mesh::MeshSet<3>::vertex_t*,
 
 typedef std::unordered_map<const carve::mesh::Vertex<3>*, PC2>
     VertexClassification;
-}
-}
+}  // namespace csg
+}  // namespace carve

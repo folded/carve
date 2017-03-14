@@ -136,5 +136,5 @@ class djset {
     }
   }
 };
-}
-}
+}  // namespace djset
+}  // namespace carve

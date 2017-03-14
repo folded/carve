@@ -105,7 +105,7 @@ static carve::geom::vector<3> (*unproject_tab[2][3])(
     const carve::geom::vector<2>&, const carve::geom3d::Plane&) = {
     {&_unproject_1, &_unproject_2, &_unproject_3},
     {&_unproject_4, &_unproject_5, &_unproject_6}};
-}
+}  // namespace
 
 namespace carve {
 namespace mesh {
@@ -804,8 +804,8 @@ void FaceStitcher::construct() {
 }
 
 FaceStitcher::FaceStitcher(const MeshOptions& _opts) : opts(_opts) {}
-}
-}
+}  // namespace detail
+}  // namespace mesh
 
 // construct a MeshSet from a Polyhedron, maintaining on the
 // connectivity information in the Polyhedron.
@@ -1066,7 +1066,7 @@ poly::Polyhedron* polyhedronFromMesh(const mesh::MeshSet<3>* mesh,
 
   return poly;
 }
-}
+}  // namespace carve
 
 // explicit instantiation for 2D case.
 // XXX: do not compile because of a missing definition for fitPlane in the 2d

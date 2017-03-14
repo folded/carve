@@ -54,4 +54,4 @@ class tagable {
 
   static void tag_begin() { s_count++; }
 };
-}
+}  // namespace carve

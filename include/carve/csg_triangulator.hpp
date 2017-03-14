@@ -88,7 +88,7 @@ class CarveTriangulator : public csg::CSG::Hook {
     std::swap(faces, out_faces);
   }
 };
-}
+}  // namespace detail
 
 typedef detail::CarveTriangulator<false> CarveTriangulator;
 typedef detail::CarveTriangulator<true> CarveTriangulatorWithImprovement;
@@ -453,5 +453,5 @@ class CarveHoleResolver : public csg::CSG::Hook {
     std::swap(faces, out_faces);
   }
 };
-}
-}
+}  // namespace csg
+}  // namespace carve

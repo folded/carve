@@ -351,7 +351,7 @@ class BMinusACollector : public BaseCollector {
     }
   }
 };
-}
+}  // namespace
 
 CSG::Collector* makeCollector(CSG::OP op, const carve::mesh::MeshSet<3>* poly_a,
                               const carve::mesh::MeshSet<3>* poly_b) {
@@ -371,5 +371,5 @@ CSG::Collector* makeCollector(CSG::OP op, const carve::mesh::MeshSet<3>* poly_a,
   }
   return NULL;
 }
-}
-}
+}  // namespace csg
+}  // namespace carve

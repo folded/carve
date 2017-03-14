@@ -108,5 +108,5 @@ struct vec_adapt_vertex_ptr {
     return v->v;
   }
 };
-}
-}
+}  // namespace poly
+}  // namespace carve

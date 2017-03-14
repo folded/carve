@@ -75,5 +75,5 @@ void PolylineSet::sortVertices(const carve::geom3d::Vector& axis) {
   }
   vertices.swap(vnew);
 }
-}
-}
+}  // namespace line
+}  // namespace carve

@@ -798,5 +798,5 @@ template <unsigned ndim>
 double distance2(const tri<ndim>& tri, const vector<ndim>& pt) {
   return distance2(closestPoint(tri, pt), pt);
 }
-}
-}
+}  // namespace geom
+}  // namespace carve

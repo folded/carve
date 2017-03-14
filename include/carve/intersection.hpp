@@ -294,5 +294,5 @@ struct Intersections
 
   void clear() { super::clear(); }
 };
-}
-}
+}  // namespace csg
+}  // namespace carve

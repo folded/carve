@@ -216,7 +216,7 @@ class ClassifyFaceGroups {
 #endif
   }
 };
-}
+}  // namespace
 
 void CSG::classifyFaceGroups(
     const V2Set& /* shared_edges */, VertexClassification& vclass,
@@ -238,5 +238,5 @@ void CSG::classifyFaceGroups(
                             poly_a_rtree, poly_b, poly_b_rtree, classifier,
                             collector, hooks);
 }
-}
-}
+}  // namespace csg
+}  // namespace carve

@@ -209,6 +209,6 @@ static inline typename Face<ndim>::vector_t unproject(
     const Face<ndim>& f, const carve::geom2d::P2& p) {
   return f.unproject(p, f.plane_eqn);
 }
-}
-}
-}
+}  // namespace face
+}  // namespace poly
+}  // namespace carve

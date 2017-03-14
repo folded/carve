@@ -231,7 +231,7 @@ inline double rangeSeparation(const std::pair<double, double>& a,
     return 0.0;
   }
 }
-}
+}  // namespace carve
 
 #if defined(_MSC_VER)
 #define MACRO_BEGIN do {

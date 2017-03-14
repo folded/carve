@@ -272,5 +272,5 @@ int sortedLineSegmentPolyIntersections(const P2Vector& points,
 bool pickContainedPoint(const std::vector<P2>& poly, P2& result) {
   return pickContainedPoint(poly, p2_adapt_ident(), result);
 }
-}
-}
+}  // namespace geom2d
+}  // namespace carve

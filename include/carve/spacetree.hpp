@@ -249,5 +249,5 @@ class SpatialSubdivTree {
     root->findObjectsNear(root, object, output, filter);
   }
 };
-}
-}
+}  // namespace space
+}  // namespace carve

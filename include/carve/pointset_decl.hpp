@@ -61,5 +61,5 @@ struct PointSet {
 
   size_t vertexToIndex_fast(const Vertex* v) const;
 };
-}
-}
+}  // namespace point
+}  // namespace carve

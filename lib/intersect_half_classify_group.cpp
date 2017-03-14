@@ -190,7 +190,7 @@ class HalfClassifyFaceGroups {
 #endif
   }
 };
-}
+}  // namespace
 
 void CSG::halfClassifyFaceGroups(
     const V2Set& /* shared_edges */, VertexClassification& vclass,
@@ -207,5 +207,5 @@ void CSG::halfClassifyFaceGroups(
                             poly_a_rtree, poly_b, poly_b_rtree, classifier,
                             group_poly, hooks);
 }
-}
-}
+}  // namespace csg
+}  // namespace carve

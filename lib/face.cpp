@@ -299,8 +299,8 @@ IntersectionClass Face<ndim>::lineSegmentIntersection(
   }
   return INTERSECT_NONE;
 }
-}
-}
+}  // namespace poly
+}  // namespace carve
 
 // explicit instantiations.
 template class carve::poly::Face<3>;
