@@ -90,8 +90,12 @@ double rad(int p) {
          .2 * (sin(p * 6 * M_TWOPI / POINTS) + sin(p * 5 * M_TWOPI / POINTS));
 }
 
-double H(int p) { return .5 + .5 * cos(p * M_TWOPI * 2 / double(POINTS)); }
-double S(int p) { return .8 + .2 * cos(p * M_TWOPI * 8 / double(POINTS)); }
+double H(int p) {
+  return .5 + .5 * cos(p * M_TWOPI * 2 / double(POINTS));
+}
+double S(int p) {
+  return .8 + .2 * cos(p * M_TWOPI * 8 / double(POINTS));
+}
 double V(int p) {
   return .8 +
          .2 * sin(.3 + p * M_TWOPI * 5 / double(POINTS)) *

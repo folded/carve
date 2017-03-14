@@ -120,7 +120,11 @@ struct face_idx : public gloop::stream::writer<size_t> {
   int max_length;
 
   face_idx(face& _r, gloop::stream::Type _data_type, int _max_length)
-      : r(_r), f(nullptr), i(0), data_type(_data_type), max_length(_max_length) {}
+      : r(_r),
+        f(nullptr),
+        i(0),
+        data_type(_data_type),
+        max_length(_max_length) {}
   void begin() override {
     f = r.curr();
     i = 0;

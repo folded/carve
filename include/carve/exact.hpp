@@ -550,7 +550,9 @@ void negate(iter_t begin, iter_t end) {
   }
 }
 
-void negate(exact_t& e) { negate(&e[0], &e[e.size()]); }
+void negate(exact_t& e) {
+  negate(&e[0], &e[e.size()]);
+}
 
 template <typename iter_t>
 void scale_zeroelim(iter_t ebegin, iter_t eend, double b, exact_t& h) {

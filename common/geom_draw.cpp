@@ -70,13 +70,21 @@ static inline void glVertex(const carve::geom3d::Vector& v) {
              g_scale * (v.z + g_translation.z));
 }
 
-static inline void glVertex(const carve::mesh::Vertex<3>* v) { glVertex(v->v); }
+static inline void glVertex(const carve::mesh::Vertex<3>* v) {
+  glVertex(v->v);
+}
 
-static inline void glVertex(const carve::mesh::Vertex<3>& v) { glVertex(v.v); }
+static inline void glVertex(const carve::mesh::Vertex<3>& v) {
+  glVertex(v.v);
+}
 
-static inline void glVertex(const carve::poly::Vertex<3>* v) { glVertex(v->v); }
+static inline void glVertex(const carve::poly::Vertex<3>* v) {
+  glVertex(v->v);
+}
 
-static inline void glVertex(const carve::poly::Vertex<3>& v) { glVertex(v.v); }
+static inline void glVertex(const carve::poly::Vertex<3>& v) {
+  glVertex(v.v);
+}
 
 class DebugHooks : public carve::csg::IntersectDebugHooks {
  public:
@@ -316,7 +324,9 @@ void drawOctree(const carve::csg::Octree& o) {
   glEnable(GL_LIGHTING);
 }
 
-void DebugHooks::drawOctree(const carve::csg::Octree& o) { ::drawOctree(o); }
+void DebugHooks::drawOctree(const carve::csg::Octree& o) {
+  ::drawOctree(o);
+}
 
 static void __stdcall _faceBegin(GLenum type, void* data) {
   carve::mesh::Face<3>* face = static_cast<carve::mesh::Face<3>*>(data);
@@ -324,7 +334,9 @@ static void __stdcall _faceBegin(GLenum type, void* data) {
   glNormal3dv(face->plane.N.v);
 }
 
-static void __stdcall _faceEnd(void* /* data */) { glEnd(); }
+static void __stdcall _faceEnd(void* /* data */) {
+  glEnd();
+}
 
 static void __stdcall _normalBegin(GLenum type, void* data) {
   GLdouble* normal = static_cast<GLdouble*>(data);
@@ -332,7 +344,9 @@ static void __stdcall _normalBegin(GLenum type, void* data) {
   glNormal3dv(normal);
 }
 
-static void __stdcall _normalEnd(void* /* data */) { glEnd(); }
+static void __stdcall _normalEnd(void* /* data */) {
+  glEnd();
+}
 
 static void __stdcall _colourVertex(void* vertex_data, void* /* data */) {
   std::pair<carve::geom3d::Vector, cRGBA>& vd(

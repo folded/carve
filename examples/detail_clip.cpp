@@ -59,7 +59,7 @@ class DetailClip : public carve::csg::CSG::Collector {
   ~DetailClip() override {}
 
   void collect(carve::csg::FaceLoopGroup* grp,
-                       carve::csg::CSG::Hooks& hooks) override {
+               carve::csg::CSG::Hooks& hooks) override {
     if (grp->face_loops.head->orig_face->mesh->meshset != src_b) {
       return;
     }

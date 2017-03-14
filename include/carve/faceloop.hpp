@@ -41,7 +41,11 @@ struct FaceLoop {
 
   FaceLoop(const carve::mesh::MeshSet<3>::face_t* f,
            const std::vector<carve::mesh::MeshSet<3>::vertex_t*>& v)
-      : next(nullptr), prev(nullptr), orig_face(f), vertices(v), group(nullptr) {}
+      : next(nullptr),
+        prev(nullptr),
+        orig_face(f),
+        vertices(v),
+        group(nullptr) {}
 };
 
 struct FaceLoopList {

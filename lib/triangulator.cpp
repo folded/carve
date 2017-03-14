@@ -382,7 +382,8 @@ void dumpPoly(const std::vector<carve::geom2d::P2>& points,
   out << "<polygon fill=\"rgb(0,0,0)\" stroke=\"blue\" stroke-width=\"0.1\" "
          "points=\"";
   for (size_t i = 0; i < points.size(); ++i) {
-    if (i) out << ' ';
+    if (i)
+      out << ' ';
     double x, y;
     x = scale * (points[i].x) - minx + 5;
     y = scale * (points[i].y) - miny + 5;

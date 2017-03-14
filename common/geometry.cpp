@@ -52,7 +52,9 @@ carve::mesh::MeshSet<3>* makeCube(const carve::math::Matrix& transform) {
                                      data.faceIndices);
 }
 
-static bool _all(int /* x */, int /* y */, int /* z */) { return true; }
+static bool _all(int /* x */, int /* y */, int /* z */) {
+  return true;
+}
 
 carve::mesh::MeshSet<3>* makeSubdividedCube(
     int sub_x, int sub_y, int sub_z, bool (*inc)(int, int, int),

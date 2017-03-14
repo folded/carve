@@ -260,8 +260,10 @@ bool FaceStitcher::EdgeOrderData::Cmp::operator()(
     double db =
         carve::geom3d::antiClockwiseAngle(base_dir, b.face_dir, edge_dir);
     int v_cmp = 0;
-    if (da < db) v_cmp = -1;
-    if (db < da) v_cmp = +1;
+    if (da < db)
+      v_cmp = -1;
+    if (db < da)
+      v_cmp = +1;
     if (v_cmp != v) {
       std::cerr << "v= " << v << " v_cmp= " << v_cmp << " da= " << da
                 << " db= " << db << "  edge_dir=" << edge_dir

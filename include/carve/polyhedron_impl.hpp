@@ -199,7 +199,9 @@ inline void Polyhedron::invert(int m_id) {
   invert(selected_manifolds);
 }
 
-inline void Polyhedron::invert() { invertAll(); }
+inline void Polyhedron::invert() {
+  invertAll();
+}
 
 inline bool Polyhedron::edgeOnManifold(const edge_t* e, int m_id) const {
   const std::vector<const face_t*>& edge_faces =

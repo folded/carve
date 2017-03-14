@@ -356,7 +356,9 @@ GLvoid Scene::_draw() {
   glutSwapBuffers();
 }
 
-bool Scene::key(unsigned char k, int x, int y) { return false; }
+bool Scene::key(unsigned char k, int x, int y) {
+  return false;
+}
 
 GLvoid Scene::draw() {}
 
@@ -398,7 +400,8 @@ Option* OptionGroup::createOption(const char* caption, bool initialValue) {
     return nullptr;
   }
 
-  GLUI_Checkbox* cb = new GLUI_Checkbox(rollout, caption, nullptr, 1, control_cb);
+  GLUI_Checkbox* cb =
+      new GLUI_Checkbox(rollout, caption, nullptr, 1, control_cb);
   cb->set_int_val(initialValue);
 
   Option* option = new Option();
@@ -462,13 +465,21 @@ void Scene::zoomTo(carve::geom3d::Vector pos, double dist) {
 }
 void Scene::_init() {}
 
-GLvoid Scene::s_draw() { g_scene->_draw(); }
-GLvoid Scene::s_resize(int w, int h) { g_scene->_resize(w, h); }
-GLvoid Scene::s_drag(int x, int y) { g_scene->_drag(x, y); }
+GLvoid Scene::s_draw() {
+  g_scene->_draw();
+}
+GLvoid Scene::s_resize(int w, int h) {
+  g_scene->_resize(w, h);
+}
+GLvoid Scene::s_drag(int x, int y) {
+  g_scene->_drag(x, y);
+}
 GLvoid Scene::s_click(int button, int state, int x, int y) {
   g_scene->_click(button, state, x, y);
 }
-GLvoid Scene::s_key(unsigned char k, int x, int y) { g_scene->_key(k, x, y); }
+GLvoid Scene::s_key(unsigned char k, int x, int y) {
+  g_scene->_key(k, x, y);
+}
 
 Scene::Scene(int argc, char** argv) {
   CAM_ROT = 0.0;
@@ -494,7 +505,9 @@ Scene::Scene(int argc, char** argv) {
   g_scene = this;
 }
 
-Scene::~Scene() { g_scene = nullptr; }
+Scene::~Scene() {
+  g_scene = nullptr;
+}
 
 void Scene::run() {
   init();

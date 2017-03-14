@@ -170,7 +170,7 @@ class Interpolator {
       return carve::csg::CSG::Hooks::RESULT_FACE_BIT;
     }
     void resultFace(const meshset_t::face_t* new_face,
-                            const meshset_t::face_t* orig_face, bool flipped) override {
+                    const meshset_t::face_t* orig_face, bool flipped) override {
       interpolator->resultFace(csg, new_face, orig_face, flipped);
     }
     void processOutputFace(
@@ -178,10 +178,9 @@ class Interpolator {
         const meshset_t::face_t* orig_face, bool flipped) override {
       interpolator->processOutputFace(csg, new_faces, orig_face, flipped);
     }
-    void edgeDivision(const meshset_t::edge_t* orig_edge,
-                              size_t orig_edge_idx,
-                              const meshset_t::vertex_t* v1,
-                              const meshset_t::vertex_t* v2) override {
+    void edgeDivision(const meshset_t::edge_t* orig_edge, size_t orig_edge_idx,
+                      const meshset_t::vertex_t* v1,
+                      const meshset_t::vertex_t* v2) override {
       interpolator->edgeDivision(csg, orig_edge, orig_edge_idx, v1, v2);
     }
 
@@ -229,9 +228,8 @@ class FaceVertexAttr : public Interpolator {
 
   attrmap_t attrs;
 
-  void resultFace(const carve::csg::CSG& csg,
-                          const meshset_t::face_t* new_face,
-                          const meshset_t::face_t* orig_face, bool flipped) override {
+  void resultFace(const carve::csg::CSG& csg, const meshset_t::face_t* new_face,
+                  const meshset_t::face_t* orig_face, bool flipped) override {
     std::vector<attr_t> vertex_attrs;
     attrvmap_t base_attrs;
     vertex_attrs.reserve(orig_face->nVertices());
@@ -317,9 +315,9 @@ class FaceEdgeAttr : public Interpolator {
   }
 
   void edgeDivision(const carve::csg::CSG& csg,
-                            const meshset_t::edge_t* orig_edge,
-                            size_t orig_edge_idx, const meshset_t::vertex_t* v1,
-                            const meshset_t::vertex_t* v2) override {
+                    const meshset_t::edge_t* orig_edge, size_t orig_edge_idx,
+                    const meshset_t::vertex_t* v1,
+                    const meshset_t::vertex_t* v2) override {
     key_t k(orig_edge->face, orig_edge_idx);
     typename attrmap_t::const_iterator attr_i = attrs.find(k);
     if (attr_i == attrs.end()) {
@@ -405,9 +403,8 @@ class FaceAttr : public Interpolator {
 
   attrmap_t attrs;
 
-  void resultFace(const carve::csg::CSG& csg,
-                          const meshset_t::face_t* new_face,
-                          const meshset_t::face_t* orig_face, bool flipped) override {
+  void resultFace(const carve::csg::CSG& csg, const meshset_t::face_t* new_face,
+                  const meshset_t::face_t* orig_face, bool flipped) override {
     typename attrmap_t::const_iterator i = attrs.find(key_t(orig_face));
     if (i != attrs.end()) {
       attrs[key_t(new_face)] = (*i).second;

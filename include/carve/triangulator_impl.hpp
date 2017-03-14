@@ -193,7 +193,12 @@ struct vertex_info {
   bool failed;
 
   vertex_info(const carve::geom2d::P2& _p, size_t _idx)
-      : prev(nullptr), next(nullptr), p(_p), idx(_idx), score(0.0), convex(false) {}
+      : prev(nullptr),
+        next(nullptr),
+        p(_p),
+        idx(_idx),
+        score(0.0),
+        convex(false) {}
 
   static double triScore(const vertex_info* p, const vertex_info* v,
                          const vertex_info* n);

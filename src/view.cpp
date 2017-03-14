@@ -111,9 +111,13 @@ struct Options : public opt::Parser {
 
 static Options options;
 
-bool odd(int x, int y, int z) { return ((x + y + z) & 1) == 1; }
+bool odd(int x, int y, int z) {
+  return ((x + y + z) & 1) == 1;
+}
 
-bool even(int x, int y, int z) { return ((x + y + z) & 1) == 0; }
+bool even(int x, int y, int z) {
+  return ((x + y + z) & 1) == 0;
+}
 
 #undef min
 #undef max

@@ -58,7 +58,9 @@ static inline void glVertex(const carve::geom3d::Vector& v) {
              g_scale * (v.z + g_translation.z));
 }
 
-static inline void glColor(const cRGBA& c) { glColor4f(c.r, c.g, c.b, c.a); }
+static inline void glColor(const cRGBA& c) {
+  glColor4f(c.r, c.g, c.b, c.a);
+}
 
 carve::interpolate::FaceVertexAttr<cRGBA> fv_colours;
 

@@ -238,7 +238,8 @@ inline double rangeSeparation(const std::pair<double, double>& a,
 #define MACRO_END                                           \
   __pragma(warning(push)) __pragma(warning(disable : 4127)) \
   }                                                         \
-  while (0) __pragma(warning(pop))
+  while (0)                                                 \
+  __pragma(warning(pop))
 #else
 #define MACRO_BEGIN do {
 #define MACRO_END \

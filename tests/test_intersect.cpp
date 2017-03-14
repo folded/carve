@@ -214,9 +214,13 @@ struct TestScene : public Scene {
   void _init() override {}
 };
 
-bool odd(int x, int y, int z) { return ((x + y + z) & 1) == 1; }
+bool odd(int x, int y, int z) {
+  return ((x + y + z) & 1) == 1;
+}
 
-bool even(int x, int y, int z) { return ((x + y + z) & 1) == 0; }
+bool even(int x, int y, int z) {
+  return ((x + y + z) & 1) == 0;
+}
 
 class Input {
  public:
@@ -594,8 +598,8 @@ void testCSG(GLuint& dlist, std::list<Input>::const_iterator begin,
       try {
         result = carve::csg::CSG().compute(
             a, b, op, nullptr, options.edge_classifier
-                                ? carve::csg::CSG::CLASSIFY_EDGE
-                                : carve::csg::CSG::CLASSIFY_NORMAL);
+                                   ? carve::csg::CSG::CLASSIFY_EDGE
+                                   : carve::csg::CSG::CLASSIFY_NORMAL);
 
         std::cerr << "result " << result << " has " << result->meshes.size()
                   << " manifolds ("

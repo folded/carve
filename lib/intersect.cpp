@@ -54,7 +54,9 @@ carve::csg::VertexPool::VertexPool() {}
 
 carve::csg::VertexPool::~VertexPool() {}
 
-void carve::csg::VertexPool::reset() { pool.clear(); }
+void carve::csg::VertexPool::reset() {
+  pool.clear();
+}
 
 carve::csg::VertexPool::vertex_t* carve::csg::VertexPool::get(
     const vertex_t::vector_t& v) {
@@ -473,9 +475,13 @@ void carve::csg::CSG::Hooks::reset() {
   }
 }
 
-carve::csg::CSG::Hooks::Hooks() : hooks() { hooks.resize(HOOK_MAX); }
+carve::csg::CSG::Hooks::Hooks() : hooks() {
+  hooks.resize(HOOK_MAX);
+}
 
-carve::csg::CSG::Hooks::~Hooks() { reset(); }
+carve::csg::CSG::Hooks::~Hooks() {
+  reset();
+}
 
 void carve::csg::CSG::makeVertexIntersections() {
   static carve::TimingName FUNC_NAME("CSG::makeVertexIntersections()");

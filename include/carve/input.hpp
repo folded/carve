@@ -38,7 +38,9 @@ namespace input {
 
 typedef std::map<std::string, std::string> Options;
 
-static inline Options opts() { return Options(); }
+static inline Options opts() {
+  return Options();
+}
 
 static inline Options opts(const char** kv) {
   Options r;

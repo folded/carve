@@ -190,7 +190,7 @@ class Slice : public carve::csg::CSG::Collector {
 
  protected:
   void collect(carve::csg::FaceLoopGroup* grp,
-                       carve::csg::CSG::Hooks& hooks) override {
+               carve::csg::CSG::Hooks& hooks) override {
     if (grp->src == src_a) {
       std::vector<carve::mesh::MeshSet<3>::face_t*> new_faces;
 
@@ -220,7 +220,8 @@ class Slice : public carve::csg::CSG::Collector {
              e = grp->classification.end();
          i != e; ++i) {
       if ((*i).classification == carve::csg::FACE_IN) {
-        if ((*i).intersected_mesh == nullptr || (*i).intersectedMeshIsClosed()) {
+        if ((*i).intersected_mesh == nullptr ||
+            (*i).intersectedMeshIsClosed()) {
           include = true;
           break;
         }

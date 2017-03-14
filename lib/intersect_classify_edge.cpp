@@ -856,11 +856,13 @@ void CSG::classifyFaceGroupsEdge(
           }
           switch (vclass[fl->vertices[fli]].cls[1]) {
             case POINT_IN:
-              (*i).classification.push_back(ClassificationInfo(nullptr, FACE_IN));
+              (*i).classification.push_back(
+                  ClassificationInfo(nullptr, FACE_IN));
               classified = true;
               break;
             case POINT_OUT:
-              (*i).classification.push_back(ClassificationInfo(nullptr, FACE_OUT));
+              (*i).classification.push_back(
+                  ClassificationInfo(nullptr, FACE_OUT));
               classified = true;
               break;
             default:
@@ -891,11 +893,13 @@ void CSG::classifyFaceGroupsEdge(
           }
           switch (vclass[fl->vertices[fli]].cls[0]) {
             case POINT_IN:
-              (*i).classification.push_back(ClassificationInfo(nullptr, FACE_IN));
+              (*i).classification.push_back(
+                  ClassificationInfo(nullptr, FACE_IN));
               classified = true;
               break;
             case POINT_OUT:
-              (*i).classification.push_back(ClassificationInfo(nullptr, FACE_OUT));
+              (*i).classification.push_back(
+                  ClassificationInfo(nullptr, FACE_OUT));
               classified = true;
               break;
             default:

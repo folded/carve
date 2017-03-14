@@ -772,9 +772,9 @@ class MeshSimplifier {
           0.5;  // compute this based upon v1_incident and v2_incident?
       vector_t merge = frac * v1->v + (1 - frac) * v2->v;
 
-      int i1 = countIntersectionPairs(affected_faces.begin(),
-                                      affected_faces.end(), near_faces.begin(),
-                                      near_faces.end(), nullptr, nullptr, merge);
+      int i1 = countIntersectionPairs(
+          affected_faces.begin(), affected_faces.end(), near_faces.begin(),
+          near_faces.end(), nullptr, nullptr, merge);
       int i2 = countIntersectionPairs(affected_faces.begin(),
                                       affected_faces.end(), near_faces.begin(),
                                       near_faces.end(), v1, v2, merge);
@@ -1429,8 +1429,9 @@ class MeshSimplifier {
       }
     }
     meshset->meshes.erase(
-        std::remove_if(meshset->meshes.begin(), meshset->meshes.end(),
-                       std::bind2nd(std::equal_to<mesh_t*>(), (mesh_t*)nullptr)),
+        std::remove_if(
+            meshset->meshes.begin(), meshset->meshes.end(),
+            std::bind2nd(std::equal_to<mesh_t*>(), (mesh_t*)nullptr)),
         meshset->meshes.end());
     return n_removed;
   }

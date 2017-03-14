@@ -67,7 +67,9 @@ inline size_t Polyline::vertexCount() const {
   return edgeCount() + (closed ? 0 : 1);
 }
 
-inline size_t Polyline::edgeCount() const { return edges.size(); }
+inline size_t Polyline::edgeCount() const {
+  return edges.size();
+}
 
 inline const PolylineEdge* Polyline::edge(size_t e) const {
   return edges[e % edges.size()];
@@ -95,7 +97,9 @@ inline Vertex* Polyline::vertex(size_t v) {
   return edges[v]->v1;
 }
 
-inline bool Polyline::isClosed() const { return closed; }
+inline bool Polyline::isClosed() const {
+  return closed;
+}
 
 template <typename iter_t>
 void Polyline::_init(bool c, iter_t begin, iter_t end,

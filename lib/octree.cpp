@@ -84,7 +84,9 @@ bool Octree::Node::mightContain(const carve::poly::Vertex<3>& p) {
   return aabb.containsPoint(p.v);
 }
 
-bool Octree::Node::hasChildren() { return !is_leaf; }
+bool Octree::Node::hasChildren() {
+  return !is_leaf;
+}
 
 bool Octree::Node::split() {
   if (is_leaf && hasGeometry()) {
@@ -135,7 +137,9 @@ bool Octree::Node::hasGeometry() {
   return faces.size() > 0 || edges.size() > 0 || vertices.size() > 0;
 }
 
-Octree::Octree() { root = nullptr; }
+Octree::Octree() {
+  root = nullptr;
+}
 
 Octree::~Octree() {
   if (root) {

@@ -60,13 +60,15 @@ unsigned blkCntTotal[32] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 
 void addBlk(unsigned size) {
   unsigned i = 0;
-  while (i < 31 && (1U << i) < size) ++i;
+  while (i < 31 && (1U << i) < size)
+    ++i;
   blkCntCurr[i]++;
   blkCntTotal[i]++;
 }
 void remBlk(unsigned size) {
   unsigned i = 0;
-  while (i < 31 && (1 << i) < size) ++i;
+  while (i < 31 && (1 << i) < size)
+    ++i;
   blkCntCurr[i]--;
 }
 }
@@ -82,7 +84,8 @@ void remBlk(unsigned size) {
 
 void* carve_alloc(size_t size) {
   void* p = malloc(size);
-  if (p == 0) throw std::bad_alloc();  // ANSI/ISO compliant behavior
+  if (p == 0)
+    throw std::bad_alloc();  // ANSI/ISO compliant behavior
 
   unsigned sz = malloc_size(p);
   carve::memoryCurr += sz;
@@ -102,7 +105,8 @@ void carve_free(void* p) {
 
 void* carve_alloc(size_t size) {
   void* p = malloc(size + 4);
-  if (p == 0) throw std::bad_alloc();  // ANSI/ISO compliant behavior
+  if (p == 0)
+    throw std::bad_alloc();  // ANSI/ISO compliant behavior
 
   int* sizePtr = (int*)p;
   *sizePtr = size;
@@ -127,13 +131,21 @@ void carve_free(void* p) {
 
 #endif
 
-void* operator new(size_t size) { return carve_alloc(size); }
+void* operator new(size_t size) {
+  return carve_alloc(size);
+}
 
-void* operator new[](size_t size) { return carve_alloc(size); }
+void* operator new[](size_t size) {
+  return carve_alloc(size);
+}
 
-void operator delete(void* p) { carve_free(p); }
+void operator delete(void* p) {
+  carve_free(p);
+}
 
-void operator delete[](void* p) { carve_free(p); }
+void operator delete[](void* p) {
+  carve_free(p);
+}
 
 #endif
 
@@ -145,7 +157,9 @@ typedef __int64 precise_time_t;
 
 precise_time_t g_frequency;
 
-void initTime() { ::QueryPerformanceFrequency((LARGE_INTEGER*)&g_frequency); }
+void initTime() {
+  ::QueryPerformanceFrequency((LARGE_INTEGER*)&g_frequency);
+}
 
 void getTime(precise_time_t& t) {
   ::QueryPerformanceCounter((LARGE_INTEGER*)&t);
@@ -167,7 +181,9 @@ void getTime(precise_time_t& t) {
   t = tv.tv_sec + tv.tv_usec / 1000000.0;
 }
 
-double diffTime(precise_time_t from, precise_time_t to) { return to - from; }
+double diffTime(precise_time_t from, precise_time_t to) {
+  return to - from;
+}
 
 #endif
 
@@ -425,13 +441,17 @@ double Timing::stop() {
 #endif
 }
 
-void Timing::printTimings() { timer.print(); }
+void Timing::printTimings() {
+  timer.print();
+}
 
 void Timing::registerID(int id, const char* name) {
   timer.registerID(id, name);
 }
 
-TimingName::TimingName(const char* name) { id = timer.registerID(name); }
+TimingName::TimingName(const char* name) {
+  id = timer.registerID(name);
+}
 }
 
 #endif

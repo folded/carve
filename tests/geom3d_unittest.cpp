@@ -103,7 +103,9 @@ void checkInvariance(const Vector& dir, const Vector& base, const Vector& a,
   checkRotationInvariance(dir, base, a, b, 1000);
 }
 
-int sign(double d) { return (d > 0) ? +1 : (d == 0) ? 0 : -1; }
+int sign(double d) {
+  return (d > 0) ? +1 : (d == 0) ? 0 : -1;
+}
 
 TEST(GeomTest, compareAnglesFailure0) {
   using namespace carve::geom3d;

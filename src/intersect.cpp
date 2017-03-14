@@ -275,9 +275,13 @@ static bool endswith(const std::string& a, const std::string& b) {
   return true;
 }
 
-bool charTok(char ch) { return strchr("()|&^,-:", ch) != nullptr; }
+bool charTok(char ch) {
+  return strchr("()|&^,-:", ch) != nullptr;
+}
 
-bool beginsNumber(char ch) { return strchr("+-0123456789.", ch) != nullptr; }
+bool beginsNumber(char ch) {
+  return strchr("+-0123456789.", ch) != nullptr;
+}
 
 bool STRTOD(const std::string& str, double& v) {
   char* ptr;

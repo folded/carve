@@ -56,7 +56,9 @@ IntersectDebugHooks* intersect_installDebugHooks(IntersectDebugHooks* hooks) {
   return h;
 }
 
-bool intersect_debugEnabled() { return true; }
+bool intersect_debugEnabled() {
+  return true;
+}
 
 #else
 
@@ -65,7 +67,9 @@ IntersectDebugHooks* intersect_installDebugHooks(
   return nullptr;
 }
 
-bool intersect_debugEnabled() { return false; }
+bool intersect_debugEnabled() {
+  return false;
+}
 
 #endif
 }  // namespace csg

@@ -39,9 +39,9 @@ class CarveTriangulator : public csg::CSG::Hook {
 
   ~CarveTriangulator() override {}
 
-  void processOutputFace(
-      std::vector<carve::mesh::MeshSet<3>::face_t*>& faces,
-      const carve::mesh::MeshSet<3>::face_t* orig, bool flipped) override {
+  void processOutputFace(std::vector<carve::mesh::MeshSet<3>::face_t*>& faces,
+                         const carve::mesh::MeshSet<3>::face_t* orig,
+                         bool flipped) override {
     std::vector<carve::mesh::MeshSet<3>::face_t*> out_faces;
 
     size_t n_tris = 0;
@@ -99,9 +99,9 @@ class CarveTriangulationImprover : public csg::CSG::Hook {
 
   ~CarveTriangulationImprover() override {}
 
-  void processOutputFace(
-      std::vector<carve::mesh::MeshSet<3>::face_t*>& faces,
-      const carve::mesh::MeshSet<3>::face_t* orig, bool flipped) override {
+  void processOutputFace(std::vector<carve::mesh::MeshSet<3>::face_t*>& faces,
+                         const carve::mesh::MeshSet<3>::face_t* orig,
+                         bool flipped) override {
     if (faces.size() == 1) {
       return;
     }
@@ -196,9 +196,9 @@ class CarveTriangulationQuadMerger : public csg::CSG::Hook {
     }
   }
 
-  void processOutputFace(
-      std::vector<carve::mesh::MeshSet<3>::face_t*>& faces,
-      const carve::mesh::MeshSet<3>::face_t* orig, bool flipped) override {
+  void processOutputFace(std::vector<carve::mesh::MeshSet<3>::face_t*>& faces,
+                         const carve::mesh::MeshSet<3>::face_t* orig,
+                         bool flipped) override {
     if (faces.size() == 1) {
       return;
     }
@@ -364,9 +364,9 @@ class CarveHoleResolver : public csg::CSG::Hook {
     } while (vert != start);
   }
 
-  void processOutputFace(
-      std::vector<carve::mesh::MeshSet<3>::face_t*>& faces,
-      const carve::mesh::MeshSet<3>::face_t* orig, bool flipped) override {
+  void processOutputFace(std::vector<carve::mesh::MeshSet<3>::face_t*>& faces,
+                         const carve::mesh::MeshSet<3>::face_t* orig,
+                         bool flipped) override {
     std::vector<carve::mesh::MeshSet<3>::face_t*> out_faces;
 
     for (size_t f = 0; f < faces.size(); ++f) {

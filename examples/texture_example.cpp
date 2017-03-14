@@ -81,7 +81,9 @@ struct tex_t {
   tex_t(float _u, float _v) : u(_u), v(_v) {}
 };
 
-tex_t operator*(double s, const tex_t& t) { return tex_t(t.u * s, t.v * s); }
+tex_t operator*(double s, const tex_t& t) {
+  return tex_t(t.u * s, t.v * s);
+}
 
 tex_t& operator+=(tex_t& t1, const tex_t& t2) {
   t1.u += t2.u;
@@ -285,7 +287,9 @@ GLuint initTexture(GLuint w, GLuint h, const unsigned char* data) {
   return tex;
 }
 
-void destroyTexture(GLuint tex) { glDeleteTextures(1, &tex); }
+void destroyTexture(GLuint tex) {
+  glDeleteTextures(1, &tex);
+}
 
 int main(int argc, char** argv) {
   TestScene* scene = new TestScene(argc, argv, 2);

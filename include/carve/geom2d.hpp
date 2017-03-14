@@ -222,7 +222,9 @@ bool triangleIntersectsTriangle(const P2vec& tri_b, const P2vec& tri_a) {
   return true;
 }
 
-static inline double atan2(const P2& p) { return ::atan2(p.y, p.x); }
+static inline double atan2(const P2& p) {
+  return ::atan2(p.y, p.x);
+}
 
 struct LineIntersectionInfo {
   LineIntersectionClass iclass;
@@ -414,7 +416,8 @@ template <typename T, typename adapt_t>
 bool pickContainedPoint(const std::vector<T>& poly, adapt_t adapt, P2& result) {
 #if defined(CARVE_DEBUG)
   std::cerr << "pickContainedPoint ";
-  for (unsigned i = 0; i < poly.size(); ++i) std::cerr << " " << adapt(poly[i]);
+  for (unsigned i = 0; i < poly.size(); ++i)
+    std::cerr << " " << adapt(poly[i]);
   std::cerr << std::endl;
 #endif
 

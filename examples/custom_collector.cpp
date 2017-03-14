@@ -104,7 +104,7 @@ class Between : public carve::csg::CSG::Collector {
   ~Between() override {}
 
   void collect(carve::csg::FaceLoopGroup* grp,
-                       carve::csg::CSG::Hooks& hooks) override {
+               carve::csg::CSG::Hooks& hooks) override {
     if (grp->face_loops.head->orig_face->mesh->meshset != src_a) {
       return;
     }

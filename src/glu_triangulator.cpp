@@ -110,7 +110,9 @@ GLUTriangulator::GLUTriangulator() {
   gluTessCallback(tess, GLU_TESS_END_DATA, (GLUTessCallback)_faceEnd);
 }
 
-GLUTriangulator::~GLUTriangulator() { gluDeleteTess(tess); }
+GLUTriangulator::~GLUTriangulator() {
+  gluDeleteTess(tess);
+}
 
 void GLUTriangulator::processOutputFace(
     std::vector<carve::poly::Face<3>*>& faces, const carve::poly::Face<3>* orig,

@@ -70,10 +70,14 @@
 
 #define FINDMINMAX(x0, x1, x2, min, max) \
   min = max = x0;                        \
-  if (x1 < min) min = x1;                \
-  if (x1 > max) max = x1;                \
-  if (x2 < min) min = x2;                \
-  if (x2 > max) max = x2;
+  if (x1 < min)                          \
+    min = x1;                            \
+  if (x1 > max)                          \
+    max = x1;                            \
+  if (x2 < min)                          \
+    min = x2;                            \
+  if (x2 > max)                          \
+    max = x2;
 
 int planeBoxOverlap(double normal[3], double vert[3],
                     double maxbox[3])  // -NJMP-
@@ -90,8 +94,10 @@ int planeBoxOverlap(double normal[3], double vert[3],
       vmax[q] = -maxbox[q] - v;  // -NJMP-
     }
   }
-  if (DOT(normal, vmin) > 0.0f) return 0;   // -NJMP-
-  if (DOT(normal, vmax) >= 0.0f) return 1;  // -NJMP-
+  if (DOT(normal, vmin) > 0.0f)
+    return 0;  // -NJMP-
+  if (DOT(normal, vmax) >= 0.0f)
+    return 1;  // -NJMP-
 
   return 0;
 }
@@ -108,7 +114,8 @@ int planeBoxOverlap(double normal[3], double vert[3],
     max = p0;                                      \
   }                                                \
   rad = fa * boxhalfsize[Y] + fb * boxhalfsize[Z]; \
-  if (min > rad || max < -rad) on_fail;
+  if (min > rad || max < -rad)                     \
+    on_fail;
 #define AXISTEST_X2(a, b, fa, fb, on_fail)         \
   p0 = a * v0[Y] - b * v0[Z];                      \
   p1 = a * v1[Y] - b * v1[Z];                      \
@@ -120,7 +127,8 @@ int planeBoxOverlap(double normal[3], double vert[3],
     max = p0;                                      \
   }                                                \
   rad = fa * boxhalfsize[Y] + fb * boxhalfsize[Z]; \
-  if (min > rad || max < -rad) on_fail;
+  if (min > rad || max < -rad)                     \
+    on_fail;
 
 /*======================== Y-tests ========================*/
 #define AXISTEST_Y02(a, b, fa, fb, on_fail)        \
@@ -134,7 +142,8 @@ int planeBoxOverlap(double normal[3], double vert[3],
     max = p0;                                      \
   }                                                \
   rad = fa * boxhalfsize[X] + fb * boxhalfsize[Z]; \
-  if (min > rad || max < -rad) on_fail;
+  if (min > rad || max < -rad)                     \
+    on_fail;
 #define AXISTEST_Y1(a, b, fa, fb, on_fail)         \
   p0 = -a * v0[X] + b * v0[Z];                     \
   p1 = -a * v1[X] + b * v1[Z];                     \
@@ -146,7 +155,8 @@ int planeBoxOverlap(double normal[3], double vert[3],
     max = p0;                                      \
   }                                                \
   rad = fa * boxhalfsize[X] + fb * boxhalfsize[Z]; \
-  if (min > rad || max < -rad) on_fail;
+  if (min > rad || max < -rad)                     \
+    on_fail;
 
 /*======================== Z-tests ========================*/
 #define AXISTEST_Z12(a, b, fa, fb, on_fail)        \
@@ -160,7 +170,8 @@ int planeBoxOverlap(double normal[3], double vert[3],
     max = p2;                                      \
   }                                                \
   rad = fa * boxhalfsize[X] + fb * boxhalfsize[Y]; \
-  if (min > rad || max < -rad) on_fail;
+  if (min > rad || max < -rad)                     \
+    on_fail;
 #define AXISTEST_Z0(a, b, fa, fb, on_fail)         \
   p0 = a * v0[X] - b * v0[Y];                      \
   p1 = a * v1[X] - b * v1[Y];                      \
@@ -172,7 +183,8 @@ int planeBoxOverlap(double normal[3], double vert[3],
     max = p0;                                      \
   }                                                \
   rad = fa * boxhalfsize[X] + fb * boxhalfsize[Y]; \
-  if (min > rad || max < -rad) on_fail;
+  if (min > rad || max < -rad)                     \
+    on_fail;
 
 int triBoxOverlap_test(double boxcenter[3], double boxhalfsize[3],
                        double triverts[3][3]) {
@@ -227,19 +239,23 @@ int triBoxOverlap_test(double boxcenter[3], double boxhalfsize[3],
   /*  the triangle against the AABB */
   /* test in X-direction */
   FINDMINMAX(v0[X], v1[X], v2[X], min, max);
-  if (min > boxhalfsize[X] || max < -boxhalfsize[X]) TEST(0x0200);
+  if (min > boxhalfsize[X] || max < -boxhalfsize[X])
+    TEST(0x0200);
   /* test in Y-direction */
   FINDMINMAX(v0[Y], v1[Y], v2[Y], min, max);
-  if (min > boxhalfsize[Y] || max < -boxhalfsize[Y]) TEST(0x0400);
+  if (min > boxhalfsize[Y] || max < -boxhalfsize[Y])
+    TEST(0x0400);
   /* test in Z-direction */
   FINDMINMAX(v0[Z], v1[Z], v2[Z], min, max);
-  if (min > boxhalfsize[Z] || max < -boxhalfsize[Z]) TEST(0x0800);
+  if (min > boxhalfsize[Z] || max < -boxhalfsize[Z])
+    TEST(0x0800);
   /* Bullet 2: */
   /*  test if the box intersects the plane of the triangle */
   /*  compute plane equation of triangle: normal*x+d=0 */
   CROSS(normal, e0, e1);
   // -NJMP- (line removed here)
-  if (!planeBoxOverlap(normal, v0, boxhalfsize)) TEST(0x1000);  // -NJMP-
+  if (!planeBoxOverlap(normal, v0, boxhalfsize))
+    TEST(0x1000);     // -NJMP-
   return test_result; /* box and triangle overlaps */
 }
 
@@ -294,25 +310,31 @@ int triBoxOverlap_optimized(double boxcenter[3], double boxhalfsize[3],
   /*  the triangle against the AABB */
   /* test in X-direction */
   FINDMINMAX(v0[X], v1[X], v2[X], min, max);
-  if (min > boxhalfsize[X] || max < -boxhalfsize[X]) return 1;
+  if (min > boxhalfsize[X] || max < -boxhalfsize[X])
+    return 1;
   /* test in Y-direction */
   FINDMINMAX(v0[Y], v1[Y], v2[Y], min, max);
-  if (min > boxhalfsize[Y] || max < -boxhalfsize[Y]) return 1;
+  if (min > boxhalfsize[Y] || max < -boxhalfsize[Y])
+    return 1;
   /* test in Z-direction */
   FINDMINMAX(v0[Z], v1[Z], v2[Z], min, max);
-  if (min > boxhalfsize[Z] || max < -boxhalfsize[Z]) return 1;
+  if (min > boxhalfsize[Z] || max < -boxhalfsize[Z])
+    return 1;
   /* Bullet 2: */
   /*  test if the box intersects the plane of the triangle */
   /*  compute plane equation of triangle: normal*x+d=0 */
   CROSS(normal, e0, e1);
   // -NJMP- (line removed here)
-  if (!planeBoxOverlap(normal, v0, boxhalfsize)) return 1;  // -NJMP-
-  return 0; /* box and triangle overlaps */
+  if (!planeBoxOverlap(normal, v0, boxhalfsize))
+    return 1;  // -NJMP-
+  return 0;    /* box and triangle overlaps */
 }
 
 MTRand rnd;
 
-double randrange(double min, double max) { return rnd.rand(max - min) + min; }
+double randrange(double min, double max) {
+  return rnd.rand(max - min) + min;
+}
 
 carve::geom::vector<3> randomVector() {
   return carve::geom::VECTOR(randrange(-4.0, +4.0), randrange(-4.0, +4.0),

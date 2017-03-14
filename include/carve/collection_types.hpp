@@ -45,7 +45,9 @@ static inline V2 ordered_edge(carve::mesh::MeshSet<3>::vertex_t* a,
   return V2(std::min(a, b), std::max(a, b));
 }
 
-static inline V2 flip(const V2& v) { return V2(v.second, v.first); }
+static inline V2 flip(const V2& v) {
+  return V2(v.second, v.first);
+}
 
 // include/carve/csg.hpp include/carve/faceloop.hpp
 // lib/intersect.cpp lib/intersect_classify_common_impl.hpp

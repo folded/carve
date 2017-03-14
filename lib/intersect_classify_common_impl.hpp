@@ -31,22 +31,25 @@ typedef std::unordered_map<carve::mesh::MeshSet<3>::vertex_t*,
     GroupLookup;
 
 inline bool isSameFwd(const V2Set& a, const V2Set& b) {
-  if (a.size() != b.size()) { return false;
-}
+  if (a.size() != b.size()) {
+    return false;
+  }
   for (V2Set::const_iterator i = a.begin(), e = a.end(); i != e; ++i) {
-    if (b.find((*i)) == b.end()) { return false;
-}
+    if (b.find((*i)) == b.end()) {
+      return false;
+    }
   }
   return true;
 }
 
 inline bool isSameRev(const V2Set& a, const V2Set& b) {
-  if (a.size() != b.size()) { return false;
-}
+  if (a.size() != b.size()) {
+    return false;
+  }
   for (V2Set::const_iterator i = a.begin(), e = a.end(); i != e; ++i) {
     if (b.find(std::make_pair((*i).second, (*i).first)) == b.end()) {
       return false;
-}
+    }
   }
   return true;
 }
@@ -67,8 +70,9 @@ static void performClassifySimpleOnFaceGroups(FLGroupList& a_groups,
   // minimum vertex pointer - this pointer must be shared between
   // FaceLoops that this test catches.
   for (FLGroupList::iterator i = a_groups.begin(); i != a_groups.end(); ++i) {
-    if ((*i).face_loops.size() != 1) { continue;
-}
+    if ((*i).face_loops.size() != 1) {
+      continue;
+    }
     FaceLoop* f = (*i).face_loops.head;
     carve::mesh::MeshSet<3>::vertex_t* v =
         *std::min_element(f->vertices.begin(), f->vertices.end());
@@ -76,8 +80,9 @@ static void performClassifySimpleOnFaceGroups(FLGroupList& a_groups,
   }
 
   for (FLGroupList::iterator i = b_groups.begin(); i != b_groups.end(); ++i) {
-    if ((*i).face_loops.size() != 1) { continue;
-}
+    if ((*i).face_loops.size() != 1) {
+      continue;
+    }
     FaceLoop* f = (*i).face_loops.head;
     carve::mesh::MeshSet<3>::vertex_t* v =
         *std::min_element(f->vertices.begin(), f->vertices.end());
@@ -108,8 +113,9 @@ static void performClassifySimpleOnFaceGroups(FLGroupList& a_groups,
         FaceLoop* f_a = (*a).face_loops.head;
 
         int s = is_same(f_a->vertices, f_b->vertices);
-        if (!s) { continue;
-}
+        if (!s) {
+          continue;
+        }
 
         // if they are ordered in the same direction, then they are
         // oriented out, otherwise oriented in.
@@ -229,10 +235,12 @@ static void performClassifyHardFaceGroups(
       continue;
     }
 
-    if (n_in) { fc = FACE_IN;
-}
-    if (n_out) { fc = FACE_OUT;
-}
+    if (n_in) {
+      fc = FACE_IN;
+    }
+    if (n_out) {
+      fc = FACE_OUT;
+    }
 
     grp.classification.push_back(ClassificationInfo(nullptr, fc));
     collector.collect(&grp, hooks);
