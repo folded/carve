@@ -67,7 +67,7 @@ struct Options : public opt::Parser {
 
   std::vector<std::string> args;
 
-  virtual void optval(const std::string& o, const std::string& v) {
+  void optval(const std::string& o, const std::string& v) override {
     if (o == "--canonicalize" || o == "-c") {
       canonicalize = true;
       return;
@@ -120,12 +120,12 @@ struct Options : public opt::Parser {
     }
   }
 
-  virtual std::string usageStr() {
+  std::string usageStr() override {
     return std::string("Usage: ") + progname +
            std::string(" [options] object slicer");
   };
 
-  virtual void arg(const std::string& arg) { args.push_back(arg); }
+  void arg(const std::string& arg) override { args.push_back(arg); }
 
   Options() {
     ascii = true;
@@ -186,11 +186,11 @@ class Slice : public carve::csg::CSG::Collector {
         const carve::mesh::MeshSet<3>* _src_b)
       : carve::csg::CSG::Collector(), src_a(_src_a), src_b(_src_b) {}
 
-  virtual ~Slice() {}
+  ~Slice() override {}
 
  protected:
-  virtual void collect(carve::csg::FaceLoopGroup* grp,
-                       carve::csg::CSG::Hooks& hooks) {
+  void collect(carve::csg::FaceLoopGroup* grp,
+                       carve::csg::CSG::Hooks& hooks) override {
     if (grp->src == src_a) {
       std::vector<carve::mesh::MeshSet<3>::face_t*> new_faces;
 
@@ -250,7 +250,7 @@ class Slice : public carve::csg::CSG::Collector {
     }
   }
 
-  virtual carve::mesh::MeshSet<3>* done(carve::csg::CSG::Hooks& hooks) {
+  carve::mesh::MeshSet<3>* done(carve::csg::CSG::Hooks& hooks) override {
     std::vector<carve::mesh::MeshSet<3>::face_t*> f;
     f.reserve(faces.size());
     for (std::list<face_data_t>::iterator i = faces.begin(); i != faces.end();

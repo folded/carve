@@ -63,9 +63,9 @@ class CSG_TransformNode : public CSG_TreeNode {
  public:
   CSG_TransformNode(const carve::math::Matrix& _transform, CSG_TreeNode* _child)
       : transform(_transform), child(_child) {}
-  virtual ~CSG_TransformNode() { delete child; }
+  ~CSG_TransformNode() override { delete child; }
 
-  virtual carve::mesh::MeshSet<3>* eval(bool& is_temp, CSG& csg) {
+  carve::mesh::MeshSet<3>* eval(bool& is_temp, CSG& csg) override {
     carve::mesh::MeshSet<3>* result = child->eval(is_temp, csg);
     if (!is_temp) {
       result = result->clone();
@@ -87,7 +87,7 @@ class CSG_InvertNode : public CSG_TreeNode {
     selected_meshes.resize(g_id + 1, false);
     selected_meshes[g_id] = true;
   }
-  virtual ~CSG_InvertNode() { delete child; }
+  ~CSG_InvertNode() override { delete child; }
 
   template <typename T>
   CSG_InvertNode(T start, T end, CSG_TreeNode* _child)
@@ -102,7 +102,7 @@ class CSG_InvertNode : public CSG_TreeNode {
     }
   }
 
-  virtual carve::mesh::MeshSet<3>* eval(bool& is_temp, CSG& csg) {
+  carve::mesh::MeshSet<3>* eval(bool& is_temp, CSG& csg) override {
     bool c_temp;
     carve::mesh::MeshSet<3>* c = child->eval(c_temp, csg);
     if (!c_temp) {
@@ -147,9 +147,9 @@ class CSG_SelectNode : public CSG_TreeNode {
     }
   }
 
-  virtual ~CSG_SelectNode() { delete child; }
+  ~CSG_SelectNode() override { delete child; }
 
-  virtual carve::mesh::MeshSet<3>* eval(bool& is_temp, CSG& csg) {
+  carve::mesh::MeshSet<3>* eval(bool& is_temp, CSG& csg) override {
     bool c_temp;
     carve::mesh::MeshSet<3>* c = child->eval(c_temp, csg);
     if (!c_temp) {
@@ -179,7 +179,7 @@ class CSG_PolyNode : public CSG_TreeNode {
  public:
   CSG_PolyNode(carve::mesh::MeshSet<3>* _poly, bool _del)
       : poly(_poly), del(_del) {}
-  virtual ~CSG_PolyNode() {
+  ~CSG_PolyNode() override {
     static carve::TimingName FUNC_NAME("delete polyhedron");
     carve::TimingBlock block(FUNC_NAME);
 
@@ -188,7 +188,7 @@ class CSG_PolyNode : public CSG_TreeNode {
     }
   }
 
-  virtual carve::mesh::MeshSet<3>* eval(bool& is_temp, CSG& csg) {
+  carve::mesh::MeshSet<3>* eval(bool& is_temp, CSG& csg) override {
     is_temp = false;
     return poly;
   }
@@ -210,7 +210,7 @@ class CSG_OPNode : public CSG_TreeNode {
         rescale(_rescale),
         classify_type(_classify_type) {}
 
-  virtual ~CSG_OPNode() {
+  ~CSG_OPNode() override {
     delete left;
     delete right;
   }
@@ -315,7 +315,7 @@ class CSG_OPNode : public CSG_TreeNode {
     return result;
   }
 
-  virtual carve::mesh::MeshSet<3>* eval(bool& is_temp, CSG& csg) {
+  carve::mesh::MeshSet<3>* eval(bool& is_temp, CSG& csg) override {
     if (rescale) {
       return evalScaled(is_temp, csg);
     } else {

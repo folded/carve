@@ -95,9 +95,9 @@ struct VertexData : public Data {
 
   VertexData() : Data() {}
 
-  virtual ~VertexData() {}
+  ~VertexData() override {}
 
-  virtual void transform(const carve::math::Matrix& transform) {
+  void transform(const carve::math::Matrix& transform) override {
     for (size_t i = 0; i < points.size(); ++i) {
       points[i] *= transform;
     }
@@ -124,7 +124,7 @@ struct PolyhedronData : public VertexData {
 
   PolyhedronData() : VertexData(), faceIndices(), faceCount(0) {}
 
-  virtual ~PolyhedronData() {}
+  ~PolyhedronData() override {}
 
   void reserveFaces(int count, int avgFaceSize) {
     faceIndices.reserve(faceIndices.size() + count * (1 + avgFaceSize));
@@ -184,7 +184,7 @@ struct PolylineSetData : public VertexData {
 
   PolylineSetData() : VertexData(), polylines() {}
 
-  virtual ~PolylineSetData() {}
+  ~PolylineSetData() override {}
 
   void beginPolyline(bool closed = false) {
     polylines.push_back(std::make_pair(closed, std::vector<int>()));
@@ -208,7 +208,7 @@ struct PolylineSetData : public VertexData {
 struct PointSetData : public VertexData {
   PointSetData() : VertexData() {}
 
-  virtual ~PointSetData() {}
+  ~PointSetData() override {}
 
   carve::point::PointSet* create(const Options& options) const {
     carve::point::PointSet* p = new carve::point::PointSet(points);

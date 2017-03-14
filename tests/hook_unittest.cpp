@@ -63,9 +63,9 @@ struct ResultFaceHook : public carve::csg::CSG::Hook {
   ResultFaceHook(std::map<const carve::mesh::MeshSet<3>*, int>& _counter)
       : counter(_counter) {}
 
-  virtual void resultFace(const carve::mesh::MeshSet<3>::face_t* output_face,
+  void resultFace(const carve::mesh::MeshSet<3>::face_t* output_face,
                           const carve::mesh::MeshSet<3>::face_t* source_face,
-                          bool flipped) {
+                          bool flipped) override {
     const carve::mesh::MeshSet<3>* source_poly =
         static_cast<const carve::mesh::MeshSet<3>*>(source_face->mesh->meshset);
     counter[source_poly]++;

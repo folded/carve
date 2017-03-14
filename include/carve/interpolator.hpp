@@ -169,26 +169,26 @@ class Interpolator {
     virtual unsigned hookBits() const {
       return carve::csg::CSG::Hooks::RESULT_FACE_BIT;
     }
-    virtual void resultFace(const meshset_t::face_t* new_face,
-                            const meshset_t::face_t* orig_face, bool flipped) {
+    void resultFace(const meshset_t::face_t* new_face,
+                            const meshset_t::face_t* orig_face, bool flipped) override {
       interpolator->resultFace(csg, new_face, orig_face, flipped);
     }
-    virtual void processOutputFace(
+    void processOutputFace(
         std::vector<carve::mesh::MeshSet<3>::face_t*>& new_faces,
-        const meshset_t::face_t* orig_face, bool flipped) {
+        const meshset_t::face_t* orig_face, bool flipped) override {
       interpolator->processOutputFace(csg, new_faces, orig_face, flipped);
     }
-    virtual void edgeDivision(const meshset_t::edge_t* orig_edge,
+    void edgeDivision(const meshset_t::edge_t* orig_edge,
                               size_t orig_edge_idx,
                               const meshset_t::vertex_t* v1,
-                              const meshset_t::vertex_t* v2) {
+                              const meshset_t::vertex_t* v2) override {
       interpolator->edgeDivision(csg, orig_edge, orig_edge_idx, v1, v2);
     }
 
     Hook(Interpolator* _interpolator, const carve::csg::CSG& _csg)
         : interpolator(_interpolator), csg(_csg) {}
 
-    virtual ~Hook() {}
+    ~Hook() override {}
   };
 
   virtual Hook* makeHook(carve::csg::CSG& csg) { return new Hook(this, csg); }
@@ -229,9 +229,9 @@ class FaceVertexAttr : public Interpolator {
 
   attrmap_t attrs;
 
-  virtual void resultFace(const carve::csg::CSG& csg,
+  void resultFace(const carve::csg::CSG& csg,
                           const meshset_t::face_t* new_face,
-                          const meshset_t::face_t* orig_face, bool flipped) {
+                          const meshset_t::face_t* orig_face, bool flipped) override {
     std::vector<attr_t> vertex_attrs;
     attrvmap_t base_attrs;
     vertex_attrs.reserve(orig_face->nVertices());
@@ -283,7 +283,7 @@ class FaceVertexAttr : public Interpolator {
 
   FaceVertexAttr() : Interpolator() {}
 
-  virtual ~FaceVertexAttr() {}
+  ~FaceVertexAttr() override {}
 };
 
 template <typename attr_t>
@@ -303,23 +303,23 @@ class FaceEdgeAttr : public Interpolator {
 
   struct Hook : public Interpolator::Hook {
    public:
-    virtual unsigned hookBits() const {
+    unsigned hookBits() const override {
       return carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT |
              carve::csg::CSG::Hooks::EDGE_DIVISION_BIT;
     }
     Hook(Interpolator* _interpolator, const carve::csg::CSG& _csg)
         : Interpolator::Hook(_interpolator, _csg) {}
-    virtual ~Hook() {}
+    ~Hook() override {}
   };
 
-  virtual Interpolator::Hook* makeHook(carve::csg::CSG& csg) {
+  Interpolator::Hook* makeHook(carve::csg::CSG& csg) override {
     return new Hook(this, csg);
   }
 
-  virtual void edgeDivision(const carve::csg::CSG& csg,
+  void edgeDivision(const carve::csg::CSG& csg,
                             const meshset_t::edge_t* orig_edge,
                             size_t orig_edge_idx, const meshset_t::vertex_t* v1,
-                            const meshset_t::vertex_t* v2) {
+                            const meshset_t::vertex_t* v2) override {
     key_t k(orig_edge->face, orig_edge_idx);
     typename attrmap_t::const_iterator attr_i = attrs.find(k);
     if (attr_i == attrs.end()) {
@@ -328,10 +328,10 @@ class FaceEdgeAttr : public Interpolator {
     edgediv[vpair_t(v1, v2)] = k;
   }
 
-  virtual void processOutputFace(
+  void processOutputFace(
       const carve::csg::CSG& csg,
       std::vector<carve::mesh::MeshSet<3>::face_t*>& new_faces,
-      const meshset_t::face_t* orig_face, bool flipped) {
+      const meshset_t::face_t* orig_face, bool flipped) override {
     edgedivmap_t undiv;
 
     for (meshset_t::face_t::const_edge_iter_t e = orig_face->begin();
@@ -388,7 +388,7 @@ class FaceEdgeAttr : public Interpolator {
 
   FaceEdgeAttr() : Interpolator() {}
 
-  virtual ~FaceEdgeAttr() {}
+  ~FaceEdgeAttr() override {}
 };
 
 template <typename attr_t>
@@ -405,9 +405,9 @@ class FaceAttr : public Interpolator {
 
   attrmap_t attrs;
 
-  virtual void resultFace(const carve::csg::CSG& csg,
+  void resultFace(const carve::csg::CSG& csg,
                           const meshset_t::face_t* new_face,
-                          const meshset_t::face_t* orig_face, bool flipped) {
+                          const meshset_t::face_t* orig_face, bool flipped) override {
     typename attrmap_t::const_iterator i = attrs.find(key_t(orig_face));
     if (i != attrs.end()) {
       attrs[key_t(new_face)] = (*i).second;
@@ -434,7 +434,7 @@ class FaceAttr : public Interpolator {
 
   FaceAttr() : Interpolator() {}
 
-  virtual ~FaceAttr() {}
+  ~FaceAttr() override {}
 };
 }  // namespace interpolate
 }  // namespace carve

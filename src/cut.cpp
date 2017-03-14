@@ -55,7 +55,7 @@ struct Options : public opt::Parser {
 
   std::vector<std::string> args;
 
-  virtual void optval(const std::string& o, const std::string& v) {
+  void optval(const std::string& o, const std::string& v) override {
     if (o == "--binary" || o == "-b") {
       ascii = false;
       return;
@@ -78,14 +78,14 @@ struct Options : public opt::Parser {
     }
   }
 
-  virtual std::string usageStr() {
+  std::string usageStr() override {
     return std::string("Usage: ") + progname +
            std::string(" [options] expression");
   };
 
-  virtual void arg(const std::string& a) { args.push_back(a); }
+  void arg(const std::string& a) override { args.push_back(a); }
 
-  virtual void help(std::ostream& out) { this->opt::Parser::help(out); }
+  void help(std::ostream& out) override { this->opt::Parser::help(out); }
 
   Options() {
     ascii = true;

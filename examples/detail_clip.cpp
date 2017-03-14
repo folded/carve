@@ -56,10 +56,10 @@ class DetailClip : public carve::csg::CSG::Collector {
              const carve::mesh::MeshSet<3>* _src_b)
       : carve::csg::CSG::Collector(), src_a(_src_a), src_b(_src_b) {}
 
-  virtual ~DetailClip() {}
+  ~DetailClip() override {}
 
-  virtual void collect(carve::csg::FaceLoopGroup* grp,
-                       carve::csg::CSG::Hooks& hooks) {
+  void collect(carve::csg::FaceLoopGroup* grp,
+                       carve::csg::CSG::Hooks& hooks) override {
     if (grp->face_loops.head->orig_face->mesh->meshset != src_b) {
       return;
     }
@@ -81,7 +81,7 @@ class DetailClip : public carve::csg::CSG::Collector {
     }
   }
 
-  virtual carve::mesh::MeshSet<3>* done(carve::csg::CSG::Hooks& hooks) {
+  carve::mesh::MeshSet<3>* done(carve::csg::CSG::Hooks& hooks) override {
     return new carve::mesh::MeshSet<3>(faces);
   }
 };

@@ -51,9 +51,9 @@ struct GroupPoly : public CSG::Collector {
             std::list<std::pair<FaceClass, carve::mesh::MeshSet<3>*> >& _out)
       : CSG::Collector(), want_groups_from(poly), out(_out) {}
 
-  virtual ~GroupPoly() {}
+  ~GroupPoly() override {}
 
-  virtual void collect(FaceLoopGroup* grp, CSG::Hooks& /* hooks */) {
+  void collect(FaceLoopGroup* grp, CSG::Hooks& /* hooks */) override {
     if (grp->face_loops.head->orig_face->mesh->meshset != want_groups_from) {
       return;
     }
@@ -78,7 +78,7 @@ struct GroupPoly : public CSG::Collector {
     out.push_back(std::make_pair(fc, new carve::mesh::MeshSet<3>(faces)));
   }
 
-  virtual carve::mesh::MeshSet<3>* done(CSG::Hooks& /* hooks */) {
+  carve::mesh::MeshSet<3>* done(CSG::Hooks& /* hooks */) override {
     return NULL;
   }
 };

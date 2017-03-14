@@ -58,7 +58,7 @@ struct Options : public opt::Parser {
   bool vtk;
   std::vector<std::string> files;
 
-  virtual void optval(const std::string& o, const std::string& v) {
+  void optval(const std::string& o, const std::string& v) override {
     if (o == "--obj" || o == "-O") {
       obj = true;
       return;
@@ -89,7 +89,7 @@ struct Options : public opt::Parser {
     }
   }
 
-  virtual void arg(const std::string& a) { files.push_back(a); }
+  void arg(const std::string& a) override { files.push_back(a); }
 
   Options() {
     obj = false;
@@ -343,7 +343,7 @@ struct TestScene : public Scene {
   std::vector<bool> draw_flags;
   std::vector<bool> is_wireframe;
 
-  virtual bool key(unsigned char k, int x, int y) {
+  bool key(unsigned char k, int x, int y) override {
     const char* t;
     static const char* l = "1234567890!@#$%^&*()";
     if (k == '\\') {
@@ -393,7 +393,7 @@ struct TestScene : public Scene {
     return true;
   }
 
-  virtual GLvoid draw() {
+  GLvoid draw() override {
     for (unsigned i = 0; i < draw_flags.size(); ++i) {
       if (draw_flags[i] && !is_wireframe[i]) {
         glCallList(draw_list_base + i);
@@ -422,7 +422,7 @@ struct TestScene : public Scene {
     draw_list_base = 0;
   }
 
-  virtual ~TestScene() { glDeleteLists(draw_list_base, draw_flags.size()); }
+  ~TestScene() override { glDeleteLists(draw_list_base, draw_flags.size()); }
 };
 
 int main(int argc, char** argv) {

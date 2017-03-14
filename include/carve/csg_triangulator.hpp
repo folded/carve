@@ -37,11 +37,11 @@ class CarveTriangulator : public csg::CSG::Hook {
  public:
   CarveTriangulator() {}
 
-  virtual ~CarveTriangulator() {}
+  ~CarveTriangulator() override {}
 
-  virtual void processOutputFace(
+  void processOutputFace(
       std::vector<carve::mesh::MeshSet<3>::face_t*>& faces,
-      const carve::mesh::MeshSet<3>::face_t* orig, bool flipped) {
+      const carve::mesh::MeshSet<3>::face_t* orig, bool flipped) override {
     std::vector<carve::mesh::MeshSet<3>::face_t*> out_faces;
 
     size_t n_tris = 0;
@@ -97,11 +97,11 @@ class CarveTriangulationImprover : public csg::CSG::Hook {
  public:
   CarveTriangulationImprover() {}
 
-  virtual ~CarveTriangulationImprover() {}
+  ~CarveTriangulationImprover() override {}
 
-  virtual void processOutputFace(
+  void processOutputFace(
       std::vector<carve::mesh::MeshSet<3>::face_t*>& faces,
-      const carve::mesh::MeshSet<3>::face_t* orig, bool flipped) {
+      const carve::mesh::MeshSet<3>::face_t* orig, bool flipped) override {
     if (faces.size() == 1) {
       return;
     }
@@ -172,7 +172,7 @@ class CarveTriangulationQuadMerger : public csg::CSG::Hook {
  public:
   CarveTriangulationQuadMerger() {}
 
-  virtual ~CarveTriangulationQuadMerger() {}
+  ~CarveTriangulationQuadMerger() override {}
 
   double scoreQuad(edge_map_t::iterator i, edge_map_t& edge_map) {
     if (!(*i).second.first || !(*i).second.second) {
@@ -196,9 +196,9 @@ class CarveTriangulationQuadMerger : public csg::CSG::Hook {
     }
   }
 
-  virtual void processOutputFace(
+  void processOutputFace(
       std::vector<carve::mesh::MeshSet<3>::face_t*>& faces,
-      const carve::mesh::MeshSet<3>::face_t* orig, bool flipped) {
+      const carve::mesh::MeshSet<3>::face_t* orig, bool flipped) override {
     if (faces.size() == 1) {
       return;
     }
@@ -274,7 +274,7 @@ class CarveHoleResolver : public csg::CSG::Hook {
  public:
   CarveHoleResolver() {}
 
-  virtual ~CarveHoleResolver() {}
+  ~CarveHoleResolver() override {}
 
   bool findRepeatedEdges(
       const std::vector<carve::mesh::MeshSet<3>::vertex_t*>& vertices,
@@ -364,9 +364,9 @@ class CarveHoleResolver : public csg::CSG::Hook {
     } while (vert != start);
   }
 
-  virtual void processOutputFace(
+  void processOutputFace(
       std::vector<carve::mesh::MeshSet<3>::face_t*>& faces,
-      const carve::mesh::MeshSet<3>::face_t* orig, bool flipped) {
+      const carve::mesh::MeshSet<3>::face_t* orig, bool flipped) override {
     std::vector<carve::mesh::MeshSet<3>::face_t*> out_faces;
 
     for (size_t f = 0; f < faces.size(); ++f) {

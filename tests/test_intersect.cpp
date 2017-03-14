@@ -67,7 +67,7 @@ struct Options : public opt::Parser {
 
   std::vector<std::string> args;
 
-  virtual void optval(const std::string& o, const std::string& v) {
+  void optval(const std::string& o, const std::string& v) override {
     if (o == "--binary" || o == "-b") {
       ascii = false;
       return;
@@ -91,7 +91,7 @@ struct Options : public opt::Parser {
     }
   }
 
-  virtual void arg(const std::string& a) { args.push_back(a); }
+  void arg(const std::string& a) override { args.push_back(a); }
 
   Options() {
     ascii = true;
@@ -123,7 +123,7 @@ struct TestScene : public Scene {
   GLuint draw_list_base;
   std::vector<Option*> draw_flags;
   std::vector<bool> wireframe_flags;
-  virtual bool key(unsigned char k, int x, int y) {
+  bool key(unsigned char k, int x, int y) override {
     const char* t;
     static const char* l = "1234567890!@#$%^&*()";
     t = strchr(l, k);
@@ -136,7 +136,7 @@ struct TestScene : public Scene {
     return true;
   }
 
-  virtual GLvoid draw() {
+  GLvoid draw() override {
     for (size_t i = 0; i < draw_flags.size(); ++i) {
       if (draw_flags[i]->isChecked() && !wireframe_flags[i]) {
         glCallList(draw_list_base + i);
@@ -172,7 +172,7 @@ struct TestScene : public Scene {
     }
   }
 
-  virtual void click(int button, int state, int x, int y) {
+  void click(int button, int state, int x, int y) override {
     //     if ((glutGetModifiers() & GLUT_ACTIVE_CTRL) != 0 && state ==
     //     GLUT_DOWN) {
 
@@ -209,9 +209,9 @@ struct TestScene : public Scene {
     draw_list_base = glGenLists(n_dlist);
   }
 
-  virtual ~TestScene() { glDeleteLists(draw_list_base, draw_flags.size()); }
+  ~TestScene() override { glDeleteLists(draw_list_base, draw_flags.size()); }
 
-  virtual void _init() {}
+  void _init() override {}
 };
 
 bool odd(int x, int y, int z) { return ((x + y + z) & 1) == 1; }

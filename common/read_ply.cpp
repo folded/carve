@@ -45,9 +45,9 @@ namespace {
 struct line : public gloop::stream::null_reader {
   carve::input::PolylineSetData* data;
   line(carve::input::PolylineSetData* _data) : data(_data) {}
-  virtual void length(int /* len */) {}
-  virtual void next() { data->beginPolyline(); }
-  virtual void end() {}
+  void length(int /* len */) override {}
+  void next() override { data->beginPolyline(); }
+  void end() override {}
   carve::input::PolylineSetData::polyline_data_t& curr() const {
     return data->polylines.back();
   }
@@ -56,7 +56,7 @@ struct line : public gloop::stream::null_reader {
 struct line_closed : public gloop::stream::reader<bool> {
   line* l;
   line_closed(line* _l) : l(_l) {}
-  virtual void value(bool val) { l->curr().first = val; }
+  void value(bool val) override { l->curr().first = val; }
 };
 
 struct line_idx : public gloop::stream::reader<int> {
@@ -67,20 +67,20 @@ struct line_idx : public gloop::stream::reader<int> {
       l->curr().second.reserve(len);
     }
   }
-  virtual void value(int val) { l->curr().second.push_back(val); }
+  void value(int val) override { l->curr().second.push_back(val); }
 };
 
 template <typename container_t>
 struct vertex : public gloop::stream::null_reader {
   container_t& container;
   vertex(container_t& _container) : container(_container) {}
-  virtual void next() { container.push_back(carve::geom3d::Vector()); }
-  virtual void length(int l) {
+  void next() override { container.push_back(carve::geom3d::Vector()); }
+  void length(int l) override {
     if (l > 0) {
       container.reserve(container.size() + l);
     }
   }
-  virtual void end() {}
+  void end() override {}
   carve::geom3d::Vector& curr() const { return container.back(); }
 };
 template <typename container_t>
@@ -92,7 +92,7 @@ template <int idx, typename curr_t>
 struct vertex_component : public gloop::stream::reader<double> {
   const curr_t* i;
   vertex_component(const curr_t* _i) : i(_i) {}
-  virtual void value(double val) { i->curr().v[idx] = val; }
+  void value(double val) override { i->curr().v[idx] = val; }
 };
 template <int idx, typename curr_t>
 vertex_component<idx, curr_t>* vertex_component_inserter(const curr_t* i) {
@@ -102,7 +102,7 @@ vertex_component<idx, curr_t>* vertex_component_inserter(const curr_t* i) {
 struct face : public gloop::stream::null_reader {
   carve::input::PolyhedronData* data;
   face(carve::input::PolyhedronData* _data) : data(_data) {}
-  virtual void length(int l) {
+  void length(int l) override {
     if (l > 0) {
       data->reserveFaces(l, 3);
     }
@@ -115,12 +115,12 @@ struct face_idx : public gloop::stream::reader<int> {
 
   face_idx(carve::input::PolyhedronData* _data) : data(_data), vidx() {}
 
-  virtual void length(int l) {
+  void length(int l) override {
     vidx.clear();
     vidx.reserve(l);
   }
-  virtual void value(int val) { vidx.push_back(val); }
-  virtual void end() { data->addFace(vidx.begin(), vidx.end()); }
+  void value(int val) override { vidx.push_back(val); }
+  void end() override { data->addFace(vidx.begin(), vidx.end()); }
 };
 
 struct tristrip_idx : public gloop::stream::reader<int> {
@@ -131,7 +131,7 @@ struct tristrip_idx : public gloop::stream::reader<int> {
   tristrip_idx(carve::input::PolyhedronData* _data)
       : data(_data), a(-1), b(-1), c(-1), clk(true) {}
 
-  virtual void value(int val) {
+  void value(int val) override {
     a = b;
     b = c;
     c = val;
@@ -147,7 +147,7 @@ struct tristrip_idx : public gloop::stream::reader<int> {
     }
   }
 
-  virtual void length(int len) { data->reserveFaces(len - 2, 3); }
+  void length(int len) override { data->reserveFaces(len - 2, 3); }
 };
 
 struct begin_pointset : public gloop::stream::null_reader {
@@ -157,8 +157,8 @@ struct begin_pointset : public gloop::stream::null_reader {
 
   begin_pointset(gloop::stream::model_reader& _sr, carve::input::Input& _inputs)
       : sr(_sr), inputs(_inputs) {}
-  ~begin_pointset() {}
-  virtual void begin() {
+  ~begin_pointset() override {}
+  void begin() override {
     data = new carve::input::PointSetData();
     vertex<std::vector<carve::geom3d::Vector> >* vi =
         vertex_inserter(data->points);
@@ -167,8 +167,8 @@ struct begin_pointset : public gloop::stream::null_reader {
     sr.addReader("pointset.vertex.y", vertex_component_inserter<1>(vi));
     sr.addReader("pointset.vertex.z", vertex_component_inserter<2>(vi));
   }
-  virtual void end() { inputs.addDataBlock(data); }
-  virtual void fail() { delete data; }
+  void end() override { inputs.addDataBlock(data); }
+  void fail() override { delete data; }
 };
 
 struct begin_polyline : public gloop::stream::null_reader {
@@ -178,8 +178,8 @@ struct begin_polyline : public gloop::stream::null_reader {
 
   begin_polyline(gloop::stream::model_reader& _sr, carve::input::Input& _inputs)
       : sr(_sr), inputs(_inputs) {}
-  ~begin_polyline() {}
-  virtual void begin() {
+  ~begin_polyline() override {}
+  void begin() override {
     data = new carve::input::PolylineSetData();
     vertex<std::vector<carve::geom3d::Vector> >* vi =
         vertex_inserter(data->points);
@@ -193,8 +193,8 @@ struct begin_polyline : public gloop::stream::null_reader {
     sr.addReader("polyline.polyline.closed", new line_closed(li));
     sr.addReader("polyline.polyline.vertex_indices", new line_idx(li));
   }
-  virtual void end() { inputs.addDataBlock(data); }
-  virtual void fail() { delete data; }
+  void end() override { inputs.addDataBlock(data); }
+  void fail() override { delete data; }
 };
 
 struct begin_polyhedron : public gloop::stream::null_reader {
@@ -205,8 +205,8 @@ struct begin_polyhedron : public gloop::stream::null_reader {
   begin_polyhedron(gloop::stream::model_reader& _sr,
                    carve::input::Input& _inputs)
       : sr(_sr), inputs(_inputs) {}
-  ~begin_polyhedron() {}
-  virtual void begin() {
+  ~begin_polyhedron() override {}
+  void begin() override {
     data = new carve::input::PolyhedronData();
     vertex<std::vector<carve::geom3d::Vector> >* vi =
         vertex_inserter(data->points);
@@ -220,8 +220,8 @@ struct begin_polyhedron : public gloop::stream::null_reader {
 
     sr.addReader("polyhedron.tristrips.vertex_indices", new tristrip_idx(data));
   }
-  virtual void end() { inputs.addDataBlock(data); }
-  virtual void fail() { delete data; }
+  void end() override { inputs.addDataBlock(data); }
+  void fail() override { delete data; }
 };
 
 void modelSetup(carve::input::Input& inputs,

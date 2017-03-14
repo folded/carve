@@ -195,7 +195,7 @@ class MeshSimplifier {
                                      edge->next->next->vert->v) == 0.0;
     }
 
-    virtual bool canFlip(const EdgeInfo* e) const {
+    bool canFlip(const EdgeInfo* e) const override {
       return FlippableBase::canFlip(e) && connectsExactlyCoplanarFaces(e) &&
              flippable_DotProd(e);
     }
@@ -204,9 +204,9 @@ class MeshSimplifier {
   struct FlippableColinearPair : public FlippableBase {
     FlippableColinearPair() {}
 
-    virtual double score(const EdgeInfo* e) const { return e->l[0] - e->l[1]; }
+    double score(const EdgeInfo* e) const override { return e->l[0] - e->l[1]; }
 
-    virtual bool canFlip(const EdgeInfo* e) const {
+    bool canFlip(const EdgeInfo* e) const override {
       if (!FlippableBase::canFlip(e)) {
         return false;
       }
@@ -229,7 +229,7 @@ class MeshSimplifier {
           min_colinearity(_min_colinearity),
           min_delta_v(_min_delta_v) {}
 
-    virtual bool canFlip(const EdgeInfo* e) const {
+    bool canFlip(const EdgeInfo* e) const override {
       if (!FlippableBase::canFlip(e)) {
         return false;
       }

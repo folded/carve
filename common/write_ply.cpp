@@ -50,9 +50,9 @@ struct vertex : public vertex_base {
   const container_t& cnt;
   int i;
   vertex(const container_t& _cnt) : cnt(_cnt), i(-1) {}
-  virtual void next() { ++i; }
-  virtual int length() { return cnt.size(); }
-  virtual const carve::geom3d::Vector& curr() const { return cnt[i].v; }
+  void next() override { ++i; }
+  int length() override { return cnt.size(); }
+  const carve::geom3d::Vector& curr() const override { return cnt[i].v; }
 };
 
 typedef vertex<std::vector<carve::point::Vertex> > pointset_vertex;
@@ -64,7 +64,7 @@ template <int idx>
 struct vertex_component : public gloop::stream::writer<double> {
   vertex_base& r;
   vertex_component(vertex_base& _r) : r(_r) {}
-  virtual double value() { return r.curr().v[idx]; }
+  double value() override { return r.curr().v[idx]; }
 };
 
 struct mesh_face : public gloop::stream::null_writer {
@@ -73,8 +73,8 @@ struct mesh_face : public gloop::stream::null_writer {
   mesh_face(const carve::mesh::MeshSet<3>* poly) : faces(), i(-1) {
     std::copy(poly->faceBegin(), poly->faceEnd(), std::back_inserter(faces));
   }
-  virtual void next() { ++i; }
-  virtual int length() { return faces.size(); }
+  void next() override { ++i; }
+  int length() override { return faces.size(); }
   const carve::mesh::MeshSet<3>::face_t* curr() const { return faces[i]; }
 };
 
@@ -87,17 +87,17 @@ struct mesh_face_idx : public gloop::stream::writer<size_t> {
 
   mesh_face_idx(mesh_face& _r, gloop::stream::Type _data_type, int _max_length)
       : r(_r), f(NULL), data_type(_data_type), max_length(_max_length) {}
-  virtual void begin() {
+  void begin() override {
     f = r.curr();
     i = f->begin();
   }
-  virtual int length() { return f->nVertices(); }
+  int length() override { return f->nVertices(); }
 
-  virtual bool isList() { return true; }
-  virtual gloop::stream::Type dataType() { return data_type; }
-  virtual int maxLength() { return max_length; }
+  bool isList() override { return true; }
+  gloop::stream::Type dataType() override { return data_type; }
+  int maxLength() override { return max_length; }
 
-  virtual size_t value() {
+  size_t value() override {
     const carve::mesh::MeshSet<3>::vertex_t* v = (*i++).vert;
     return v - &f->mesh->meshset->vertex_storage[0];
   }
@@ -107,8 +107,8 @@ struct face : public gloop::stream::null_writer {
   const carve::poly::Polyhedron* poly;
   int i;
   face(const carve::poly::Polyhedron* _poly) : poly(_poly), i(-1) {}
-  virtual void next() { ++i; }
-  virtual int length() { return poly->faces.size(); }
+  void next() override { ++i; }
+  int length() override { return poly->faces.size(); }
   const carve::poly::Face<3>* curr() const { return &poly->faces[i]; }
 };
 
@@ -121,17 +121,17 @@ struct face_idx : public gloop::stream::writer<size_t> {
 
   face_idx(face& _r, gloop::stream::Type _data_type, int _max_length)
       : r(_r), f(NULL), i(0), data_type(_data_type), max_length(_max_length) {}
-  virtual void begin() {
+  void begin() override {
     f = r.curr();
     i = 0;
   }
-  virtual int length() { return f->nVertices(); }
+  int length() override { return f->nVertices(); }
 
-  virtual bool isList() { return true; }
-  virtual gloop::stream::Type dataType() { return data_type; }
-  virtual int maxLength() { return max_length; }
+  bool isList() override { return true; }
+  gloop::stream::Type dataType() override { return data_type; }
+  int maxLength() override { return max_length; }
 
-  virtual size_t value() {
+  size_t value() override {
     return static_cast<const carve::poly::Polyhedron*>(f->owner)
         ->vertexToIndex_fast(f->vertex(i++));
   }
@@ -144,19 +144,19 @@ struct lineset : public gloop::stream::null_writer {
   lineset(const carve::line::PolylineSet* _polyline) : polyline(_polyline) {
     n = polyline->lines.begin();
   }
-  virtual void next() {
+  void next() override {
     c = n;
     ++n;
   }
-  virtual int length() { return polyline->lines.size(); }
+  int length() override { return polyline->lines.size(); }
   const carve::line::Polyline* curr() const { return *c; }
 };
 
 struct line_closed : public gloop::stream::writer<bool> {
   lineset& ls;
   line_closed(lineset& _ls) : ls(_ls) {}
-  virtual gloop::stream::Type dataType() { return gloop::stream::U8; }
-  virtual bool value() { return ls.curr()->isClosed(); }
+  gloop::stream::Type dataType() override { return gloop::stream::U8; }
+  bool value() override { return ls.curr()->isClosed(); }
 };
 
 struct line_vi : public gloop::stream::writer<size_t> {
@@ -172,15 +172,15 @@ struct line_vi : public gloop::stream::writer<size_t> {
         i(0),
         data_type(_data_type),
         max_length(_max_length) {}
-  virtual bool isList() { return true; }
-  virtual gloop::stream::Type dataType() { return data_type; }
-  virtual int maxLength() { return max_length; }
-  virtual void begin() {
+  bool isList() override { return true; }
+  gloop::stream::Type dataType() override { return data_type; }
+  int maxLength() override { return max_length; }
+  void begin() override {
     l = ls.curr();
     i = 0;
   }
-  virtual int length() { return l->vertexCount(); }
-  virtual size_t value() {
+  int length() override { return l->vertexCount(); }
+  size_t value() override {
     return ls.polyline->vertexToIndex_fast(l->vertex(i++));
   }
 };

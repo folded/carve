@@ -49,7 +49,7 @@ struct TestScene : public Scene {
   GLuint draw_list_base;
   std::vector<bool> draw_flags;
 
-  virtual bool key(unsigned char k, int x, int y) {
+  bool key(unsigned char k, int x, int y) override {
     const char* t;
     static const char* l = "1234567890!@#$%^&*()";
     t = strchr(l, k);
@@ -62,7 +62,7 @@ struct TestScene : public Scene {
     return true;
   }
 
-  virtual GLvoid draw() {
+  GLvoid draw() override {
     for (int i = 0; i < draw_flags.size(); ++i) {
       if (draw_flags[i]) {
         glCallList(draw_list_base + i);
@@ -76,7 +76,7 @@ struct TestScene : public Scene {
     draw_flags.resize(n_dlist, false);
   }
 
-  virtual ~TestScene() { glDeleteLists(draw_list_base, draw_flags.size()); }
+  ~TestScene() override { glDeleteLists(draw_list_base, draw_flags.size()); }
 };
 
 #define POINTS 60

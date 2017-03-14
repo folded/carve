@@ -64,7 +64,7 @@ class BaseCollector : public CSG::Collector {
                 const carve::mesh::MeshSet<3>* _src_b)
       : CSG::Collector(), src_a(_src_a), src_b(_src_b) {}
 
-  virtual ~BaseCollector() {}
+  ~BaseCollector() override {}
 
   void FWD(const carve::mesh::MeshSet<3>::face_t* orig_face,
            const std::vector<carve::mesh::MeshSet<3>::vertex_t*>& vertices,
@@ -115,7 +115,7 @@ class BaseCollector : public CSG::Collector {
       carve::geom3d::Vector normal, bool poly_a, FaceClass face_class,
       CSG::Hooks& hooks) = 0;
 
-  virtual void collect(FaceLoopGroup* grp, CSG::Hooks& hooks) {
+  void collect(FaceLoopGroup* grp, CSG::Hooks& hooks) override {
     std::list<ClassificationInfo>& cinfo = (grp->classification);
 
     if (cinfo.size() == 0) {
@@ -217,7 +217,7 @@ class BaseCollector : public CSG::Collector {
     }
   }
 
-  virtual carve::mesh::MeshSet<3>* done(CSG::Hooks& hooks) {
+  carve::mesh::MeshSet<3>* done(CSG::Hooks& hooks) override {
     std::vector<carve::mesh::MeshSet<3>::face_t*> f;
     f.reserve(faces.size());
     for (std::list<face_data_t>::iterator i = faces.begin(); i != faces.end();
@@ -243,18 +243,18 @@ class AllCollector : public BaseCollector {
   AllCollector(const carve::mesh::MeshSet<3>* _src_a,
                const carve::mesh::MeshSet<3>* _src_b)
       : BaseCollector(_src_a, _src_b) {}
-  virtual ~AllCollector() {}
-  virtual void collect(FaceLoopGroup* grp, CSG::Hooks& hooks) {
+  ~AllCollector() override {}
+  void collect(FaceLoopGroup* grp, CSG::Hooks& hooks) override {
     for (FaceLoop* f = grp->face_loops.head; f; f = f->next) {
       FWD(f->orig_face, f->vertices, f->orig_face->plane.N,
           f->orig_face->mesh->meshset == src_a, FACE_OUT, hooks);
     }
   }
-  virtual void collect(
+  void collect(
       const carve::mesh::MeshSet<3>::face_t* orig_face,
       const std::vector<carve::mesh::MeshSet<3>::vertex_t*>& vertices,
       carve::geom3d::Vector normal, bool poly_a, FaceClass face_class,
-      CSG::Hooks& hooks) {
+      CSG::Hooks& hooks) override {
     FWD(orig_face, vertices, normal, poly_a, face_class, hooks);
   }
 };
@@ -264,12 +264,12 @@ class UnionCollector : public BaseCollector {
   UnionCollector(const carve::mesh::MeshSet<3>* _src_a,
                  const carve::mesh::MeshSet<3>* _src_b)
       : BaseCollector(_src_a, _src_b) {}
-  virtual ~UnionCollector() {}
-  virtual void collect(
+  ~UnionCollector() override {}
+  void collect(
       const carve::mesh::MeshSet<3>::face_t* orig_face,
       const std::vector<carve::mesh::MeshSet<3>::vertex_t*>& vertices,
       carve::geom3d::Vector normal, bool poly_a, FaceClass face_class,
-      CSG::Hooks& hooks) {
+      CSG::Hooks& hooks) override {
     if (face_class == FACE_OUT ||
         (poly_a && face_class == FACE_ON_ORIENT_OUT)) {
       FWD(orig_face, vertices, normal, poly_a, face_class, hooks);
@@ -282,12 +282,12 @@ class IntersectionCollector : public BaseCollector {
   IntersectionCollector(const carve::mesh::MeshSet<3>* _src_a,
                         const carve::mesh::MeshSet<3>* _src_b)
       : BaseCollector(_src_a, _src_b) {}
-  virtual ~IntersectionCollector() {}
-  virtual void collect(
+  ~IntersectionCollector() override {}
+  void collect(
       const carve::mesh::MeshSet<3>::face_t* orig_face,
       const std::vector<carve::mesh::MeshSet<3>::vertex_t*>& vertices,
       carve::geom3d::Vector normal, bool poly_a, FaceClass face_class,
-      CSG::Hooks& hooks) {
+      CSG::Hooks& hooks) override {
     if (face_class == FACE_IN || (poly_a && face_class == FACE_ON_ORIENT_OUT)) {
       FWD(orig_face, vertices, normal, poly_a, face_class, hooks);
     }
@@ -299,12 +299,12 @@ class SymmetricDifferenceCollector : public BaseCollector {
   SymmetricDifferenceCollector(const carve::mesh::MeshSet<3>* _src_a,
                                const carve::mesh::MeshSet<3>* _src_b)
       : BaseCollector(_src_a, _src_b) {}
-  virtual ~SymmetricDifferenceCollector() {}
-  virtual void collect(
+  ~SymmetricDifferenceCollector() override {}
+  void collect(
       const carve::mesh::MeshSet<3>::face_t* orig_face,
       const std::vector<carve::mesh::MeshSet<3>::vertex_t*>& vertices,
       carve::geom3d::Vector normal, bool poly_a, FaceClass face_class,
-      CSG::Hooks& hooks) {
+      CSG::Hooks& hooks) override {
     if (face_class == FACE_OUT) {
       FWD(orig_face, vertices, normal, poly_a, face_class, hooks);
     } else if (face_class == FACE_IN) {
@@ -318,12 +318,12 @@ class AMinusBCollector : public BaseCollector {
   AMinusBCollector(const carve::mesh::MeshSet<3>* _src_a,
                    const carve::mesh::MeshSet<3>* _src_b)
       : BaseCollector(_src_a, _src_b) {}
-  virtual ~AMinusBCollector() {}
-  virtual void collect(
+  ~AMinusBCollector() override {}
+  void collect(
       const carve::mesh::MeshSet<3>::face_t* orig_face,
       const std::vector<carve::mesh::MeshSet<3>::vertex_t*>& vertices,
       carve::geom3d::Vector normal, bool poly_a, FaceClass face_class,
-      CSG::Hooks& hooks) {
+      CSG::Hooks& hooks) override {
     if ((face_class == FACE_OUT || face_class == FACE_ON_ORIENT_IN) && poly_a) {
       FWD(orig_face, vertices, normal, poly_a, face_class, hooks);
     } else if (face_class == FACE_IN && !poly_a) {
@@ -337,12 +337,12 @@ class BMinusACollector : public BaseCollector {
   BMinusACollector(const carve::mesh::MeshSet<3>* _src_a,
                    const carve::mesh::MeshSet<3>* _src_b)
       : BaseCollector(_src_a, _src_b) {}
-  virtual ~BMinusACollector() {}
-  virtual void collect(
+  ~BMinusACollector() override {}
+  void collect(
       const carve::mesh::MeshSet<3>::face_t* orig_face,
       const std::vector<carve::mesh::MeshSet<3>::vertex_t*>& vertices,
       carve::geom3d::Vector normal, bool poly_a, FaceClass face_class,
-      CSG::Hooks& hooks) {
+      CSG::Hooks& hooks) override {
     if ((face_class == FACE_OUT || face_class == FACE_ON_ORIENT_IN) &&
         !poly_a) {
       FWD(orig_face, vertices, normal, poly_a, face_class, hooks);

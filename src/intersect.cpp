@@ -80,7 +80,7 @@ struct Options : public opt::Parser {
     }
   }
 
-  virtual void optval(const std::string& o, const std::string& v) {
+  void optval(const std::string& o, const std::string& v) override {
     if (o == "--canonicalize" || o == "-c") {
       canonicalize = true;
       return;
@@ -147,12 +147,12 @@ struct Options : public opt::Parser {
     }
   }
 
-  virtual std::string usageStr() {
+  std::string usageStr() override {
     return std::string("Usage: ") + progname +
            std::string(" [options] expression");
   };
 
-  virtual void arg(const std::string& a) {
+  void arg(const std::string& a) override {
     if (from_file) {
       std::cerr << "Can't mix command line arguments and -f" << std::endl;
       exit(1);
@@ -163,7 +163,7 @@ struct Options : public opt::Parser {
     stream += a;
   }
 
-  virtual void help(std::ostream& out) {
+  void help(std::ostream& out) override {
     this->opt::Parser::help(out);
     out << std::endl;
     out << "expression is an infix expression:" << std::endl;

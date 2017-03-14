@@ -50,7 +50,7 @@ class GLUTriangulator : public carve::csg::CSG::Hook {
 
  public:
   GLUTriangulator();
-  virtual ~GLUTriangulator();
+  ~GLUTriangulator() override;
   virtual void processOutputFace(std::vector<carve::poly::Face<3>*>& faces,
                                  const carve::poly::Face<3>* orig,
                                  bool flipped);

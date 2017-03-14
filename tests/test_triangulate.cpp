@@ -48,15 +48,15 @@
 struct TestScene : public Scene {
   GLuint d_list;
 
-  virtual bool key(unsigned char k, int x, int y) { return true; }
+  bool key(unsigned char k, int x, int y) override { return true; }
 
-  virtual GLvoid draw() { glCallList(d_list); }
+  GLvoid draw() override { glCallList(d_list); }
 
   TestScene(int argc, char** argv) : Scene(argc, argv) {
     d_list = glGenLists(1);
   }
 
-  virtual ~TestScene() { glDeleteLists(d_list, 1); }
+  ~TestScene() override { glDeleteLists(d_list, 1); }
 };
 
 int main(int argc, char** argv) {

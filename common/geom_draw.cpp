@@ -80,7 +80,7 @@ static inline void glVertex(const carve::poly::Vertex<3>& v) { glVertex(v.v); }
 
 class DebugHooks : public carve::csg::IntersectDebugHooks {
  public:
-  virtual void drawIntersections(const carve::csg::VertexIntersections& vint);
+  void drawIntersections(const carve::csg::VertexIntersections& vint) override;
 
   virtual void drawOctree(const carve::csg::Octree& o);
 
