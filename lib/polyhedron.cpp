@@ -251,7 +251,7 @@ bool Polyhedron::initConnectivity() {
       for (size_t f = 0; f < mesh->faces.size(); ++f) {
         mesh::Face<3>* src = mesh->faces[f];
         mesh::Edge<3>* e = src->edge;
-        faces[face_map[src]].manifold_id = m;
+        faces[face_map[src]].manifold_id = static_cast<int>(m);
         do {
           edge_map[std::make_pair(e->v1() - Vbase, e->v2() - Vbase)].push_back(
               e);
@@ -360,7 +360,7 @@ bool Polyhedron::calcManifoldEmbedding() {
 
   carve::TimingBlock block(FUNC_NAME);
 
-  const unsigned MCOUNT = manifoldCount();
+  const size_t MCOUNT = manifoldCount();
   if (MCOUNT < 2) {
     return true;
   }
@@ -784,14 +784,14 @@ void Polyhedron::testVertexAgainstClosedManifolds(
     if (!manifold_is_closed[i]) {
       continue;
     }
-    if (result.find(i) != result.end()) {
+    if (result.find(static_cast<int>(i)) != result.end()) {
       continue;
     }
     PointClass pc = (crossings[i] & 1) ? POINT_IN : POINT_OUT;
     if (!ignore_orientation && manifold_is_negative[i]) {
       pc = (PointClass)-pc;
     }
-    result[i] = pc;
+    result[static_cast<int>(i)] = pc;
   }
 }
 

@@ -136,7 +136,7 @@ class CarveTriangulationImprover : public csg::CSG::Hook {
           } else {
             v = (*j).second;
           }
-          tri.v[i.idx()] = v;
+          tri.v[i.idx()] = static_cast<unsigned int>(v);
         }
         result.push_back(tri);
         delete face;

@@ -38,8 +38,7 @@
 #include <string>
 #include <utility>
 #include <vector>
-
-#include "write_ply.hpp"
+#include <functional>
 
 namespace carve {
 namespace mesh {
@@ -388,7 +387,7 @@ class MeshSimplifier {
       }
     }
 
-    return ints.size();
+    return static_cast<int>(ints.size());
   }
 
   int countIntersections(const vertex_t* v1, const vertex_t* v2,
@@ -1049,11 +1048,11 @@ class MeshSimplifier {
   }
 
   double minimize(carve::geom::vector<3>& vert,
-                  const std::list<carve::geom::plane<3> >& planes, int axis) {
+                  const std::list<carve::geom::plane<3> >& planes, unsigned axis) {
     double num = 0.0;
     double den = 0.0;
-    int a1 = (axis + 1) % 3;
-    int a2 = (axis + 2) % 3;
+    unsigned a1 = (axis + 1) % 3;
+    unsigned a2 = (axis + 2) % 3;
     for (std::list<carve::geom::plane<3> >::const_iterator i = planes.begin();
          i != planes.end(); ++i) {
       const carve::geom::vector<3>& N = (*i).N;
@@ -1311,7 +1310,7 @@ class MeshSimplifier {
       }
 
       double d = summedError(vert->v, planes);
-      for (size_t N = 0;; N = (N + 1) % 3) {
+      for (unsigned N = 0;; N = (N + 1) % 3) {
         if (constraint & (1 << N)) {
           continue;
         }
@@ -1333,7 +1332,7 @@ class MeshSimplifier {
             if (constraint & (1 << N)) {
               continue;
             }
-            if (axes & (1 << N)) {
+            if (axes & (1ULL << N)) {
               v.v[N] = ceil(v.v[N] / grid) * grid;
             } else {
               v.v[N] = floor(v.v[N] / grid) * grid;
@@ -1462,8 +1461,8 @@ class MeshSimplifier {
           heap() {
       for (size_t i = 0; i < (1 << 3); ++i) {
         vector_t t = origin;
-        for (size_t j = 0; j < 3; ++j) {
-          if (i & (1U << j)) {
+        for (unsigned j = 0; j < 3; ++j) {
+          if (i & (1ULL << j)) {
             t[j] = ceil(t[j] * rounding_fac) / rounding_fac;
           } else {
             t[j] = floor(t[j] * rounding_fac) / rounding_fac;

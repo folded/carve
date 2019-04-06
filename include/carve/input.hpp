@@ -138,7 +138,7 @@ struct PolyhedronData : public VertexData {
   void addFace(Iter begin, Iter end) {
     size_t n = std::distance(begin, end);
     faceIndices.reserve(faceIndices.size() + n + 1);
-    faceIndices.push_back(n);
+    faceIndices.push_back(static_cast<int>(n));
     std::copy(begin, end, std::back_inserter(faceIndices));
     ++faceCount;
   }

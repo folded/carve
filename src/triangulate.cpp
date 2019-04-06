@@ -122,7 +122,7 @@ static bool endswith(const std::string& a, const std::string& b) {
     return false;
   }
 
-  for (unsigned i = a.size(), j = b.size(); j;) {
+  for (size_t i = a.size(), j = b.size(); j;) {
     if (tolower(a[--i]) != tolower(b[--j])) {
       return false;
     }
