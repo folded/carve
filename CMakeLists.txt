@@ -33,10 +33,10 @@ if (MSVC)
     # In hermetic build environments, tests may not have access to MS runtime
     # DLLs, so this replaces /MD (CRT libraries in DLLs) with /MT (static CRT
     # libraries).
-    string(REPLACE "/MD" "-MT" ${flag_var} "${${flag_var}}")
+  #  string(REPLACE "/MD" "-MT" ${flag_var} "${${flag_var}}")
     # We prefer more strict warning checking for building Google Test.
     # Replaces /W3 with /W4 in defaults.
-    string(REPLACE "/W3" "-W4" ${flag_var} "${${flag_var}}")
+  #  string(REPLACE "/W3" "-W4" ${flag_var} "${${flag_var}}")
   endforeach()
 endif()
 
