@@ -32,7 +32,7 @@
 #include <gloop/exceptions.hpp>
 #include <gloop/ref.hpp>
 
-#ifdef WIN32
+#if defined(WIN32) && defined(_MSC_VER) && _MSC_VER < 1800
 
 typedef char int8_t;
 typedef short int16_t;
@@ -153,7 +153,7 @@ namespace gloop {
     void send_sequence(reader_base *rd, size_t n, iter_t begin, iter_t end) {
       if (rd) {
         rd->begin();
-        rd->length(n);
+        rd->length(static_cast<int>(n));
         while (begin != end) {
           rd->next();
           rd->_val(*begin++);

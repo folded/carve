@@ -33,7 +33,7 @@
 #include <iostream>
 #include <iomanip>
 #include <iterator>
-
+#include <algorithm>
 
 namespace gloop {
   namespace obj {
@@ -101,7 +101,7 @@ namespace gloop {
       for (size_t i = 0; i < std::min(rd_count, r1.size()); ++i) {
         if (v_rd[i] && r1[i].size()) {
           v_rd[i]->begin();
-          v_rd[i]->length(blocks.size());
+          v_rd[i]->length(static_cast<int>(blocks.size()));
         }
       }
 
@@ -317,19 +317,19 @@ namespace {
         uint32_t idx;
         v_prop->wt->next();
         v_prop->wt->_val(idx);
-        idx += v_base;
+		idx += static_cast<uint32_t>(v_base);
         s << idx;
         if (vt_prop || vn_prop) s << "/";
         if (vt_prop) {
           vt_prop->wt->next();
           vt_prop->wt->_val(idx);
-          idx += vt_base;
+		  idx += static_cast<uint32_t>(vt_base);
           s << idx;
         }
         if (vn_prop) {
           vn_prop->wt->next();
           vn_prop->wt->_val(idx);
-          idx += vn_base;
+		  idx += static_cast<uint32_t>(vn_base);
           s << "/" << idx;
         }
       }
