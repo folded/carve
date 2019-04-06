@@ -1385,12 +1385,12 @@ void carve::csg::CSG::calc(meshset_t* a, const face_rtree_t* a_rtree,
 
 #if defined(CARVE_DEBUG_WRITE_PLY_DATA)
   {
-    std::auto_ptr<carve::mesh::MeshSet<3> > poly(
+    std::unique_ptr<carve::mesh::MeshSet<3> > poly(
         faceLoopsToPolyhedron(a_face_loops));
     writePLY("/tmp/a_split.ply", poly.get(), false);
   }
   {
-    std::auto_ptr<carve::mesh::MeshSet<3> > poly(
+    std::unique_ptr<carve::mesh::MeshSet<3> > poly(
         faceLoopsToPolyhedron(b_face_loops));
     writePLY("/tmp/b_split.ply", poly.get(), false);
   }
@@ -1499,9 +1499,9 @@ carve::mesh::MeshSet<3>* carve::csg::CSG::compute(
   size_t a_edge_count;
   size_t b_edge_count;
 
-  std::auto_ptr<face_rtree_t> a_rtree(
+  std::unique_ptr<face_rtree_t> a_rtree(
       face_rtree_t::construct_STR(a->faceBegin(), a->faceEnd(), 4, 4));
-  std::auto_ptr<face_rtree_t> b_rtree(
+  std::unique_ptr<face_rtree_t> b_rtree(
       face_rtree_t::construct_STR(b->faceBegin(), b->faceEnd(), 4, 4));
 
   {
@@ -1660,9 +1660,9 @@ bool carve::csg::CSG::sliceAndClassify(
   size_t a_edge_count;
   size_t b_edge_count;
 
-  std::auto_ptr<face_rtree_t> closed_rtree(face_rtree_t::construct_STR(
+  std::unique_ptr<face_rtree_t> closed_rtree(face_rtree_t::construct_STR(
       closed->faceBegin(), closed->faceEnd(), 4, 4));
-  std::auto_ptr<face_rtree_t> open_rtree(
+  std::unique_ptr<face_rtree_t> open_rtree(
       face_rtree_t::construct_STR(open->faceBegin(), open->faceEnd(), 4, 4));
 
   calc(closed, closed_rtree.get(), open, open_rtree.get(), vclass, eclass,
@@ -1724,9 +1724,9 @@ void carve::csg::CSG::slice(meshset_t* a, meshset_t* b,
   size_t a_edge_count;
   size_t b_edge_count;
 
-  std::auto_ptr<face_rtree_t> a_rtree(
+  std::unique_ptr<face_rtree_t> a_rtree(
       face_rtree_t::construct_STR(a->faceBegin(), a->faceEnd(), 4, 4));
-  std::auto_ptr<face_rtree_t> b_rtree(
+  std::unique_ptr<face_rtree_t> b_rtree(
       face_rtree_t::construct_STR(b->faceBegin(), b->faceEnd(), 4, 4));
 
   calc(a, a_rtree.get(), b, b_rtree.get(), vclass, eclass, a_face_loops,
