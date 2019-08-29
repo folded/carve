@@ -726,7 +726,7 @@ static void mergeFacesAndHoles(
     std::set<int> removed;
 
     for (unsigned i = 0; i < containing_faces.size(); ++i) {
-      if (containing_faces[i].size() == 1) {
+      if (!containing_faces[i].empty()) {
         int f = containing_faces[i][0];
         face_holes[f].push_back(i);
 #if defined(CARVE_DEBUG)
