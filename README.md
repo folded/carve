@@ -1,7 +1,7 @@
 
-This fork of carve contains fixes to allow static compilation for
-* Windows MSVC2013 Express compiler x64
-* Linux Ubuntu GNU g++ 7.3.0 with boost x64
+This fork of carve contains fixes to allow static library compilation for
+* Windows MSVC2013 (express) & MSVC2019 (community) x64 compilers 
+* Linux Ubuntu GNU g++ x64
 
 ## Basic build instructions
 
