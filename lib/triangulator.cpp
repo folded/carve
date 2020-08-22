@@ -556,8 +556,9 @@ size_t carve::triangulate::detail::removeDegeneracies(
     }
 
     if (remove) {
-      result.push_back(carve::triangulate::tri_idx(v->idx, v->next->idx,
-                                                   v->next->next->idx));
+      result.push_back(carve::triangulate::tri_idx(static_cast<unsigned int>(v->idx), 
+                                                   static_cast<unsigned int>(v->next->idx),
+                                                   static_cast<unsigned int>(v->next->next->idx)));
       n = v->next;
       if (n == begin) {
         begin = n->next;
@@ -659,7 +660,9 @@ bool carve::triangulate::detail::doTriangulate(
     vertex_info* p = v->prev;
 
     result.push_back(
-        carve::triangulate::tri_idx(v->prev->idx, v->idx, v->next->idx));
+        carve::triangulate::tri_idx(static_cast<unsigned int>(v->prev->idx),
+                                    static_cast<unsigned int>(v->idx),
+                                    static_cast<unsigned int>(v->next->idx)));
 
 #if defined(CARVE_DEBUG)
     {
@@ -734,8 +737,9 @@ bool carve::triangulate::detail::doTriangulate(
   }
 
   if (remain == 3) {
-    result.push_back(carve::triangulate::tri_idx(begin->idx, begin->next->idx,
-                                                 begin->next->next->idx));
+	  result.push_back(carve::triangulate::tri_idx(static_cast<unsigned int>(begin->idx),
+                                                   static_cast<unsigned int>(begin->next->idx),
+                                                   static_cast<unsigned int>(begin->next->next->idx)));
   }
 
   vertex_info* d = begin;

@@ -21,7 +21,7 @@ option(CARVE_DEBUG                       "Compile in debug code"                
 option(CARVE_DEBUG_WRITE_PLY_DATA        "Write geometry output during debug"                OFF)
 option(CARVE_USE_EXACT_PREDICATES        "Use Shewchuk's exact predicates, where possible"   OFF)
 option(CARVE_INTERSECT_GLU_TRIANGULATOR  "Include support for GLU triangulator in intersect" OFF)
-option(CARVE_GTEST_TESTS                 "Complie gtest, and dependent tests"                ON)
+option(CARVE_GTEST_TESTS                 "Compile gtest, and dependent tests"                ON)
 
 if (MSVC)
   # For MSVC, CMake sets certain flags to defaults we want to override.
@@ -33,10 +33,10 @@ if (MSVC)
     # In hermetic build environments, tests may not have access to MS runtime
     # DLLs, so this replaces /MD (CRT libraries in DLLs) with /MT (static CRT
     # libraries).
-    string(REPLACE "/MD" "-MT" ${flag_var} "${${flag_var}}")
+  #  string(REPLACE "/MD" "-MT" ${flag_var} "${${flag_var}}")
     # We prefer more strict warning checking for building Google Test.
     # Replaces /W3 with /W4 in defaults.
-    string(REPLACE "/W3" "-W4" ${flag_var} "${${flag_var}}")
+  #  string(REPLACE "/W3" "-W4" ${flag_var} "${${flag_var}}")
   endforeach()
 endif()
 
@@ -66,6 +66,7 @@ if(OPENMP_FOUND)
 endif()
 
 if(CARVE_WITH_GUI)
+  set(OpenGL_GL_PREFERENCE GLVND)
   find_package(OpenGL)
   find_package(GLUT)
   find_package(GLEW)

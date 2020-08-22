@@ -116,7 +116,6 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
 
 /* On some machines, the exact arithmetic routines might be defeated by the  */
 /*   use of internal extended precision floating-point registers.  Sometimes */
@@ -519,9 +518,9 @@ double doublerand() {
   long a, b, c;
   long i;
 
-  a = random();
-  b = random();
-  c = random();
+  a = rand();
+  b = rand();
+  c = rand();
   result = (double)(a - 1073741824) * 8388608.0 + (double)(b >> 8);
   for (i = 512, expo = 2; i <= 131072; i *= 2, expo = expo * expo) {
     if (c & i) {
@@ -544,9 +543,9 @@ double narrowdoublerand() {
   long a, b, c;
   long i;
 
-  a = random();
-  b = random();
-  c = random();
+  a = rand();
+  b = rand();
+  c = rand();
   result = (double)(a - 1073741824) * 8388608.0 + (double)(b >> 8);
   for (i = 512, expo = 2; i <= 2048; i *= 2, expo = expo * expo) {
     if (c & i) {
@@ -566,8 +565,8 @@ double uniformdoublerand() {
   double result;
   long a, b;
 
-  a = random();
-  b = random();
+  a = rand();
+  b = rand();
   result = (double)(a - 1073741824) * 8388608.0 + (double)(b >> 8);
   return result;
 }

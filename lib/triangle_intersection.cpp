@@ -35,6 +35,7 @@
 #include <cstdlib>
 
 #include <iostream>
+#include <algorithm>
 
 typedef carve::geom::vector<3> vec3;
 typedef carve::geom::vector<2> vec2;
@@ -139,6 +140,10 @@ bool sat_plane(const vec3 tri_a[3], const vec3 tri_b[3], unsigned i, unsigned j,
   return false;
 }
 
+inline bool sat_plane_size_t(const vec3 tri_a[3], const vec3 tri_b[3], size_t i, size_t j, size_t k) {
+   return sat_plane(tri_a, tri_b, static_cast<unsigned>(i), static_cast<unsigned>(j), static_cast<unsigned>(k));
+}
+
 // returns true if no intersection, based upon edge^a_i and vertex^b_j
 // separating plane.
 bool sat_plane(const vec3 tri_a[3], const vec3 tri_b[3], unsigned i,
@@ -165,6 +170,10 @@ bool sat_plane(const vec3 tri_a[3], const vec3 tri_b[3], unsigned i,
   return false;
 }
 
+inline bool sat_plane_size_t(const vec3 tri_a[3], const vec3 tri_b[3], size_t i, size_t j) {
+  return sat_plane(tri_a, tri_b, static_cast<unsigned>(i), static_cast<unsigned>(j));
+}
+
 // returns: -1 - no intersection
 //           0 - touching
 //          +1 - intersection
@@ -174,15 +183,24 @@ int sat_edge(const vec2 tri_a[3], const vec2 tri_b[3], unsigned i) {
               dbl_sign(orient2d_exact(tri_a[i], tri_a[(i + 1) % 3], tri_b[2])));
 }
 
+inline int sat_edge_size_t(const vec2 tri_a[3], const vec2 tri_b[3], size_t i) { 
+	return sat_edge(tri_a, tri_b, static_cast<unsigned>(i));
+}
+
+
 // returns: -1 - no intersection
 //           0 - touching
 //          +1 - intersection
-bool sat_edge(const vec2 tri_a[3], const vec2 tri_b[3], unsigned i,
+int sat_edge(const vec2 tri_a[3], const vec2 tri_b[3], unsigned i,
               unsigned j) {
   return std::max(dbl_sign(orient2d_exact(tri_a[i], tri_a[(i + 1) % 3],
                                           tri_b[(j + 1) % 3])),
                   dbl_sign(orient2d_exact(tri_a[i], tri_a[(i + 1) % 3],
                                           tri_b[(j + 2) % 3])));
+}
+
+inline int sat_edge_size_t(const vec2 tri_a[3], const vec2 tri_b[3], size_t i, size_t j) {
+   return sat_edge(tri_a, tri_b, static_cast<unsigned>(i), static_cast<unsigned>(j));
 }
 
 // test for vertex sharing. between a triangle pair.
@@ -445,16 +463,16 @@ TriangleInt triangle_intersection(const vec2 tri_a[3], const vec2 tri_b[3]) {
     }
     case 1: {
       // shared vertex (ia, ib) [but not shared edge]
-      if (sat_edge(tri_a, tri_b, (ia + 2) % 3, ib) < 0) {
+	  if (sat_edge_size_t(tri_a, tri_b, (ia + 2) % 3, ib) < 0) {
         return TR_INT_VERT;
       }
-      if (sat_edge(tri_a, tri_b, ia, ib) < 0) {
+	  if (sat_edge_size_t(tri_a, tri_b, ia, ib) < 0) {
         return TR_INT_VERT;
       }
-      if (sat_edge(tri_b, tri_a, (ib + 2) % 3, ia) < 0) {
+	  if (sat_edge_size_t(tri_b, tri_a, (ib + 2) % 3, ia) < 0) {
         return TR_INT_VERT;
       }
-      if (sat_edge(tri_b, tri_a, ib, ia) < 0) {
+	  if (sat_edge_size_t(tri_b, tri_a, ib, ia) < 0) {
         return TR_INT_VERT;
       }
 
@@ -513,10 +531,10 @@ TriangleInt triangle_intersection(const vec3 tri_a[3], const vec3 tri_b[3]) {
       // no shared vertices.
       for (size_t i = 0; i < 3; ++i) {
         for (size_t j = 0; j < 3; ++j) {
-          if (sat_plane(tri_a, tri_b, i, j)) {
+          if (sat_plane_size_t(tri_a, tri_b, i, j)) {
             return TR_INT_NONE;
           }
-          if (sat_plane(tri_b, tri_a, i, j)) {
+		  if (sat_plane_size_t(tri_b, tri_a, i, j)) {
             return TR_INT_NONE;
           }
         }
@@ -529,28 +547,28 @@ TriangleInt triangle_intersection(const vec3 tri_a[3], const vec3 tri_b[3]) {
       size_t ia0 = ia, ia1 = (ia + 1) % 3, ia2 = (ia + 2) % 3;
       size_t ib0 = ib, ib1 = (ib + 1) % 3, ib2 = (ib + 2) % 3;
 
-      if (sat_plane(tri_a, tri_b, ia2, ib1, ib2)) {
+	  if (sat_plane_size_t(tri_a, tri_b, ia2, ib1, ib2)) {
         return TR_INT_VERT;
       }
-      if (sat_plane(tri_a, tri_b, ia2, ib2, ib1)) {
+	  if (sat_plane_size_t(tri_a, tri_b, ia2, ib2, ib1)) {
         return TR_INT_VERT;
       }
-      if (sat_plane(tri_a, tri_b, ia0, ib1, ib2)) {
+	  if (sat_plane_size_t(tri_a, tri_b, ia0, ib1, ib2)) {
         return TR_INT_VERT;
       }
-      if (sat_plane(tri_a, tri_b, ia0, ib2, ib1)) {
+	  if (sat_plane_size_t(tri_a, tri_b, ia0, ib2, ib1)) {
         return TR_INT_VERT;
       }
-      if (sat_plane(tri_b, tri_b, ib2, ia1, ia2)) {
+	  if (sat_plane_size_t(tri_b, tri_b, ib2, ia1, ia2)) {
         return TR_INT_VERT;
       }
-      if (sat_plane(tri_b, tri_b, ib2, ia2, ia1)) {
+	  if (sat_plane_size_t(tri_b, tri_b, ib2, ia2, ia1)) {
         return TR_INT_VERT;
       }
-      if (sat_plane(tri_b, tri_b, ib0, ia1, ia2)) {
+	  if (sat_plane_size_t(tri_b, tri_b, ib0, ia1, ia2)) {
         return TR_INT_VERT;
       }
-      if (sat_plane(tri_b, tri_b, ib0, ia2, ia1)) {
+	  if (sat_plane_size_t(tri_b, tri_b, ib0, ia2, ia1)) {
         return TR_INT_VERT;
       }
 
@@ -573,12 +591,12 @@ bool triangle_intersection_simple(const vec2 tri_a[3], const vec2 tri_b[3]) {
   CARVE_ASSERT(orient2d_exact(tri_b[0], tri_b[1], tri_b[2]) >= 0.0);
 
   for (size_t i = 0; i < 3; ++i) {
-    if (sat_edge(tri_a, tri_b, i) < 0) {
+	  if (sat_edge_size_t(tri_a, tri_b, i) < 0) {
       return false;
     }
   }
   for (size_t i = 0; i < 3; ++i) {
-    if (sat_edge(tri_b, tri_a, i) < 0) {
+	  if (sat_edge_size_t(tri_b, tri_a, i) < 0) {
       return false;
     }
   }
@@ -605,10 +623,10 @@ bool triangle_intersection_simple(const vec3 tri_a[3], const vec3 tri_b[3]) {
 
   for (size_t i = 0; i < 3; ++i) {
     for (size_t j = 0; j < 3; ++j) {
-      if (sat_plane(tri_a, tri_b, i, j)) {
+      if (sat_plane_size_t(tri_a, tri_b, i, j)) {
         return false;
       }
-      if (sat_plane(tri_b, tri_a, i, j)) {
+	  if (sat_plane_size_t(tri_b, tri_a, i, j)) {
         return false;
       }
     }
@@ -675,10 +693,10 @@ TriangleIntType triangle_intersection_exact(const vec2 tri_a[3],
 
   int curr = +1;
   for (size_t i = 0; curr != -1 && i < 3; ++i) {
-    curr = std::min(curr, sat_edge(tri_a, tri_b, i));
+    curr = std::min(curr, sat_edge_size_t(tri_a, tri_b, i));
   }
   for (size_t i = 0; curr != -1 && i < 3; ++i) {
-    curr = std::min(curr, sat_edge(tri_b, tri_a, i));
+	  curr = std::min(curr, sat_edge_size_t(tri_b, tri_a, i));
   }
   switch (curr) {
     case -1:

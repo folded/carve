@@ -109,7 +109,7 @@ static bool endswith(const std::string& a, const std::string& b) {
     return false;
   }
 
-  for (unsigned i = a.size(), j = b.size(); j;) {
+  for (size_t i = a.size(), j = b.size(); j;) {
     if (tolower(a[--i]) != tolower(b[--j])) {
       return false;
     }
@@ -259,8 +259,8 @@ int triangle_line_intersection_2d(const vec3 tri[3], const vec3& p1,
   pp1 = carve::geom::select(p1, a1, a2);
   pp2 = carve::geom::select(p2, a1, a2);
 
-  int ia = std::find(ptri, ptri + 3, pp1) - ptri;
-  int ib = std::find(ptri, ptri + 3, pp2) - ptri;
+  int ia = static_cast<int>(std::find(ptri, ptri + 3, pp1) - ptri);
+  int ib = static_cast<int>(std::find(ptri, ptri + 3, pp2) - ptri);
 
   if (ia == 3 && ib == 3) {
     // no shared vertices
@@ -350,9 +350,9 @@ int triangle_triangle_intersection_2d(const vec3 tri_a[3],
     std::swap(ptri_b[0], ptri_b[2]);
   }
 
-  int ia = std::find(ptri_b, ptri_b + 3, ptri_a[0]) - ptri_b;
-  int ib = std::find(ptri_b, ptri_b + 3, ptri_a[1]) - ptri_b;
-  int ic = std::find(ptri_b, ptri_b + 3, ptri_a[2]) - ptri_b;
+  int ia = static_cast<int>(std::find(ptri_b, ptri_b + 3, ptri_a[0]) - ptri_b);
+  int ib = static_cast<int>(std::find(ptri_b, ptri_b + 3, ptri_a[1]) - ptri_b);
+  int ic = static_cast<int>(std::find(ptri_b, ptri_b + 3, ptri_a[2]) - ptri_b);
 
   if (ia == 3 && ib == 3 && ic == 3) {
     // no shared vertices
@@ -569,10 +569,10 @@ int orient3d_inexact(const vec3& a, const vec3& b, const vec3& c,
   double errbound = 0.0;  // shewchuk::robust.o3derrboundA * permanent;
 
   if ((det > errbound) || (-det > errbound)) {
-    return det;
+    return static_cast<int>(det);
   }
 
-  return 0.0;
+  return 0;
 }
 
 // returns true if no intersection, based upon normal testing.
@@ -591,7 +591,9 @@ bool sat_normal(const vec3 tri_a[3], const vec3 tri_b[3]) {
 // returns true if no intersection, based upon edge^a_i and edge^b_j separating
 // axis.
 bool sat_edge(const vec3 tri_a[3], const vec3 tri_b[3], unsigned i,
-              unsigned j) {}
+	unsigned j) {
+	return false;
+}
 
 // 0 = not intersecting
 // 1 = shared vertex

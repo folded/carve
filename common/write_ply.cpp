@@ -51,7 +51,7 @@ struct vertex : public vertex_base {
   int i;
   vertex(const container_t& _cnt) : cnt(_cnt), i(-1) {}
   void next() override { ++i; }
-  int length() override { return cnt.size(); }
+  int length() override { return static_cast<int>(cnt.size()); }
   const carve::geom3d::Vector& curr() const override { return cnt[i].v; }
 };
 
@@ -74,7 +74,7 @@ struct mesh_face : public gloop::stream::null_writer {
     std::copy(poly->faceBegin(), poly->faceEnd(), std::back_inserter(faces));
   }
   void next() override { ++i; }
-  int length() override { return faces.size(); }
+  int length() override { return static_cast<int>(faces.size()); }
   const carve::mesh::MeshSet<3>::face_t* curr() const { return faces[i]; }
 };
 
@@ -91,7 +91,7 @@ struct mesh_face_idx : public gloop::stream::writer<size_t> {
     f = r.curr();
     i = f->begin();
   }
-  int length() override { return f->nVertices(); }
+  int length() override { return static_cast<int>(f->nVertices()); }
 
   bool isList() override { return true; }
   gloop::stream::Type dataType() override { return data_type; }
@@ -108,7 +108,7 @@ struct face : public gloop::stream::null_writer {
   int i;
   face(const carve::poly::Polyhedron* _poly) : poly(_poly), i(-1) {}
   void next() override { ++i; }
-  int length() override { return poly->faces.size(); }
+  int length() override { return static_cast<int>(poly->faces.size()); }
   const carve::poly::Face<3>* curr() const { return &poly->faces[i]; }
 };
 
@@ -129,7 +129,7 @@ struct face_idx : public gloop::stream::writer<size_t> {
     f = r.curr();
     i = 0;
   }
-  int length() override { return f->nVertices(); }
+  int length() override { return static_cast<int>(f->nVertices()); }
 
   bool isList() override { return true; }
   gloop::stream::Type dataType() override { return data_type; }
@@ -152,7 +152,7 @@ struct lineset : public gloop::stream::null_writer {
     c = n;
     ++n;
   }
-  int length() override { return polyline->lines.size(); }
+  int length() override { return static_cast<int>(polyline->lines.size()); }
   const carve::line::Polyline* curr() const { return *c; }
 };
 
@@ -183,7 +183,7 @@ struct line_vi : public gloop::stream::writer<size_t> {
     l = ls.curr();
     i = 0;
   }
-  int length() override { return l->vertexCount(); }
+  int length() override { return static_cast<int>(l->vertexCount()); }
   size_t value() override {
     return ls.polyline->vertexToIndex_fast(l->vertex(i++));
   }
@@ -208,8 +208,8 @@ void setup(gloop::stream::model_writer& file,
   file.addWriter("polyhedron.face", fi);
   file.addWriter("polyhedron.face.vertex_indices",
                  new mesh_face_idx(*fi, gloop::stream::smallest_type(
-                                            poly->vertex_storage.size()),
-                                   face_max));
+				 static_cast<uint32_t>(poly->vertex_storage.size())),
+											static_cast<int>(face_max)));
 }
 
 void setup(gloop::stream::model_writer& file,
@@ -230,8 +230,8 @@ void setup(gloop::stream::model_writer& file,
   file.addWriter("polyhedron.face", fi);
   file.addWriter(
       "polyhedron.face.vertex_indices",
-      new face_idx(*fi, gloop::stream::smallest_type(poly->vertices.size()),
-                   face_max));
+	  new face_idx(*fi, gloop::stream::smallest_type(static_cast<uint32_t>(poly->vertices.size())),
+	  static_cast<int>(face_max)));
 }
 
 void setup(gloop::stream::model_writer& file,
@@ -256,8 +256,8 @@ void setup(gloop::stream::model_writer& file,
   file.addWriter("polyline.polyline.closed", new line_closed(*pi));
   file.addWriter(
       "polyline.polyline.vertex_indices",
-      new line_vi(*pi, gloop::stream::smallest_type(lines->vertices.size()),
-                  line_max));
+	  new line_vi(*pi, gloop::stream::smallest_type(static_cast<uint32_t>(lines->vertices.size())),
+	  static_cast<int>(line_max)));
 }
 
 void setup(gloop::stream::model_writer& file,

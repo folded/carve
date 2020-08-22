@@ -194,10 +194,10 @@ struct RTreeNode {
     aabb_cmp_mid(size_t _dim) : dim(_dim) {}
 
     bool operator()(const node_t* a, const node_t* b) {
-      return a->bbox.mid(dim) < b->bbox.mid(dim);
+      return a->bbox.mid(static_cast<unsigned int>(dim)) < b->bbox.mid(static_cast<unsigned int>(dim));
     }
     bool operator()(const data_aabb_t& a, const data_aabb_t& b) {
-      return a.bbox.mid(dim) < b.bbox.mid(dim);
+      return a.bbox.mid(static_cast<unsigned int>(dim)) < b.bbox.mid(static_cast<unsigned int>(dim));
     }
   };
 
@@ -257,7 +257,7 @@ struct RTreeNode {
     const size_t N = std::distance(begin, end);
 
     size_t dim = ndim;
-    double r_best = N + 1;
+    double r_best = static_cast<double>(N + 1);
 
     // find the sparsest remaining dimension to partition by.
     for (size_t i = 0; i < ndim; ++i) {

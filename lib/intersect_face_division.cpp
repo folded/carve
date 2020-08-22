@@ -499,7 +499,7 @@ static void computeContainment(
     face_loops_sorted[m].reserve(f_loop.size());
     for (size_t n = 0; n < f_loop.size(); ++n) {
       face_loops_projected[m].push_back(face->project(f_loop[n]->v));
-      face_loops_sorted[m].push_back(n);
+      face_loops_sorted[m].push_back(static_cast<unsigned int>(n));
     }
     face_loop_areas.push_back(
         carve::geom2d::signedArea(face_loops_projected[m]));
@@ -519,7 +519,7 @@ static void computeContainment(
     hole_loops_projected[m].reserve(h_loop.size());
     for (size_t n = 0; n < h_loop.size(); ++n) {
       hole_loops_projected[m].push_back(face->project(h_loop[n]->v));
-      hole_loops_sorted[m].push_back(n);
+      hole_loops_sorted[m].push_back(static_cast<unsigned int>(n));
     }
     hole_loop_areas.push_back(
         carve::geom2d::signedArea(hole_loops_projected[m]));

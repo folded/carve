@@ -256,7 +256,7 @@ int Polyhedron::vertexManifolds(const vertex_t* v, T result) const {
   }
 
   std::copy(em.begin(), em.end(), result);
-  return em.size();
+  return static_cast<int>(em.size());
 }
 
 template <typename T>

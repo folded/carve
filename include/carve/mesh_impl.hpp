@@ -438,7 +438,7 @@ typename Face<ndim>::vector_t Face<ndim>::centroid() const {
     v += e->vert->v;
     e = e->next;
   } while (e != edge);
-  v /= n_edges;
+  v /= static_cast<double>(n_edges);
   return v;
 }
 

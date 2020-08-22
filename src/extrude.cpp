@@ -397,7 +397,7 @@ carve::poly::Polyhedron* extrude(
 
   for (size_t p = 0; p < paths.size(); ++p) {
     const std::vector<carve::geom2d::P2>& path = paths[p];
-    const unsigned N = path.size();
+    const size_t N = path.size();
     std::cerr << "N=" << N << std::endl;
 
     std::vector<unsigned> fwd, rev;
@@ -415,18 +415,18 @@ carve::poly::Polyhedron* extrude(
       j = vert_idx.find(v);
       if (j == vert_idx.end()) {
         data.addVertex(v);
-        fwd.push_back(vert_idx[v] = data.getVertexCount() - 1);
+        fwd.push_back(static_cast<unsigned>(vert_idx[v] = data.getVertexCount() - 1));
       } else {
-        fwd.push_back((*j).second);
+        fwd.push_back(static_cast<unsigned>((*j).second));
       }
 
       v = carve::geom::VECTOR(path[i].x, -path[i].y, 0.0) + dir;
       j = vert_idx.find(v);
       if (j == vert_idx.end()) {
         data.addVertex(v);
-        rev.push_back(vert_idx[v] = data.getVertexCount() - 1);
+        rev.push_back(static_cast<unsigned int>(vert_idx[v] = data.getVertexCount() - 1));
       } else {
-        rev.push_back((*j).second);
+        rev.push_back(static_cast<unsigned int>((*j).second));
       }
     }
 
