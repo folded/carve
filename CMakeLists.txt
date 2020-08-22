@@ -66,6 +66,7 @@ if(OPENMP_FOUND)
 endif()
 
 if(CARVE_WITH_GUI)
+  set(OpenGL_GL_PREFERENCE GLVND)
   find_package(OpenGL)
   find_package(GLUT)
   find_package(GLEW)
