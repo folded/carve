@@ -16,6 +16,9 @@ This fork of carve contains fixes to allow static library compilation for
 ## Linux command line build with cmake
 
 $ cd carve
+
 $ cmake -B build -DBUILD_TESTING:BOOL="0" -DCARVE_USE_EXACT_PREDICATES:BOOL="1" -DCARVE_GTEST_TESTS:BOOL="0" -DCARVE_WITH_GUI:BOOL="0" -DBUILD_SHARED_LIBS:BOOL="0"
+
 $ cd build
+
 $ make
