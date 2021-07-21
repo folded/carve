@@ -31,6 +31,7 @@
 #include <carve/rtree.hpp>
 
 #include <carve/poly.hpp>
+#include <functional>
 
 namespace {
 inline double CALC_X(const carve::geom::plane<3>& p, double y, double z) {
@@ -932,7 +933,7 @@ static void copyMeshFaces(
     ;
 
     poly->faces.push_back(poly::Polyhedron::face_t(vert_ptr));
-    poly->faces.back().manifold_id = manifold_id;
+    poly->faces.back().manifold_id = static_cast<int>(manifold_id);
     poly->faces.back().owner = poly;
   }
 }

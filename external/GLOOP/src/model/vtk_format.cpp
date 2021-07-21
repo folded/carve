@@ -86,7 +86,7 @@ namespace gloop {
       stream::reader_base *z_rd = findReader(base, "vertex", "z");
       if (e_rd) {
         e_rd->begin();
-        e_rd->length(point_data.size());
+        e_rd->length(static_cast<int>(point_data.size()));
       }
       // std::cerr << "emitting " << point_data.size() << " points" << std::endl;
       for (size_t i = 0; i < point_data.size(); ++i) {
@@ -184,7 +184,7 @@ namespace gloop {
 
             if (e_rd) {
               e_rd->begin();
-              e_rd->length(num);
+              e_rd->length(static_cast<int>(num));
             }
 
             size_t x = 0;
@@ -226,7 +226,7 @@ namespace gloop {
 
             if (e_rd) {
               e_rd->begin();
-              e_rd->length(num);
+              e_rd->length(static_cast<int>(num));
             }
 
             size_t x = 0;

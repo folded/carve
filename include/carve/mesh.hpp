@@ -310,7 +310,8 @@ class Face : public tagable {
         unproject(nullptr) {}
 
   Face(const Face& other)
-      : edge(nullptr),
+      : tagable(other),
+        edge(nullptr),
         n_edges(other.n_edges),
         mesh(nullptr),
         id(other.id),
@@ -326,10 +327,10 @@ class Face : public tagable {
   typedef detail::list_iter_t<const Edge<ndim> > const_edge_iter_t;
 
   edge_iter_t begin() { return edge_iter_t(edge, 0); }
-  edge_iter_t end() { return edge_iter_t(edge, n_edges); }
+  edge_iter_t end() { return edge_iter_t(edge, static_cast<int>(n_edges)); }
 
   const_edge_iter_t begin() const { return const_edge_iter_t(edge, 0); }
-  const_edge_iter_t end() const { return const_edge_iter_t(edge, n_edges); }
+  const_edge_iter_t end() const { return const_edge_iter_t(edge, static_cast<int>(n_edges)); }
 
   bool containsPoint(const vector_t& p) const;
   bool containsPointInProjection(const vector_t& p) const;

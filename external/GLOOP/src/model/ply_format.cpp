@@ -34,7 +34,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#ifdef WIN32
+#if defined(WIN32) && defined(_MSC_VER) && _MSC_VER < 1800
 
 typedef char int8_t;
 typedef short int16_t;
@@ -403,7 +403,7 @@ namespace {
         in.seekg(len * sz, std::ios_base::cur);
       } else {
         rd->begin();
-        rd->length(len);
+        rd->length(static_cast<int>(len));
         for (size_t i = 0; i < len; ++i) {
           rd->next();
           in.read(buf, sz);
@@ -426,7 +426,7 @@ namespace {
       }
       if (rd != NULL) {
         rd->begin();
-        rd->length(len);
+        rd->length(static_cast<int>(len));
         for (size_t i = 0; i < len; ++i) {
           rd->next();
           if (!prop_read(in, type, rd)) {
@@ -503,7 +503,7 @@ namespace {
         in >> s_count;
         if (!in.fail()) {
           name = s_name;
-          count = s_count;
+          count = static_cast<int>(s_count);
         }
       }
     }

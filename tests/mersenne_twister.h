@@ -65,10 +65,20 @@
 #include <time.h>
 #include <math.h>
 
-#if !defined(_WIN32)
-#include <stdint.h>
-#else
+#if defined(WIN32) && defined(_MSC_VER) && _MSC_VER < 1800
+
+typedef char int8_t;
+typedef short int16_t;
+typedef long int32_t;
+
+typedef unsigned char uint8_t;
+typedef unsigned short uint16_t;
 typedef unsigned long uint32_t;
+
+#else 
+
+#include <stdint.h>
+
 #endif
 
 class MTRand {

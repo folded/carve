@@ -21,7 +21,12 @@ inline long random() {
 }
 
 #if defined(_MSC_VER)
+#if _MSC_VER < 1800
 #  include <carve/cbrt.h>
+#else
+#  include <BaseTsd.h>
+typedef SSIZE_T ssize_t;
+#endif
 
 #if _MSC_VER < 1300
 // intptr_t is an integer type that is big enough to hold a pointer
