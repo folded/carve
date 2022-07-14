@@ -30,6 +30,14 @@
 #pragma once
 
 #if (defined WIN32) || (defined _WIN32)
+
+// These definitions are already provided by Visual Studio 2022
+#if (defined _MSC_VER) && _MSC_VER >= 1930
+
+#include <stdint.h>
+
+#else
+
   typedef char int8_t;
   typedef short int16_t;
   typedef long int32_t;
@@ -37,6 +45,9 @@
   typedef unsigned char uint8_t;
   typedef unsigned short uint16_t;
   typedef unsigned long uint32_t;
+
+#endif
+
 #else
 #include <stdint.h>
 #endif
