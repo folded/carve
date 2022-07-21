@@ -32,7 +32,7 @@
 #if (defined WIN32) || (defined _WIN32)
 
 // These definitions are already provided by Visual Studio 2022
-#if (defined _MSC_VER) && _MSC_VER >= 1930
+#if (defined _MSC_VER) && _MSC_VER >= 1929
 
 #include <stdint.h>
 
