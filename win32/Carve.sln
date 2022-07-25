@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32616.157
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "carvelib", "carvelib\carvelib.vcxproj", "{21F77D6E-3E33-4EB0-8BC6-C0C86C7EE45B}"
 EndProject
@@ -16,6 +16,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glui32", "glui\glui.vcxproj", "{63A9D017-1F43-4F1E-8C04-56F8EAABBFC4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "intersect", "intersect\intersect.vcxproj", "{FD8895D6-8EE2-4E37-8E76-A642FA1422C1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{21F77D6E-3E33-4EB0-8BC6-C0C86C7EE45B} = {21F77D6E-3E33-4EB0-8BC6-C0C86C7EE45B}
+		{B74F9D7B-8A9D-45A0-8D09-973D01314D80} = {B74F9D7B-8A9D-45A0-8D09-973D01314D80}
+		{A50234C1-A40D-4782-81CB-9D4549DC9474} = {A50234C1-A40D-4782-81CB-9D4549DC9474}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "view", "view\view.vcxproj", "{2DCBE71A-A29A-4FE7-A23C-AFA762DF13E1}"
 EndProject
