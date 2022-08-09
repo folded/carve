@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="model">
+      <UniqueIdentifier>{0d5aea50-0ec0-43c1-b723-0632810d0f0b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\external\GLOOP\src\model\obj_format.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\GLOOP\src\model\ply_format.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\GLOOP\src\model\stream.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\GLOOP\src\model\vtk_format.cpp">
+      <Filter>model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\external\GLOOP\src\fbo.cpp" />
+    <ClCompile Include="..\..\external\GLOOP\src\matrix.cpp" />
+    <ClCompile Include="..\..\external\GLOOP\src\quaternion.cpp" />
+    <ClCompile Include="..\..\external\GLOOP\src\radiance.cpp" />
+    <ClCompile Include="..\..\external\GLOOP\src\shader.cpp" />
+    <ClCompile Include="..\..\external\GLOOP\src\surface.cpp" />
+    <ClCompile Include="..\..\external\GLOOP\src\texparam.cpp" />
+    <ClCompile Include="..\..\external\GLOOP\src\vbo.cpp" />
+  </ItemGroup>
+</Project>
